@@ -10,7 +10,13 @@ CREATE TABLE PRODUCTO(
 	Sodio INT,
 	Carbohidratos INT,
 	Hierro INT,
-	Vitaminas INT,
+	VitaminaD INT,
+	VitaminaB6 INT,
+	VitaminaC INT,
+	Vitaminak INT,
+	VitaminaB INT,
+	VitaminaB12 INT,
+	VitaminaA INT,
 	Calcio INT
 );
 
