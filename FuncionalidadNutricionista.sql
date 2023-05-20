@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION RegistrarNutricionista(
   cedula INT,
-  foto TEXT,
+  foto BYTEA,
   nombre VARCHAR(50),
   apellido1 VARCHAR(50),
   apellido2 VARCHAR(50),
