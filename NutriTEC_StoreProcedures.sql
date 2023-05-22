@@ -59,6 +59,8 @@ BEGIN
 END
 $$;
 
+
+
 -- Busqueda de clientes
 CREATE OR REPLACE FUNCTION GetClienteByCorreo(
 	Correo_ VARCHAR
@@ -90,7 +92,32 @@ AS $$
 	SELECT * FROM CLIENTE WHERE cliente.Nombre = Nombre_ AND cliente.Apellido1 = Apellido1_;
 $$;
 
--- Falta la parte de asociacion
+
+
+-- Asociación de clientes
+CREATE OR REPLACE PROCEDURE AddClienteToNutricionista(
+	Nutricionista_ INT,
+	Cliente_ VARCHAR
+)
+language plpgsql
+AS $$
+BEGIN
+	INSERT INTO CLIENTES_NUTRICIONISTA(Nutricionista, Cliente)
+	VALUES (Nutricionista_, Cliente_);
+	commit;
+END
+$$
+
+
+CREATE OR REPLACE FUNCTION GetClientesDeNutricionista()
+RETURNS setof CLIENTES_NUTRICIONISTA
+language sql
+AS
+$$
+	SELECT * FROM CLIENTES_NUTRICIONISTA;
+$$
+
+
 
 -- Asignación de un plan
 CREATE OR REPLACE PROCEDURE AddPlanToCliente(
@@ -118,6 +145,7 @@ AS
 $$
 	SELECT * FROM PLANES_CLIENTE WHERE planes_cliente.Cliente = Correo_;
 $$
+
 
 
 -- Pruebas
