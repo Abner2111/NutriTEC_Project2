@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">NutriTECPaciente</string>
+    <string name="username_placeholder">Nombre Apellido</string>
+    <string name="RegistroMedidas">Registrar medidas</string>
+    <string name="RegistroConsumo">Registrar consumo</string>
+</resources>
