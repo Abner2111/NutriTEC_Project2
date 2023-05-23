@@ -17,29 +17,56 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="150sp"
             android:layout_weight="1"
-            android:padding_bottom="10sp"
             android:text="Registro de consumo"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            android:autoSizeTextType="uniform"/>
 
         <SearchView
             android:id="@+id/consumable_searchbox"
             android:layout_width="match_parent"
-            android:layout_height="65sp"
-            android:layout_weight="1" />
+            android:layout_height="80sp"
+            android:layout_weight="1"
+            android:iconifiedByDefault="false"
+            android:queryHint="Búsqueda de consumibles">
+
+        </SearchView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/newRecipeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/new_recipe"
+                android:layout_marginEnd="2sp"/>
+
+            <Button
+                android:id="@+id/newProductBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/new_product"
+                android:layout_marginStart="2sp"/>
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="6"
-            android:paddingBottom="10sp"
             android:paddingTop="10sp"
+            android:paddingBottom="10sp"
             tools:listitem="@layout/consumable_list_item" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/registroConsumoBtn"
             android:layout_width="match_parent"
             android:layout_height="80sp"
             android:layout_weight="1"
