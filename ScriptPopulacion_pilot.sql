@@ -13,7 +13,24 @@ INSERT INTO CLIENTE (Correo, Nombre, Apellido1, Apellido2, Contrasena, Pais, Fec
 			 VALUES ('cliente@estudiantec.cr', 'Charlie', 'Harper', '', '82e8fe7e1194b8ce42addb5374ccb047',
 				    'Costa Rica', '10-06-2022', '01-01-1985', 185, 90);
 
+INSERT INTO PRODUCTO(Nombre, Codigo_barras, Tamano_porcion, Aprobado, Grasa, Energia,
+					 Proteina, Sodio, Carbohidratos, Hierro, VitaminaD, VitaminaB6, VitaminaC,
+					 VitaminaK, VitaminaB, VitaminaB12, VitaminaA, Calcio)
+			VALUES('Lechuga', 'EXR302', 'Pequena', false, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+			
+INSERT INTO RECETA VALUES ('Pollo al pesto');
+INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha, RecetaName, Producto_id)
+			VALUES ('cliente@estudiantec.cr', 2, '24-06-2020', 'Pollo al pesto', 1);
+
+INSERT INTO CONSUMO_RECETA(Consumo_id, Receta_name) 
+			VALUES (1, 'Pollo al pesto');
+
+
 -- Verificacion
+SELECT * FROM CONSUMO_RECETA;
+SELECT * FROM CONSUMO;
+SELECT * FROM RECETA;
+SELECT * FROM PRODUCTO;
 SELECT * FROM TIPO_COBRO;
 SELECT * FROM NUTRICIONISTA;
 SELECT * FROM CLIENTE;
