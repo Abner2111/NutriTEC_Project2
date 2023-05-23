@@ -13,7 +13,7 @@
         android:theme="@style/Theme.NutriTECPaciente"
         tools:targetApi="31">
         <activity
-            android:name=".RegistroConsumoActivity"
+            android:name=".ConsumableRegisterActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

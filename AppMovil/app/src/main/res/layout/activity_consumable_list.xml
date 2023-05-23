@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConsumableRegisterActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        android:padding="10sp"
+        >
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:layout_weight="1"
+            android:padding_bottom="10sp"
+            android:text="Registro de consumo"
+            android:textSize="40sp" />
+
+        <SearchView
+            android:id="@+id/consumable_searchbox"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            tools:listitem="@layout/consumable_list_item" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:layout_weight="1"
+            android:text="@string/register_ingest"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#393939"
+            android:textColorLink="#919191"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
