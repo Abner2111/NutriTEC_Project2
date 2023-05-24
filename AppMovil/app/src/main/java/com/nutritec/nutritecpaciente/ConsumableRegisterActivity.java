@@ -2,8 +2,14 @@ package com.nutritec.nutritecpaciente;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Selection;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.nutritec.nutritecpaciente.databinding.ActivityConsumableRegisterBinding;
 
@@ -12,7 +18,10 @@ import java.util.ArrayList;
 
 public class ConsumableRegisterActivity extends AppCompatActivity {
     ActivityConsumableRegisterBinding binding;
-    public static ArrayList<Consumable> consumableList = new ArrayList<>();
+    public  ArrayList<Consumable> consumableList = new ArrayList<>();
+    public  ArrayList<Consumable>  selectedConsumables = new ArrayList<>();
+
+    public boolean selecting = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +30,20 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
         setUpList();
         initSearchWidgets();
         setContentView(binding.getRoot());
+        binding.registroConsumoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selecting){
+                    showSelection();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Consumo Registrado",Toast.LENGTH_SHORT).show();
+                    finish();
+                    Intent home = new Intent(ConsumableRegisterActivity.this, MainActivity.class);
+                    startActivity(home);
+                }
+            }
+        });
+
     }
 
     private void initSearchWidgets(){
@@ -37,9 +60,8 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
                     if (consumable.getNombre().toLowerCase().contains(s) || consumable.getBarcode().contains(s)){
                         filteredConsumables.add(consumable);
                     }
-
                 }
-                ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(), filteredConsumables);
+                ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(), filteredConsumables,selectedConsumables);
                 binding.listview.setAdapter(adapter);
                 return false;
             }
@@ -57,9 +79,20 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
         consumableList.add(new Consumable("Casado con pescado", "500",""));
         consumableList.add(new Consumable("Agua gasificada","0","44444444"));
     }
-    private void setUpList(){
-        ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(),  consumableList);
+    @SuppressLint("SetTextI18n")
+    private void showSelection(){
+        binding.consumableRegistrytitle.setText("Selección");
+        ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(), selectedConsumables);
         binding.listview.setAdapter(adapter);
+        selecting = false;
+        binding.registroConsumoBtn.setText("Confirmar");
+    }
+
+    private void setUpList(){
+        ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(),  consumableList, selectedConsumables);
+        binding.listview.setAdapter(adapter);
+
+
     }
 
 }

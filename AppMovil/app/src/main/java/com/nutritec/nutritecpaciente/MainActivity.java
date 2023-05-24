@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         binding.registrarConsumoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent consumableRegistryActivity = new Intent(MainActivity.this, ConsumableRegisterActivity.class);
+                Intent consumableRegistryActivity = new Intent(MainActivity.this, MealTimeSelectionActivity.class);
                 startActivity(consumableRegistryActivity);
             }
         });

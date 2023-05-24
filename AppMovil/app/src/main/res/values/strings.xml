@@ -6,4 +6,10 @@
     <string name="register_ingest">REGISTRAR CONSUMO</string>
     <string name="new_product">Nuevo producto</string>
     <string name="new_recipe">Nueva receta</string>
+    <string name="mealselectionlbl">Selecciona el tiempo de comida</string>
+    <string name="cenalbl">Cena</string>
+    <string name="afternoonsnacklbl">Merienda de la tarde</string>
+    <string name="lunchlbl">Almuerzo</string>
+    <string name="morningsnacklabl">Merienda de la mañana</string>
+    <string name="breakfastlbl">Desayuno</string>
 </resources>

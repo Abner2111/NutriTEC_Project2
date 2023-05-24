@@ -55,8 +55,7 @@ create or replace procedure udp_newClient(
 	Fecha_registro date,
 	Fecha_nacimiento date,
 	Estatura integer,
-	Peso integer,
-	OUT Msg VARCHAR)
+	Peso integer)
 language plpgsql    
 as $$
 begin 
@@ -71,10 +70,7 @@ begin
 		   Fecha_nacimiento, 
 		   Estatura,
 		   Peso);
-	Msg = 'New Client Ok';
-
-exception when others then
-	Msg = 'Error';
+	
 end;$$; 
 
 /**gets client info when email and passwords match**/
