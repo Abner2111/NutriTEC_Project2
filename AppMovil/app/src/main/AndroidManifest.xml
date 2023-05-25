@@ -13,6 +13,12 @@
         android:theme="@style/Theme.NutriTECPaciente"
         tools:targetApi="31">
         <activity
+            android:name=".NuevaRecetaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MeasurementRegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MealTimeSelectionActivity"
             android:exported="false" />
         <activity

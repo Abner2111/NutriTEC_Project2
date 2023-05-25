@@ -26,5 +26,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding.registrarMedidasBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent measurementRegistryActivity = new Intent(MainActivity.this, MeasurementRegisterActivity.class);
+                startActivity(measurementRegistryActivity);
+            }
+        });
+
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NutriTECPaciente</string>
+    <string name="app_name">NutriTEC</string>
     <string name="username_placeholder">Nombre Apellido</string>
     <string name="RegistroMedidas">Registrar medidas</string>
     <string name="RegistroConsumo">Registrar consumo</string>
@@ -12,4 +12,11 @@
     <string name="lunchlbl">Almuerzo</string>
     <string name="morningsnacklabl">Merienda de la mañana</string>
     <string name="breakfastlbl">Desayuno</string>
+    <string name="medidacinturalbl">Medida de cintura</string>
+    <string name="cmunit">cm</string>
+    <string name="medidacuellolbl">Medida de cuello</string>
+    <string name="medidacaderalbl">Medida de cadera</string>
+    <string name="porcentajemusculolbl">Porcentaje de músculo</string>
+    <string name="porcentajegrasalbl">Porcentaje de grasa</string>
+    <string name="measureRegistryTitle">Registro de medidas fiosionómicas</string>
 </resources>

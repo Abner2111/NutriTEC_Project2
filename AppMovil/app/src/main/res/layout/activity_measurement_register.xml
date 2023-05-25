@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp"
+    tools:context=".MeasurementRegisterActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:text="@string/measureRegistryTitle"
+            android:textSize="43sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/medidacuellolbl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/neckMeasureinpt"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/cmunit"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/medidacinturalbl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/waistMeasureinpt"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/cmunit"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/medidacaderalbl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/hipMeasureinpt"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/cmunit"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/porcentajemusculolbl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+<!--            <EditText-->
+<!--                android:id="@+id/musclePercentageinpt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="65sp"-->
+<!--                android:layout_weight="2"-->
+<!--                android:ems="10"-->
+<!--                android:inputType="number"-->
+<!--                android:textAlignment="textEnd"-->
+<!--                android:textSize="18sp" />-->
+            <NumberPicker
+                android:id="@+id/musclePercentagePicker"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:fadingEdge="none"
+                android:hapticFeedbackEnabled="true"
+                android:theme="@style/AppTheme.Picker"
+                android:fadingEdgeLength="50dp"/>
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="%"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/porcentajegrasalbl"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+<!--            <EditText-->
+<!--                android:id="@+id/fatPercentageinpt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="65sp"-->
+<!--                android:layout_weight="2"-->
+<!--                android:ems="10"-->
+<!--                android:inputType="number"-->
+<!--                android:textAlignment="textEnd"-->
+<!--                android:textSize="18sp" />-->
+            <NumberPicker
+                android:id="@+id/fatPercentagePicker"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="2"
+                android:fadingEdge="horizontal|vertical"
+                android:fadingEdgeLength="50dp"
+                android:hapticFeedbackEnabled="true"
+                android:theme="@style/AppTheme.Picker"/>
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="%"
+                android:textSize="18sp"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/RegistroMedidas"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
+        tools:layout_editor_absoluteX="10dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
