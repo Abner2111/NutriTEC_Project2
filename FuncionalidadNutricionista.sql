@@ -107,13 +107,13 @@ $$ LANGUAGE plpgsql;
 -- ------------------------------------------------------------------------------------ --
 
 CREATE OR REPLACE PROCEDURE EliminarProductoPorCodigoBarras(
-  codigo_barras VARCHAR(30)
+  codigo_barras_param VARCHAR(30)
 )
 AS $$
 BEGIN
   -- Eliminar el producto con el código de barras especificado
   DELETE FROM PRODUCTO
-  WHERE Codigo_barras = codigo_barras;
+  WHERE PRODUCTO.Codigo_barras = codigo_barras_param;
   
   RAISE NOTICE 'Producto eliminado exitosamente.';
 END;
@@ -227,3 +227,9 @@ BEGIN
 END;
 $$;
 -- ----------------------------------------------------------------------------------------------- --
+CREATE OR REPLACE FUNCTION ObtenerProductos()
+  RETURNS SETOF PRODUCTO AS $$
+BEGIN
+  RETURN QUERY SELECT * FROM PRODUCTO;
+END;
+$$ LANGUAGE plpgsql;
