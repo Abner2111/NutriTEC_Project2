@@ -86,8 +86,8 @@ CREATE TABLE CLIENTE(
 	Apellido2 VARCHAR(50),
 	Contrasena VARCHAR(100) NOT NULL,
 	Pais VARCHAR(25) NOT NULL,
-	Fecha_registro DATE NOT NULL,
-	Fecha_nacimiento DATE NOT NULL,
+	Fecha_registro VARCHAR(50) NOT NULL,
+	Fecha_nacimiento VARCHAR(50) NOT NULL,
 	Estatura INT,
 	Peso INT
 );

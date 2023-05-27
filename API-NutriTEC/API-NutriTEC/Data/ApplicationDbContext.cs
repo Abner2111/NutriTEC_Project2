@@ -12,6 +12,7 @@ namespace API_NutriTEC.Data
         
         public DbSet<Administrador> administrador { get; set; }
         public DbSet<Plan> plan { get; set; }
+        public DbSet<Cliente> cliente { get; set; }
     }
 }
 
