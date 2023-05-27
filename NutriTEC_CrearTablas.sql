@@ -108,17 +108,19 @@ CREATE TABLE CONSUMO(
 
 CREATE TABLE CONSUMO_RECETA(
 	Consumo_id INT NOT NULL,
-	Receta_name VARCHAR(100) NOT NULL
+	Receta_name VARCHAR(100) NOT NULL,
+	Cantidad INT DEFAULT 1
 );
 
 CREATE TABLE CONSUMO_PRODUCTO(
 	Consumo_id INT NOT NULL,
-	Producto_id INT NOT NULL
+	Producto_id INT NOT NULL,
+	Cantidad INT DEFAULT 1
 );
 
 CREATE TABLE MEDIDA(
 	Id SERIAL,
-	Fecha DATE,
+	Fecha VARCHAR(100),
 	MedidaCintura INT,
 	PorcentajeGrasa INT,
 	PorcentajeMusculo INT,

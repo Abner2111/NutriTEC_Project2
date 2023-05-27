@@ -42,6 +42,15 @@ as $$
 	commit;
 end;$$;
 
+-- CLIENTE
+CREATE OR REPLACE FUNCTION GetCliente()
+RETURNS setof CLIENTE
+language sql
+AS
+$$
+	SELECT * FROM CLIENTE;
+$$
+
 /**
 it adds a new client to the db given all the requiered details
 **/
@@ -52,11 +61,11 @@ create or replace procedure udp_newClient(
 	Apellido2 varchar,
 	Contrasena varchar,
 	Pais varchar,
-	Fecha_registro date,
-	Fecha_nacimiento date,
+	Fecha_registro varchar,
+	Fecha_nacimiento varchar,
 	Estatura integer,
-	Peso integer,
-	OUT Msg VARCHAR)
+	Peso integer
+)
 language plpgsql    
 as $$
 begin 
@@ -71,14 +80,48 @@ begin
 		   Fecha_nacimiento, 
 		   Estatura,
 		   Peso);
-	Msg = 'New Client Ok';
+	commit;
+end
+$$
 
-exception when others then
-	Msg = 'Error';
-end;$$; 
+CREATE OR REPLACE PROCEDURE udp_updateClient(
+	Correo_ varchar,
+	Nombre_ varchar,
+	Apellido1_ varchar,
+	Apellido2_ varchar,
+	Contrasena_ varchar,
+	Pais_ varchar,
+	Fecha_registro_ varchar,
+	Fecha_nacimiento_ varchar,
+	Estatura_ integer,
+	Peso_ integer
+)
+language plpgsql
+AS $$
+BEGIN
+	UPDATE CLIENTE 
+	SET Nombre=Nombre_, Apellido1=Apellido1_, Apellido2=Apellido2_, Contrasena=Contrasena_,
+	Pais=Pais_, Fecha_registro=Fecha_registro_, Fecha_nacimiento=Fecha_nacimiento_, 
+	Estatura=Estatura_, Peso=Peso_
+	WHERE Correo=Correo;
+	commit;
+END
+$$
+
+
+CREATE OR REPLACE PROCEDURE udp_deleteClient(
+	Correo_ VARCHAR
+)
+language plpgsql
+AS $$
+BEGIN
+	DELETE FROM CLIENTE WHERE Correo_=Correo;
+	commit;
+END
+$$
 
 /**gets client info when email and passwords match**/
-CREATE OR REPLACE PROCEDURE udp_getClient(
+CREATE OR REPLACE PROCEDURE udp_loginClient(
 	inptCorreo varchar(100),
 	inptContrasena varchar(100)
 )
