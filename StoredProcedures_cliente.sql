@@ -182,20 +182,20 @@ It acceps various null values. If a registry is given by the user in the
 same date it overrides the values that are already stored
 **/
 CREATE OR REPLACE PROCEDURE udp_registroMedidas(
-	inptFecha DATE,
+	inptFecha VARCHAR,
 	inptMedidaCintura INT,
 	inptPorcentajeGrasa INT,
 	inptPorcentajeMusculo INT,
 	inptMedidaCadera INT,
 	inptMedidaCuello INT,
-	inptCorreoCliente VARCHAR(100)
+	inptCorreoCliente VARCHAR
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE 
 	medidaExistenteId INT;
 BEGIN
-	IF NOT EXISTS(SELECT Id FROM MEDIDA WHERE MEDIDA.correoclient=intCorreoCliente AND MEDIDA.fecha = inptFecha)
+	IF NOT EXISTS(SELECT Id FROM MEDIDA WHERE MEDIDA.correocliente=inptCorreoCliente AND MEDIDA.fecha = inptFecha)
 	THEN
 	INSERT INTO MEDIDA (
 		Fecha,
@@ -213,7 +213,7 @@ BEGIN
 			inptMedidaCuello,
 			inptCorreoCliente);
 	ELSE
-		medidaExistenteId = (SELECT Id FROM MEDIDA WHERE MEDIDA.correoclient=intCorreoCliente AND MEDIDA.fecha = inptFecha);
+		medidaExistenteId = (SELECT Id FROM MEDIDA WHERE MEDIDA.correocliente=inptCorreoCliente AND MEDIDA.fecha = inptFecha);
 		IF NOT (inptMedidaCintura IS NULL) THEN
 			UPDATE MEDIDA
 			SET medidacintura = inptMedidaCintura
@@ -266,9 +266,9 @@ CREATE OR REPLACE PROCEDURE udp_newProduct(
 	inptVitaminaB12 INT,
 	inptVitaminaA INT,
 	inptCalcio INT)
-LANGUAGE SQL
+LANGUAGE plpgsql
 AS $$
-
+BEGIN
 	INSERT INTO producto(Nombre,
 		Codigo_barras,
 		Tamano_porcion,
@@ -305,5 +305,6 @@ AS $$
 		inptVitaminaA,
 		inptCalcio
 		);
-end;$$;
-
+		COMMIT;
+end
+$$
