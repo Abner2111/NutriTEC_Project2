@@ -5,6 +5,7 @@ using System.Linq;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace API_NutriTEC.Controllers
 {

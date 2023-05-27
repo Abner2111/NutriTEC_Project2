@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION RegistrarNutricionista(
+CREATE OR REPLACE PROCEDURE RegistrarNutricionista(
   cedula INT,
   foto BYTEA,
   nombre VARCHAR(50),
@@ -14,7 +14,8 @@ CREATE OR REPLACE FUNCTION RegistrarNutricionista(
   estatura INT,
   peso INT
 )
-RETURNS VOID AS $$
+LANGUAGE plpgsql
+AS $$
 BEGIN
   -- Insertar el nutricionista en la tabla NUTRICIONISTA
   INSERT INTO NUTRICIONISTA (Cedula, Foto, Nombre, Apellido1, Apellido2, Correo, Fecha_nacimiento, Tipo_cobro, Codigo, Tarjeta_credito, Contrasena, Direccion, Estatura, Peso)
@@ -24,7 +25,8 @@ BEGIN
   
   RAISE NOTICE 'Nutricionista registrado exitosamente.';
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
 
 -- ------------------------------------------------------------------------------------------------------- --
 
@@ -162,4 +164,66 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- ----------------------------------------------------------------------------------------------- --
+
+CREATE OR REPLACE FUNCTION ObtenerNutricionistas()
+RETURNS SETOF NUTRICIONISTA AS
+$$
+BEGIN
+  RETURN QUERY SELECT * FROM NUTRICIONISTA;
+END;
+$$
+LANGUAGE plpgsql;
+
+-- ----------------------------------------------------------------------------------------------- --
+
+CREATE OR REPLACE PROCEDURE EliminarNutricionista(IN p_cedula INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  DELETE FROM NUTRICIONISTA WHERE NUTRICIONISTA.Cedula = p_cedula;
+  RAISE NOTICE 'Nutricionista eliminado exitosamente.';
+END;
+$$;
+
+-- ----------------------------------------------------------------------------------------------- --
+CREATE OR REPLACE PROCEDURE udp_editarnutricionista(
+  IN p_cedula INT,
+  IN p_foto BYTEA,
+  IN p_nombre VARCHAR(50),
+  IN p_apellido1 VARCHAR(50),
+  IN p_apellido2 VARCHAR(50),
+  IN p_correo VARCHAR(100),
+  IN p_fecha_nacimiento DATE,
+  IN p_tipo_cobro INT,
+  IN p_codigo VARCHAR(50),
+  IN p_tarjeta_credito VARCHAR(30),
+  IN p_contrasena VARCHAR(100),
+  IN p_direccion VARCHAR(100),
+  IN p_estatura INT,
+  IN p_peso INT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  UPDATE NUTRICIONISTA
+  SET
+    Foto = p_foto,
+    Nombre = p_nombre,
+    Apellido1 = p_apellido1,
+    Apellido2 = p_apellido2,
+    Correo = p_correo,
+    Fecha_nacimiento = p_fecha_nacimiento,
+    Tipo_cobro = p_tipo_cobro,
+    Codigo = p_codigo,
+    Tarjeta_credito = p_tarjeta_credito,
+    Contrasena = p_contrasena,
+    Direccion = p_direccion,
+    Estatura = p_estatura,
+    Peso = p_peso
+  WHERE Cedula = p_cedula;
+
+  RAISE NOTICE 'Nutricionista actualizado exitosamente.';
+END;
+$$;
 -- ----------------------------------------------------------------------------------------------- --
