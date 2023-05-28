@@ -13,4 +13,5 @@ public class Consumo
     
     public int consumo_id { get; set; }
     public int producto_id { get; set; }
+    public string receta_name { get; set; }
 }

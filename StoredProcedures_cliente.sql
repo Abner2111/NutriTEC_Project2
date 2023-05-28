@@ -156,16 +156,14 @@ BEGIN
 	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
 	INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
 END $$
-
-CALL udp_registroConsumoProducto('cliente@estudiantec.cr', '27-05-2023', 11, 1);
 	
 /**
 It registers a consumed recipe by a client given the user email,
 the date, meal time and the id of the consumed recipe
 **/
 CREATE OR REPLACE PROCEDURE udp_registroConsumoReceta(
-	inptcorreo VARCHAR(100),
-	intpfecha date,
+	inptcorreo VARCHAR,
+	inptfecha VARCHAR,
 	inpttiempocomidaid int,
 	inptRecetaName RECETA.nombre%type
 )
@@ -175,11 +173,13 @@ DECLARE
 	consumoExistenteId int;
 BEGIN
 	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
-		INSERT INTO CONSUMO VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
+		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
 	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
 	INSERT INTO CONSUMO_RECETA VALUES(consumoExistenteId, inptRecetaName);
 end $$
+
+CALL udp_registroConsumoReceta('cliente@estudiantec.cr', '27-05-2023', 11, 'Pinto');
 
 /**
 Registers the fisiological data given by the user in a specific date.

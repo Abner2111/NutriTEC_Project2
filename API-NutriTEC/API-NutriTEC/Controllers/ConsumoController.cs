@@ -21,8 +21,8 @@ namespace API_NutriTEC.Controllers
             _context = context;
         }
         
-        [HttpPost]
-        public async Task<ActionResult<Consumo>> PostConsumo(Consumo consumo)
+        [HttpPost("/producto")]
+        public async Task<ActionResult<Consumo>> PostConsumoProducto(Consumo consumo)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoproducto", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -30,6 +30,29 @@ namespace API_NutriTEC.Controllers
             cmd.Parameters.AddWithValue("inptfecha", consumo.fecha);
             cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo.tiempocomidaid);
             cmd.Parameters.AddWithValue("inptproductoid", consumo.producto_id);
+
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        [HttpPost("/receta")]
+        public async Task<ActionResult<Consumo>> PostConsumoReceta(Consumo consumo)
+        {
+            NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoreceta", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("inptcorreo", consumo.cliente);
+            cmd.Parameters.AddWithValue("inptfecha", consumo.fecha);
+            cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo.tiempocomidaid);
+            cmd.Parameters.AddWithValue("inptrecetaname", consumo.receta_name);
 
             try
             {
