@@ -1,4 +1,6 @@
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -26,26 +28,50 @@ namespace API_NutriTEC.Controllers
         public async Task <ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
             var result = _context.cliente.FromSqlRaw($"SELECT * FROM GetCliente();").ToList();
-            //return Ok();
+            return result;
+        }
+        
+        [HttpGet("PorCorreo/{correo}")]
+        public async Task <ActionResult<IEnumerable<Cliente>>> GetClienteByCorreo(string correo)
+        {
+            var result = _context.cliente.FromSql($"SELECT * FROM GetClienteByCorreo({correo});").ToList();
+            return result;
+        }
+        
+        [HttpGet("PorNombre/{nombre}")]
+        public async Task <ActionResult<IEnumerable<Cliente>>> GetClienteByNombre(string nombre)
+        {
+            var result = _context.cliente.FromSql($"SELECT * FROM GetClienteByNombre({nombre});").ToList();
+            return result;
+        }
+        
+        [HttpGet("PorNombreApellido/{nombre}/{apellido1}")]
+        public async Task <ActionResult<IEnumerable<Cliente>>> GetClienteByNombreApellido(string nombre, string apellido1)
+        {
+            var result = _context.cliente.FromSql($"SELECT * FROM GetClienteByNombreApellido({nombre},{apellido1});").ToList();
             return result;
         }
 
-        [HttpGet("{correo}/{contrasena}")]
+        [HttpGet("Login/{correo}/{contrasena}")]
         public async Task <ActionResult<IEnumerable<Cliente>>> LoginCliente(string correo, string contrasena)
         {
-            var result = _context.cliente.FromSqlRaw($"SELECT * FROM LoginCliente({correo},{contrasena});").ToList();
-            //return Ok();
-            if (result != null)
-            {
-                return Ok();
-            }
-
-            return NotFound();
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(contrasena));
+            var hashedPassword = BitConverter.ToString(hash).Replace("-", "").ToLower();
+            
+            var result = _context.cliente.FromSql($"SELECT * FROM udp_loginClient({correo}, {hashedPassword});").ToList();
+            return result;
         }
         
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                string contrasenaMD5 = GetMd5Hash(md5Hash, cliente.contrasena);
+                cliente.contrasena = contrasenaMD5;
+            }
+            
             NpgsqlCommand cmd = new NpgsqlCommand("udp_newclient", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("correo", cliente.correo);
@@ -119,6 +145,20 @@ namespace API_NutriTEC.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+        
+        private string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
         }
     }
 }

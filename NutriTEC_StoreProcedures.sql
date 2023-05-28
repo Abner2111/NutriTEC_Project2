@@ -71,6 +71,8 @@ AS $$
 	SELECT * FROM CLIENTE WHERE cliente.Correo = Correo_;
 $$;
 
+SELECT * FROM GetClienteByCorreo('string');
+
 
 CREATE OR REPLACE FUNCTION GetClienteByNombre(
 	Nombre_ VARCHAR

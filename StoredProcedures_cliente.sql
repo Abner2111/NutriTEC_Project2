@@ -121,16 +121,19 @@ END
 $$
 
 /**gets client info when email and passwords match**/
-CREATE OR REPLACE PROCEDURE udp_loginClient(
+CREATE OR REPLACE FUNCTION udp_loginClient(
 	inptCorreo varchar(100),
 	inptContrasena varchar(100)
 )
+RETURNS setof CLIENTE
 LANGUAGE SQL
 AS $$
-SELECT cliente.nombre, cliente.apellido1, cliente.apellido2
-FROM cliente
+SELECT *
+FROM CLIENTE
 WHERE cliente.correo = inptCorreo AND cliente.contrasena=inptContrasena;
-END;$$;
+$$;
+
+SELECT * FROM udp_loginClient('cliente@estudiantec.cr', 'string');
 
 /**
 It registers a consumed product by a client given the user email,
