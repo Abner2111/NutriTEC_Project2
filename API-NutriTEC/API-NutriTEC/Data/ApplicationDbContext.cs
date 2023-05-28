@@ -19,6 +19,7 @@ namespace API_NutriTEC.Data
         public DbSet<Nutricionista> nutricionista { get; set; }
         
         public  DbSet<Producto> producto { get; set; }
+        public DbSet<AddPlanToClienteRequest> planes_cliente { get; set; }
     }
 }
 

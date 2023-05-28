@@ -6,6 +6,7 @@ using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace API_NutriTEC.Controllers
 {
@@ -146,6 +147,55 @@ namespace API_NutriTEC.Controllers
                 return BadRequest(e.Message);
             }
         }
+        // POST: api/cliente/addplan
+        [HttpPost("addplan")]
+        public IActionResult AddPlanToCliente([FromBody] AddPlanToClienteRequest request)
+        {
+            try
+            {
+                var clienteParam = new NpgsqlParameter("Cliente_", NpgsqlDbType.Varchar)
+                    { Value = request.Cliente };
+                var planIdParam = new NpgsqlParameter("PlanId_", NpgsqlDbType.Integer)
+                    { Value = request.PlanId };
+                var fechaInicioParam = new NpgsqlParameter("Fecha_inicio_", NpgsqlDbType.Date)
+                    { Value = request.Fecha_inicio };
+                var fechaFinalParam = new NpgsqlParameter("Fecha_final_", NpgsqlDbType.Date)
+                    { Value = request.Fecha_final };
+
+                _context.Database.ExecuteSqlRaw(
+                    "CALL AddPlanToCliente(@Cliente_, @PlanId_, @Fecha_inicio_, @Fecha_final_)",
+                    clienteParam, planIdParam, fechaInicioParam, fechaFinalParam);
+
+                _context.SaveChanges();
+
+                return Ok("Plan agregado al cliente exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+        // GET: api/cliente/planes/{correo}
+        [HttpGet("planes/{correo}")]
+        public IActionResult GetPlanesOfCliente(string correo)
+        {
+            try
+            {
+                var correoParam = new NpgsqlParameter("Correo_", NpgsqlDbType.Varchar)
+                    { Value = correo };
+
+                var planesCliente = _context.planes_cliente.FromSqlRaw("SELECT * FROM GetPlanesOfCliente(@Correo_)", correoParam).ToList();
+
+                return Ok(planesCliente);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
+
+
         
         private string GetMd5Hash(MD5 md5Hash, string input)
         {
