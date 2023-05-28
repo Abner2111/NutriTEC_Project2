@@ -141,7 +141,7 @@ the date, meal time and the id of the consumed product
 **/
 CREATE OR REPLACE PROCEDURE udp_registroConsumoProducto(
 	inptcorreo VARCHAR(100),
-	intpfecha date,
+	inptfecha VARCHAR,
 	inpttiempocomidaid int,
 	inptproductoId int	
 )
@@ -151,11 +151,13 @@ DECLARE
 	consumoExistenteId int;
 BEGIN
 	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
-		INSERT INTO CONSUMO VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
+		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
 	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
-	INSERT INTO CONSUMO_PROUCTO VALUES(consumoExistenteId, inptproductoId);
+	INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
 END $$
+
+CALL udp_registroConsumoProducto('cliente@estudiantec.cr', '27-05-2023', 11, 1);
 	
 /**
 It registers a consumed recipe by a client given the user email,
