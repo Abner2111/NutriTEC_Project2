@@ -1,3 +1,17 @@
+CREATE OR REPLACE PROCEDURE udp_newReceta(
+	Receta_ VARCHAR,
+	Producto_id_ INT
+)
+language plpgsql
+AS $$
+BEGIN
+	IF NOT EXISTS (SELECT Nombre FROM RECETA WHERE receta.Nombre = Receta_) THEN
+		INSERT INTO RECETA (Nombre) VALUES (Receta_);
+	END IF;
+	INSERT INTO PRODUCTOS_RECETA (Receta_name, Producto_id) VALUES (Receta_, Producto_id_);
+END
+$$
+
 /**
 obtiene informacion nutricional de una receta dado el nommbre
 **/
@@ -26,6 +40,19 @@ as $$
 	GROUP BY RECETA.nombre;
 	commit;
 end;$$;
+
+
+CREATE OR REPLACE PROCEDURE DeleteProductoReceta(
+	Receta_ VARCHAR,
+	Producto_id_ INT
+)
+language plpgsql
+AS $$
+BEGIN
+	DELETE FROM PRODUCTOS_RECETA WHERE Receta_=Receta_name AND Producto_id_ = Producto_id;
+	commit;
+END
+$$;
 
 /**
 It gives a list of ingredients for a recipe given its name
@@ -132,8 +159,6 @@ SELECT *
 FROM CLIENTE
 WHERE cliente.correo = inptCorreo AND cliente.contrasena=inptContrasena;
 $$;
-
-SELECT * FROM udp_loginClient('cliente@estudiantec.cr', 'string');
 
 /**
 It registers a consumed product by a client given the user email,
