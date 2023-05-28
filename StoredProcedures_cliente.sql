@@ -1,3 +1,17 @@
+CREATE OR REPLACE PROCEDURE udp_newReceta(
+	Receta_ VARCHAR,
+	Producto_id_ INT
+)
+language plpgsql
+AS $$
+BEGIN
+	IF NOT EXISTS (SELECT Nombre FROM RECETA WHERE receta.Nombre = Receta_) THEN
+		INSERT INTO RECETA (Nombre) VALUES (Receta_);
+	END IF;
+	INSERT INTO PRODUCTOS_RECETA (Receta_name, Producto_id) VALUES (Receta_, Producto_id_);
+END
+$$
+
 /**
 obtiene informacion nutricional de una receta dado el nommbre
 **/
@@ -27,6 +41,19 @@ as $$
 	commit;
 end;$$;
 
+
+CREATE OR REPLACE PROCEDURE DeleteProductoReceta(
+	Receta_ VARCHAR,
+	Producto_id_ INT
+)
+language plpgsql
+AS $$
+BEGIN
+	DELETE FROM PRODUCTOS_RECETA WHERE Receta_=Receta_name AND Producto_id_ = Producto_id;
+	commit;
+END
+$$;
+
 /**
 It gives a list of ingredients for a recipe given its name
 **/
@@ -42,6 +69,15 @@ as $$
 	commit;
 end;$$;
 
+-- CLIENTE
+CREATE OR REPLACE FUNCTION GetCliente()
+RETURNS setof CLIENTE
+language sql
+AS
+$$
+	SELECT * FROM CLIENTE;
+$$
+
 /**
 it adds a new client to the db given all the requiered details
 **/
@@ -52,11 +88,11 @@ create or replace procedure udp_newClient(
 	Apellido2 varchar,
 	Contrasena varchar,
 	Pais varchar,
-	Fecha_registro date,
-	Fecha_nacimiento date,
+	Fecha_registro varchar,
+	Fecha_nacimiento varchar,
 	Estatura integer,
-	Peso integer,
-	OUT Msg VARCHAR)
+	Peso integer
+)
 language plpgsql    
 as $$
 begin 
@@ -71,23 +107,58 @@ begin
 		   Fecha_nacimiento, 
 		   Estatura,
 		   Peso);
-	Msg = 'New Client Ok';
+	commit;
+end
+$$
 
-exception when others then
-	Msg = 'Error';
-end;$$; 
+CREATE OR REPLACE PROCEDURE udp_updateClient(
+	Correo_ varchar,
+	Nombre_ varchar,
+	Apellido1_ varchar,
+	Apellido2_ varchar,
+	Contrasena_ varchar,
+	Pais_ varchar,
+	Fecha_registro_ varchar,
+	Fecha_nacimiento_ varchar,
+	Estatura_ integer,
+	Peso_ integer
+)
+language plpgsql
+AS $$
+BEGIN
+	UPDATE CLIENTE 
+	SET Nombre=Nombre_, Apellido1=Apellido1_, Apellido2=Apellido2_, Contrasena=Contrasena_,
+	Pais=Pais_, Fecha_registro=Fecha_registro_, Fecha_nacimiento=Fecha_nacimiento_, 
+	Estatura=Estatura_, Peso=Peso_
+	WHERE Correo=Correo;
+	commit;
+END
+$$
+
+
+CREATE OR REPLACE PROCEDURE udp_deleteClient(
+	Correo_ VARCHAR
+)
+language plpgsql
+AS $$
+BEGIN
+	DELETE FROM CLIENTE WHERE Correo_=Correo;
+	commit;
+END
+$$
 
 /**gets client info when email and passwords match**/
-CREATE OR REPLACE PROCEDURE udp_getClient(
+CREATE OR REPLACE FUNCTION udp_loginClient(
 	inptCorreo varchar(100),
 	inptContrasena varchar(100)
 )
+RETURNS setof CLIENTE
 LANGUAGE SQL
 AS $$
-SELECT cliente.nombre, cliente.apellido1, cliente.apellido2
-FROM cliente
+SELECT *
+FROM CLIENTE
 WHERE cliente.correo = inptCorreo AND cliente.contrasena=inptContrasena;
-END;$$;
+$$;
 
 /**
 It registers a consumed product by a client given the user email,
@@ -95,7 +166,7 @@ the date, meal time and the id of the consumed product
 **/
 CREATE OR REPLACE PROCEDURE udp_registroConsumoProducto(
 	inptcorreo VARCHAR(100),
-	intpfecha date,
+	inptfecha VARCHAR,
 	inpttiempocomidaid int,
 	inptproductoId int	
 )
@@ -105,10 +176,10 @@ DECLARE
 	consumoExistenteId int;
 BEGIN
 	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
-		INSERT INTO CONSUMO VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
+		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
 	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
-	INSERT INTO CONSUMO_PROUCTO VALUES(consumoExistenteId, inptproductoId);
+	INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
 END $$
 	
 /**
@@ -116,8 +187,8 @@ It registers a consumed recipe by a client given the user email,
 the date, meal time and the id of the consumed recipe
 **/
 CREATE OR REPLACE PROCEDURE udp_registroConsumoReceta(
-	inptcorreo VARCHAR(100),
-	intpfecha date,
+	inptcorreo VARCHAR,
+	inptfecha VARCHAR,
 	inpttiempocomidaid int,
 	inptRecetaName RECETA.nombre%type
 )
@@ -127,11 +198,13 @@ DECLARE
 	consumoExistenteId int;
 BEGIN
 	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
-		INSERT INTO CONSUMO VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
+		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
 	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
 	INSERT INTO CONSUMO_RECETA VALUES(consumoExistenteId, inptRecetaName);
 end $$
+
+CALL udp_registroConsumoReceta('cliente@estudiantec.cr', '27-05-2023', 11, 'Pinto');
 
 /**
 Registers the fisiological data given by the user in a specific date.
@@ -139,20 +212,20 @@ It acceps various null values. If a registry is given by the user in the
 same date it overrides the values that are already stored
 **/
 CREATE OR REPLACE PROCEDURE udp_registroMedidas(
-	inptFecha DATE,
+	inptFecha VARCHAR,
 	inptMedidaCintura INT,
 	inptPorcentajeGrasa INT,
 	inptPorcentajeMusculo INT,
 	inptMedidaCadera INT,
 	inptMedidaCuello INT,
-	inptCorreoCliente VARCHAR(100)
+	inptCorreoCliente VARCHAR
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE 
 	medidaExistenteId INT;
 BEGIN
-	IF NOT EXISTS(SELECT Id FROM MEDIDA WHERE MEDIDA.correoclient=intCorreoCliente AND MEDIDA.fecha = inptFecha)
+	IF NOT EXISTS(SELECT Id FROM MEDIDA WHERE MEDIDA.correocliente=inptCorreoCliente AND MEDIDA.fecha = inptFecha)
 	THEN
 	INSERT INTO MEDIDA (
 		Fecha,
@@ -170,7 +243,7 @@ BEGIN
 			inptMedidaCuello,
 			inptCorreoCliente);
 	ELSE
-		medidaExistenteId = (SELECT Id FROM MEDIDA WHERE MEDIDA.correoclient=intCorreoCliente AND MEDIDA.fecha = inptFecha);
+		medidaExistenteId = (SELECT Id FROM MEDIDA WHERE MEDIDA.correocliente=inptCorreoCliente AND MEDIDA.fecha = inptFecha);
 		IF NOT (inptMedidaCintura IS NULL) THEN
 			UPDATE MEDIDA
 			SET medidacintura = inptMedidaCintura
@@ -223,9 +296,9 @@ CREATE OR REPLACE PROCEDURE udp_newProduct(
 	inptVitaminaB12 INT,
 	inptVitaminaA INT,
 	inptCalcio INT)
-LANGUAGE SQL
+LANGUAGE plpgsql
 AS $$
-
+BEGIN
 	INSERT INTO producto(Nombre,
 		Codigo_barras,
 		Tamano_porcion,
@@ -262,5 +335,6 @@ AS $$
 		inptVitaminaA,
 		inptCalcio
 		);
-end;$$;
-
+		COMMIT;
+end
+$$
