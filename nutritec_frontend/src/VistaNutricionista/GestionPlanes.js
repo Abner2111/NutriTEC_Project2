@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Navbar } from "../Templates/Navbar"
+import { NavbarNutricionista } from '../Templates/NavbarNutricionista';
 import axios from 'axios';
 
 import { CSSTransition } from 'react-transition-group';
 
-import NuevaSucursalFormulario from '../Forms/NuevaSucursalFormulario';
-import EditarSucursalFormulario from '../Forms/EditarSucursalFormulario';
-
+import NuevoPlanFormulario from '../Forms/NuevoPlanFormulario';
+import EditarPlanFormulario from '../Forms/EditarPlanFormulario';
 
 
 class GestionPlanes extends Component {
@@ -14,20 +13,14 @@ class GestionPlanes extends Component {
     super(props);
   
     this.state = {
-      nombre: "",
-      sucursales: [], // lista de sucursales obtenidos desde el API
-      telefonos: [], // lista de teléfonos para cada sucursal
+      planes: [], // lista de planes obtenidos desde el API
       showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
       showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
       showthreeForm: false,
-      showTelForm: false,
-      showTeltwoForm: false,
 
       showDialog: false, // variable para mostrar/ocultar el diálogo para agregar nuevos sucursal
       showtwoDialog: false, // variable para mostrar/ocultar el diálogo para añadir información adicional a una sucursal existente
-      showTelDialog: false, // variable para mostrar/ocultar el diálogo para agregar nuevos sucursales
-      showTeltwoDialog: false, // variable para mostrar/ocultar el diálogo para añadir información adicional a una sucursal existente
-
+      
       error: null, // variable para guardar posibles errores del API
     };
   }
@@ -50,17 +43,6 @@ class GestionPlanes extends Component {
     this.setState({ showthreeForm: !this.state.showthreeForm });
   };
 
-  /* PARA AGREGAR TELÉFONOS DE SUCURSALES */
-  // Función para alternar la visibilidad del formulario para agregar sucursal
-  toggleTelForm = () => {
-    this.setState({ showTelForm: !this.state.showTelForm });
-  };
-
-  // Función para alternar la visibilidad del formulario para eliminar sucursal
-  toggleTelt = () => {
-    this.setState({ showTeltwoForm: !this.state.showTeltwoForm });
-  };
-
 
 
   /* DIÁLOGOS */
@@ -79,63 +61,37 @@ class GestionPlanes extends Component {
     this.setState(prevState => ({ showthreeDialog: !prevState.showthreeDialog }));
   };
 
-  // Función para alternar la visibilidad del diálogo para agregar nueva sucursal
-  toggleTelDialog = () => {
-    this.setState(prevState => ({ showTelDialog: !prevState.showTelDialog }));
-  };
-
-  // Función para alternar la visibilidad del diálogo para editar sucursal
-  toggleTeltD = () => {
-    this.setState(prevState => ({ showTeltwoDialog: !prevState.showTeltwoDialog }));
-  };
-
-  getSucursal = (x) => {
-    this.setState({sucursal: x})
+  getPlan = (x) => {
+    this.setState({plan: x})
     this.toggletD()
   }
 
-  deleteSucursal = (suc) => {
+  deletePlan = (id) => {
     axios
-      .delete("http://localhost:5236/api/sucursal/"+suc, {
+      .delete("http://localhost:5295/api/plan/"+id, {
         
       })
       .then((response) => {
-        // Actualizar el estado de los pacientes con los nuevos datos ingresados
-        this.handleSucursal();
+        this.handlePlan();
       })
       .catch((error) => {
-        alert("No ha sido posible eliminar esta sucursal")
+        alert("No ha sido posible eliminar este plan")
       });
 
-    console.log("Sucursal eliminada");
+    console.log("Plan eliminado");
   };
 
   /* PARA COMPONENTES */
   // función que se ejecuta cuando se carga el componente
   componentDidMount() {
-    this.handleSucursal(); // se obtiene la lista de sucursales
+    this.handlePlan(); // se obtiene la lista de sucursales
   }
 
   // función para obtener la lista de sucursales, y teléfonos desde el API
-  handleSucursal = () => {
-    axios.get('http://localhost:5236/api/Sucursal') // obtiene la lista de sucursales desde el API
+  handlePlan = () => {
+    axios.get('http://localhost:5295/api/Plan') // obtiene la lista de sucursales desde el API
       .then(response => {
-        this.setState({ sucursales: response.data }); // guarda la lista de sucursales en el estado
-      })
-      .catch(error => {
-        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
-      });
-
-    axios.get('http://localhost:5236/api/SucursalTelefonos') // obtiene la lista de teléfonos para cada paciente desde el API
-      .then(response => {
-        const telefonos = {};
-        response.data.forEach(telefono => {
-          if (!telefonos[telefono.sucursal]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            telefonos[telefono.sucursal] = [];
-          }
-          telefonos[telefono.sucursal].push(telefono.telefono); // se agrega el teléfono actual a la lista de teléfonos del paciente
-        });
-        this.setState({ telefonos }); // se guarda la lista de teléfonos en el estado
+        this.setState({ planes: response.data }); // guarda la lista de sucursales en el estado
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
@@ -163,56 +119,44 @@ class GestionPlanes extends Component {
 
   // función que renderiza el componente
 render() {
-  const { sucursales, error, showDialog, showtwoDialog, showTelDialog, showTeltwoDialog } = this.state;
+  const { planes, error, showDialog, showtwoDialog } = this.state;
 
   return (
     <div style={{ backgroundColor: '#fff', textAlign: 'center' }}>
-        <Navbar/>
-  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Sucursales</h1>
+        <NavbarNutricionista/>
+  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Planes</h1>
       {error && <div>Error: {error}</div>}
       <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto'}} className="table border shadow">
         <thead>
           <tr>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Identificador</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nombre</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Dirección</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Fecha apertura</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Horario de atención</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Administrador</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Capacidad máxima</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Teléfonos</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Spa</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Tienda</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nutricionista</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Editar</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Eliminar</th>
           </tr>
         </thead>
         <tbody>
-          {sucursales.map(sucursale => (
-            <tr key={sucursale.nombre}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.nombre}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.canton}, {sucursale.distrito}, {sucursale.provincia}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.fecha_apertura}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.horario_atencion}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.administrador}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.capacidad_maxima}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.telefonos[sucursale.nombre] ? this.state.telefonos[sucursale.nombre].join(', ') : ''}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.activacion_spa}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{sucursale.activacion_tienda}</td>
+          {planes.map(plan => (
+            <tr key={plan.id}>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.id}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
-                onClick={() => this.getSucursal(sucursale)}>Editar</button> 
+                onClick={() => this.getPlan(plan)}>Editar</button> 
               </td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#c92d15', border: '2px solid #c92d15', cursor: 'pointer' }} 
-                onClick={() => this.deleteSucursal(sucursale.nombre)}>Eliminar</button>
+                onClick={() => this.deletePlan(plan.id)}>Eliminar</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div>
+      <div> 
         <button style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '5px', backgroundColor: '#fff', color: '#4CAF50', border: '2px solid #4CAF50', cursor: 'pointer' }} 
-        onClick={this.toggleDialog}>Nueva sucursal</button>
+        onClick={this.toggleDialog}>Nuevo plan</button>
         {showDialog && (
             <div
               style={{
@@ -247,9 +191,9 @@ render() {
               }}
             >
               {/* contenido del diálogo */}
-              <NuevaSucursalFormulario 
+              <NuevoPlanFormulario 
                 onClose={this.toggleDialog}
-                onNewSucursal={this.handleSucursal}
+                onNewPlan={this.handlePlan}
               />
               
             </div>
@@ -294,10 +238,10 @@ render() {
             }}
           >
             {/* contenido del diálogo */}
-            <EditarSucursalFormulario
+            <EditarPlanFormulario
               editName={this.state}
               onClose={this.toggletD}
-              onEditSucursal={this.handleSucursal}
+              onEditPlan={this.handlePlan}
             />
             
           </div>
