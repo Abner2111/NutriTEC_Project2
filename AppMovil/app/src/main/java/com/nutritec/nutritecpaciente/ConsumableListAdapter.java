@@ -66,6 +66,9 @@ public class ConsumableListAdapter extends ArrayAdapter<Consumable> {
             }
         });
 
+        if (this.selectedArrayList==null){
+            agregar_btn.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 }

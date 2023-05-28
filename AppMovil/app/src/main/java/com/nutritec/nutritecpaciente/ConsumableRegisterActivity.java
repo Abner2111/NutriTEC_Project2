@@ -44,6 +44,14 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
             }
         });
 
+        binding.newRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newRecipe = new Intent(ConsumableRegisterActivity.this, NuevaRecetaActivity.class);
+                startActivity(newRecipe);
+            }
+        });
+
     }
 
     private void initSearchWidgets(){
@@ -91,8 +99,6 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
     private void setUpList(){
         ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(),  consumableList, selectedConsumables);
         binding.listview.setAdapter(adapter);
-
-
     }
 
 }

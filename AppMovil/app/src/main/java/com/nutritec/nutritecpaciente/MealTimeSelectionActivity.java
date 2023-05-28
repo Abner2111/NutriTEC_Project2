@@ -46,7 +46,7 @@ public class MealTimeSelectionActivity extends AppCompatActivity {
                 consumableSelection.putExtra("MealTime", selectedMeal);
 
                 startActivity(consumableSelection);
-                finishAffinity();
+                finish();
             }
         });
     }

@@ -19,4 +19,6 @@
     <string name="porcentajemusculolbl">Porcentaje de músculo</string>
     <string name="porcentajegrasalbl">Porcentaje de grasa</string>
     <string name="measureRegistryTitle">Registro de medidas fiosionómicas</string>
+    <string name="NewRecipetitle">Crea una nueva receta</string>
+    <string name="register_recipe">Registrar receta</string>
 </resources>
