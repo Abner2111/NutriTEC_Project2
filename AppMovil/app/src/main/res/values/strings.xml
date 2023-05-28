@@ -21,4 +21,23 @@
     <string name="measureRegistryTitle">Registro de medidas fiosionómicas</string>
     <string name="NewRecipetitle">Crea una nueva receta</string>
     <string name="register_recipe">Registrar receta</string>
+    <string name="NewProductTitle">Registra un nuevo producto</string>
+    <string name="nameLabel">Nombre</string>
+    <string name="barcodeLabel">Código de barras</string>
+    <string name="portionSizeLabel">Tamaño de porción</string>
+    <string name="fatPerPortionLabel">Grasa por porción (mg/porción)</string>
+    <string name="energyPerPortionLabl">Energía por pocion (kCal)</string>
+    <string name="proteinPerPortionLabel">Proteina por porción (mg/porción)</string>
+    <string name="sodiumPerPortionLabel">Sodio por porción (mg/porción)</string>
+    <string name="carbsPerPortionLabel">Carbohidratos por porción (mg/porción)</string>
+    <string name="ironPerPortionLabel">Hierro por porción (mg/porción)</string>
+    <string name="vitaminDLabel">Vitamina D por porción (mg/porción)</string>
+    <string name="vitaminB6PerPortionLabel">Vitamina B6 por porción (mg/porción)</string>
+    <string name="vitaminCPerPortionLabel">Vitamina C por porción (mg/porción)</string>
+    <string name="vitaminKPerPortionLabel">Vitamina K por porción (mg/porción)</string>
+    <string name="vitaminBPerPortinLabel">Vitamina B por porión (mg/porción)</string>
+    <string name="vitaminB12PerPortionLabel">Vitamina B12 por porción (mg/porción)</string>
+    <string name="vitaminAPerPortionLabel">Vitamina A por porción (mg/porción)</string>
+    <string name="calciumPerPortionLabel">Calcio por porción (mg/porción)</string>
+    <string name="register_product">Registrar producto</string>
 </resources>

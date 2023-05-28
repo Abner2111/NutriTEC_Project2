@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Selection;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -47,11 +45,18 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
         binding.newRecipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent newRecipe = new Intent(ConsumableRegisterActivity.this, NuevaRecetaActivity.class);
+                Intent newRecipe = new Intent(ConsumableRegisterActivity.this, NewRecetaActivity.class);
                 startActivity(newRecipe);
             }
         });
 
+        binding.newProductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newProduct = new Intent(ConsumableRegisterActivity.this, NewProductActivity.class);
+                startActivity(newProduct);
+            }
+        });
     }
 
     private void initSearchWidgets(){

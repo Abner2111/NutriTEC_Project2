@@ -41,20 +41,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/newRecipeBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="2sp"
-                android:layout_weight="1"
-                android:text="@string/new_recipe" />
-
-            <Button
                 android:id="@+id/newProductBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2sp"
                 android:layout_weight="1"
                 android:text="@string/new_product" />
+
+            <Button
+                android:id="@+id/newRecipeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2sp"
+                android:layout_weight="1"
+                android:text="@string/new_recipe" />
         </LinearLayout>
 
         <ListView

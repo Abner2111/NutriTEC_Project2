@@ -13,7 +13,10 @@
         android:theme="@style/Theme.NutriTECPaciente"
         tools:targetApi="31">
         <activity
-            android:name=".NuevaRecetaActivity"
+            android:name=".NewProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewRecetaActivity"
             android:exported="false" />
         <activity
             android:name=".MeasurementRegisterActivity"

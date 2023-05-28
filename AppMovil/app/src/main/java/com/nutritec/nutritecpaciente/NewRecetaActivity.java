@@ -11,7 +11,7 @@ import com.nutritec.nutritecpaciente.databinding.ActivityNuevaRecetaBinding;
 
 import java.util.ArrayList;
 
-public class NuevaRecetaActivity extends AppCompatActivity {
+public class NewRecetaActivity extends AppCompatActivity {
     ActivityNuevaRecetaBinding binding;
 
     public ArrayList<Consumable> productList = new ArrayList<>();
@@ -29,6 +29,7 @@ public class NuevaRecetaActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setUpData();
         setUpList();
+        getRecipeNames();
         binding.registroRecetaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +65,10 @@ public class NuevaRecetaActivity extends AppCompatActivity {
     private void setUpList(){
         ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(),  productList, selectedProducts);
         binding.listview.setAdapter(adapter);
+    }
+
+    private void getRecipeNames(){
+
     }
 
 
