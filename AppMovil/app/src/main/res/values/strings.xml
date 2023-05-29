@@ -40,4 +40,12 @@
     <string name="vitaminAPerPortionLabel">Vitamina A por porción (mg/porción)</string>
     <string name="calciumPerPortionLabel">Calcio por porción (mg/porción)</string>
     <string name="register_product">Registrar producto</string>
+    <string name="Register">Registrarse</string>
+    <string name="newUserRegistrytitle">Regístrate en NutriTEC</string>
+    <string name="incorrect_password">Contraseña incorrecta</string>
+    <string name="Login_register">Iniciar sesión</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_cedula">Correo electrónico</string>
+    <string name="prompt_email">Correo electrónico</string>
+    <string name="invalid_id">Correo electrónico inválido</string>
 </resources>
