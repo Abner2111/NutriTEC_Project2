@@ -14,7 +14,7 @@ namespace API_NutriTEC.Controllers
         NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
         //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
         
-        private Plan plan = new Plan();
+        private PlanComida _planComida = new PlanComida();
         private readonly ApplicationDbContext _context;
 
         public PlanController(ApplicationDbContext context)
@@ -25,27 +25,35 @@ namespace API_NutriTEC.Controllers
         [HttpGet]
         public async Task <ActionResult<IEnumerable<Plan>>> GetPlanes()
         {
-            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlan();").ToList();
+            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanes();").ToList();
+            //return Ok();
+            return result;
+        }
+        
+        [HttpGet("Comidas")]
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesComidas()
+        {
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlan();").ToList();
             //return Ok();
             return result;
         }
         
         [HttpGet("{id}")]
-        public async Task <ActionResult<IEnumerable<Plan>>> GetPlan(int id)
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlan(int id)
         {
-            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanById({id});").ToList();
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanById({id});").ToList();
             return result;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Plan>> PostPlan(Plan plan)
+        public async Task<ActionResult<PlanComida>> PostPlan(PlanComida planComida)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("addplan", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("nombre_", plan.plan);
-            cmd.Parameters.AddWithValue("nutricionistid_", plan.nutricionistid);
-            cmd.Parameters.AddWithValue("tiempocomida_", plan.tiempocomida);
-            cmd.Parameters.AddWithValue("comida_", plan.comida);
+            cmd.Parameters.AddWithValue("nombre_", planComida.plan);
+            cmd.Parameters.AddWithValue("nutricionistid_", planComida.nutricionistid);
+            cmd.Parameters.AddWithValue("tiempocomida_", planComida.tiempocomida);
+            cmd.Parameters.AddWithValue("comida_", planComida.comida);
             
             try
             {
@@ -61,13 +69,13 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<Plan>> PutPlan(int id, Plan plan)
+        public async Task<ActionResult<PlanComida>> PutPlan(int id, PlanComida planComida)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("putplan", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("id_", id);
-            cmd.Parameters.AddWithValue("nombre_", plan.plan);
-            cmd.Parameters.AddWithValue("nutricionistid_", plan.nutricionistid);
+            cmd.Parameters.AddWithValue("nombre_", planComida.plan);
+            cmd.Parameters.AddWithValue("nutricionistid_", planComida.nutricionistid);
             
             try
             {
@@ -83,7 +91,7 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Plan>> DeletePlan(int id)
+        public async Task<ActionResult<PlanComida>> DeletePlan(int id)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("deleteplan", con);
             cmd.CommandType = CommandType.StoredProcedure;

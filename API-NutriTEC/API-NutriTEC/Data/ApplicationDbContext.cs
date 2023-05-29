@@ -12,11 +12,12 @@ namespace API_NutriTEC.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Plan>().HasKey(p => new {p.id, p.tiempocomida, p.comida});
+            modelBuilder.Entity<PlanComida>().HasKey(p => new {p.id, p.tiempocomida, p.comida});
         }
         
         public DbSet<Administrador> administrador { get; set; }
         public DbSet<Plan> plan { get; set; }
+        public DbSet<PlanComida> plancomida { get; set; }
         public DbSet<Cliente> cliente { get; set; }
         public DbSet<Medida> medida { get; set; }
         public DbSet<Consumo> consumo { get; set; }

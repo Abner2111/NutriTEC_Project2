@@ -14,6 +14,7 @@ class GestionPlanes extends Component {
   
     this.state = {
       planes: [], // lista de planes obtenidos desde el API
+      comidas: [],
       showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
       showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
       showthreeForm: false,
@@ -96,6 +97,24 @@ class GestionPlanes extends Component {
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
       });
+
+    axios.get('http://localhost:5295/api/Plan/Comidas') // obtiene la lista de teléfonos para cada paciente desde el API
+      .then(response => {
+        const comidas = {};
+        response.data.forEach(comida => {
+          if (!comidas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            comidas[comida.id] = [];
+          }
+          comidas[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
+          comidas[comida.id].push(": ");
+          comidas[comida.id].push(comida.comida);
+          comidas[comida.id].push(<br></br>);
+        });
+        this.setState({ comidas }); // se guarda la lista de teléfonos en el estado
+      })
+      .catch(error => {
+        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
+      });
   }
 
   // función para abrir el diálogo para agregar nuevas sucursales
@@ -126,24 +145,27 @@ render() {
         <NavbarNutricionista/>
   <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Planes</h1>
       {error && <div>Error: {error}</div>}
-      <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto'}} className="table border shadow">
+      {planes.map(plan => (
+        
+      <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto 2em'}} className="table border shadow">
         <thead>
           <tr>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nombre</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nutricionista</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Tiempo de comida</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Comida</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Total calorías</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Editar</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Eliminar</th>
           </tr>
         </thead>
+        
         <tbody>
-          {planes.map(plan => (
-            <tr key={plan.id}>
+          
+            <tr key={(plan)}>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.tiempo_comida}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.comida}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.comidas[plan.id] ? this.state.comidas[plan.id] : '' }</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>UC</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
                 onClick={() => this.getPlan(plan)}>Editar</button> 
@@ -153,9 +175,12 @@ render() {
                 onClick={() => this.deletePlan(plan.id)}>Eliminar</button>
               </td>
             </tr>
-          ))}
+          
         </tbody>
+        
       </table>
+      
+      ))}
       <div> 
         <button style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '5px', backgroundColor: '#fff', color: '#4CAF50', border: '2px solid #4CAF50', cursor: 'pointer' }} 
         onClick={this.toggleDialog}>Nuevo plan</button>
