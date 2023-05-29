@@ -66,7 +66,6 @@ public class RegistroClienteActivity extends AppCompatActivity implements DatePi
             public void onClick(View v) {
                 String id = String.valueOf(binding.userCedulaEdittext.getText());
                 String username = String.valueOf(binding.userNameEdittext.getText());
-                String snd_name = String.valueOf(binding.user2ndNameEdittext.getText());
                 String apellido1 = String.valueOf(binding.userApellido1Edittext.getText());
                 String apellido2 = String.valueOf(binding.userApellido2Edittext.getText());
                 String correo_e = String.valueOf(binding.userEmailEdittext.getText());

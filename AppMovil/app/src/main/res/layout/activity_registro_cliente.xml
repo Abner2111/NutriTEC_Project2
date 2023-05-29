@@ -8,15 +8,7 @@
     android:padding="10sp"
     tools:context=".RegistroClienteActivity">
 
-    <TextView
-        android:id="@+id/userRegistrylbl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/newUserRegistrytitle"
-        android:textSize="43sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -25,16 +17,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userRegistrylbl">
+        app:layout_constraintTop_toTopOf="parent">
+
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
-
+            <TextView
+                android:id="@+id/userRegistrylbl"
+                android:layout_width="match_parent"
+                android:layout_height="150sp"
+                android:text="@string/newUserRegistrytitle"
+                android:textSize="43sp"
+                />
             <LinearLayout
                 android:id="@+id/user_personal_info"
                 android:layout_width="match_parent"
@@ -70,19 +68,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="65dp"
                             android:layout_weight="1"
-                            android:hint="*Nombre 1"
+                            android:hint="*Nombre"
+                            android:digits="aábcdeéfghíijklmnoópqrstuúvwxyzAÁBCDÉEFGHIÍJKLMNÓOPQRSTUÚVWXYZ"
                             android:inputType="textCapWords"
                             android:textSize="18sp" />
 
-                        <EditText
-                            android:id="@+id/user_2ndName_edittext"
-                            style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="65sp"
-                            android:layout_weight="1"
-                            android:hint="Nombre 2"
-                            android:inputType="text|textCapWords"
-                            android:textSize="18sp" />
                     </LinearLayout>
 
                     <LinearLayout

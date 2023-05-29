@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        
         binding.registrarConsumoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
