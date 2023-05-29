@@ -7,6 +7,8 @@ public class Plan
 {
     [Key] 
     public int? id { get; set; }
-    public string nombre { get; set; }
+    public string plan { get; set; }
     public int nutricionistid { get; set; }
+    public string tiempocomida { get; set; }
+    public string comida { get; set; }
 }

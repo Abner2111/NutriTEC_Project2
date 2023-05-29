@@ -9,6 +9,11 @@ namespace API_NutriTEC.Data
         {
             Database.Migrate();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Plan>().HasKey(p => new {p.id, p.tiempocomida, p.comida});
+        }
         
         public DbSet<Administrador> administrador { get; set; }
         public DbSet<Plan> plan { get; set; }

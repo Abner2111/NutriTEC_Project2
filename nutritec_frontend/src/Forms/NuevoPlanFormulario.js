@@ -89,11 +89,31 @@ class NuevoPlanFormulario extends Component {
             />
           </div>
           <div className="form-input">
+            <label htmlFor="nombre">Tiempo de comida:</label>
+            <select name="cars" id="cars">
+              <option value="volvo">Desayuno</option>
+              <option value="saab">Merienda mañana</option>
+              <option value="mercedes">Almuerzo</option>
+              <option value="audi">Merienda tarde</option>
+              <option value="audi">Cena</option>
+            </select>
+          </div>
+          <div className="form-input">
             <label htmlFor="nutricionistid">Id del nutricionista:</label>
             <input
               type="text"
               name="nutricionistid"
               value={this.state.nutricionistid}
+              onChange={this.handleChange}
+              required
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="comida">Comida:</label>
+            <input
+              type="text"
+              name="comida"
+              value={this.state.comida}
               onChange={this.handleChange}
               required
             />

@@ -129,9 +129,10 @@ render() {
       <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto'}} className="table border shadow">
         <thead>
           <tr>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Identificador</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nombre</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nutricionista</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Tiempo de comida</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Comida</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Editar</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Eliminar</th>
           </tr>
@@ -139,9 +140,10 @@ render() {
         <tbody>
           {planes.map(plan => (
             <tr key={plan.id}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.id}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.tiempo_comida}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.comida}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
                 onClick={() => this.getPlan(plan)}>Editar</button> 

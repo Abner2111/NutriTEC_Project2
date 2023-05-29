@@ -1,34 +1,61 @@
 -- Plan
 CREATE OR REPLACE PROCEDURE AddPlan(
 	Nombre_ VARCHAR,
-	NutricionistId_ INT
+	NutricionistId_ INT,
+	Tiempocomida_ VARCHAR,
+	Comida_ VARCHAR
 )
 language plpgsql
 AS $$
+DECLARE
+	IdPlan INT;
+	IdComida INT;
+	IdTiempoComida INT;
 BEGIN
-	INSERT INTO PLAN(Nombre, NutricionistId)
-	VALUES (Nombre_, NutricionistId_);
+	IF NOT EXISTS (SELECT Id FROM PLAN WHERE PLAN.nombre = Nombre_) THEN
+		INSERT INTO PLAN(Nombre, NutricionistId)
+		VALUES (Nombre_, NutricionistId_);
+	END IF;
+	IdPlan = (SELECT Id FROM PLAN WHERE PLAN.nombre = Nombre_);
+	IdTiempoComida = (SELECT Id FROM TIEMPO_COMIDA WHERE TIEMPO_COMIDA.nombre = Tiempocomida_);
+	INSERT INTO COMIDA (tiempo_comida, planid) VALUES (IdTiempoComida, IdPlan);
+	
+	IdComida = (SELECT Id FROM COMIDA WHERE COMIDA.tiempo_comida = IdTiempoComida AND COMIDA.planid = IdPlan);
+	INSERT INTO RECETA_COMIDA (comidaid, recetaname) VALUES (IdComida, Comida_);
 	commit;
 END
 $$
 
+SELECT * FROM GetPlan();
+CALL AddPlan('Gana grasa', 123456789, 'Cena', 'Pinto');
 
 CREATE OR REPLACE FUNCTION GetPlan()
-RETURNS setof PLAN
+RETURNS TABLE(id INT, plan VARCHAR, nutricionistid INT, tiempocomida VARCHAR, comida VARCHAR)
 language sql
 AS
 $$
-	SELECT * FROM PLAN;
+	--SELECT * FROM PLAN;
+	SELECT PLAN.id, PLAN.nombre, PLAN.nutricionistid, TIEMPO_COMIDA.nombre, RECETA_COMIDA.recetaname
+	FROM (((PLAN
+	INNER JOIN COMIDA ON PLAN.id = COMIDA.planid)
+	INNER JOIN TIEMPO_COMIDA ON COMIDA.tiempo_comida = TIEMPO_COMIDA.id)
+	INNER JOIN RECETA_COMIDA ON RECETA_COMIDA.comidaid = COMIDA.id);
 $$
 
 
 CREATE OR REPLACE FUNCTION GetPlanById(
 	Id_ INT
 )
-RETURNS setof PLAN
+RETURNS TABLE(id INT, plan VARCHAR, nutricionistid INT, tiempocomida VARCHAR, comida VARCHAR)
 language sql
 AS $$
-	SELECT * FROM PLAN WHERE plan.Id = Id_;
+	--SELECT * FROM PLAN WHERE plan.Id = Id_;
+	SELECT PLAN.id, PLAN.nombre, PLAN.nutricionistid, TIEMPO_COMIDA.nombre, RECETA_COMIDA.recetaname
+	FROM (((PLAN
+	INNER JOIN COMIDA ON PLAN.id = COMIDA.planid)
+	INNER JOIN TIEMPO_COMIDA ON COMIDA.tiempo_comida = TIEMPO_COMIDA.id)
+	INNER JOIN RECETA_COMIDA ON RECETA_COMIDA.comidaid = COMIDA.id)
+	WHERE plan.Id = Id_;
 $$;
 
 
@@ -59,7 +86,7 @@ BEGIN
 END
 $$;
 
-
+CALL DeletePlan(1);
 
 -- Busqueda de clientes
 CREATE OR REPLACE FUNCTION GetClienteByCorreo(
