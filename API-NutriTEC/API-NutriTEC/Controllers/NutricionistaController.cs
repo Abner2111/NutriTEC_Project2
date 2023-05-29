@@ -13,11 +13,40 @@ namespace API_NutriTEC.Controllers
     [ApiController]
     public class NutricionistaController : ControllerBase
     {
+        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
         private readonly ApplicationDbContext _context;
 
         public NutricionistaController(ApplicationDbContext context)
         {
             _context = context;
+        }
+        
+        [HttpGet("Asociados/{nutricionista}")]
+        public async Task <ActionResult<IEnumerable<Cliente>>> GetPacientesDeNutricionista(int nutricionista)
+        {
+            var result = _context.cliente.FromSqlRaw($"SELECT * FROM GetClientesDeNutricionista({nutricionista});").ToList();
+            return result;
+        }
+        
+        [HttpPost("Asociar")]
+        public async Task<ActionResult<ClienteNutricionista>> AsociarClienteNutricionista(ClienteNutricionista clientenutricionista)
+        {
+            NpgsqlCommand cmd = new NpgsqlCommand("AddClienteToNutricionista", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("nutricionista_", clientenutricionista.nutricionista);
+            cmd.Parameters.AddWithValue("cliente_", clientenutricionista.cliente);
+            
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // POST: api/nutricionista/registrar
