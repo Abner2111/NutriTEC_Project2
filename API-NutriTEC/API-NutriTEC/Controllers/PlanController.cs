@@ -26,15 +26,20 @@ namespace API_NutriTEC.Controllers
         public async Task <ActionResult<IEnumerable<Plan>>> GetPlanes()
         {
             var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanes();").ToList();
-            //return Ok();
             return result;
         }
         
-        [HttpGet("Comidas")]
-        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesComidas()
+        [HttpGet("Recetas")]
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesRecetas()
         {
-            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlan();").ToList();
-            //return Ok();
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanRecetas();").ToList();
+            return result;
+        }
+        
+        [HttpGet("Productos")]
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesProductos()
+        {
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanProductos();").ToList();
             return result;
         }
         
@@ -69,13 +74,13 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<PlanComida>> PutPlan(int id, PlanComida planComida)
+        public async Task<ActionResult<Plan>> PutPlan(int id, Plan plan)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("putplan", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("id_", id);
-            cmd.Parameters.AddWithValue("nombre_", planComida.plan);
-            cmd.Parameters.AddWithValue("nutricionistid_", planComida.nutricionistid);
+            cmd.Parameters.AddWithValue("nombre_", plan.nombre);
+            cmd.Parameters.AddWithValue("nutricionistid_", plan.nutricionistid);
             
             try
             {
@@ -91,7 +96,7 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<PlanComida>> DeletePlan(int id)
+        public async Task<ActionResult<Plan>> DeletePlan(int id)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("deleteplan", con);
             cmd.CommandType = CommandType.StoredProcedure;

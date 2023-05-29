@@ -14,7 +14,8 @@ class GestionPlanes extends Component {
   
     this.state = {
       planes: [], // lista de planes obtenidos desde el API
-      comidas: [],
+      recetas: [],
+      productos: [],
       showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
       showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
       showthreeForm: false,
@@ -93,24 +94,43 @@ class GestionPlanes extends Component {
     axios.get('http://localhost:5295/api/Plan') // obtiene la lista de sucursales desde el API
       .then(response => {
         this.setState({ planes: response.data }); // guarda la lista de sucursales en el estado
+        console.log(response.data);
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
       });
 
-    axios.get('http://localhost:5295/api/Plan/Comidas') // obtiene la lista de teléfonos para cada paciente desde el API
+    axios.get('http://localhost:5295/api/Plan/Recetas') // obtiene la lista de teléfonos para cada paciente desde el API
       .then(response => {
-        const comidas = {};
+        const recetas = {};
         response.data.forEach(comida => {
-          if (!comidas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            comidas[comida.id] = [];
+          if (!recetas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            recetas[comida.id] = [];
           }
-          comidas[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
-          comidas[comida.id].push(": ");
-          comidas[comida.id].push(comida.comida);
-          comidas[comida.id].push(<br></br>);
+          recetas[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
+          recetas[comida.id].push(": ");
+          recetas[comida.id].push(comida.comida);
+          recetas[comida.id].push(<br></br>);
         });
-        this.setState({ comidas }); // se guarda la lista de teléfonos en el estado
+        this.setState({ recetas }); // se guarda la lista de teléfonos en el estado
+      })
+      .catch(error => {
+        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
+      });
+
+      axios.get('http://localhost:5295/api/Plan/Productos') // obtiene la lista de teléfonos para cada paciente desde el API
+      .then(response => {
+        const productos = {};
+        response.data.forEach(comida => {
+          if (!productos[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            productos[comida.id] = [];
+          }
+          productos[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
+          productos[comida.id].push(": ");
+          productos[comida.id].push(comida.comida);
+          productos[comida.id].push(<br></br>);
+        });
+        this.setState({ productos }); // se guarda la lista de teléfonos en el estado
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
@@ -164,7 +184,7 @@ render() {
             <tr key={(plan)}>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.comidas[plan.id] ? this.state.comidas[plan.id] : '' }</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.productos[plan.id]} {this.state.recetas[plan.id]}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>UC</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 

@@ -1,0 +1,93 @@
+-- Consumo receta
+CREATE OR REPLACE FUNCTION d_consumo_receta() 
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+	DELETE FROM CONSUMO_RECETA
+	WHERE consumo_id = OLD.consumo_id;
+	RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_consumo_receta
+	BEFORE DELETE ON consumo FOR EACH ROW
+	EXECUTE PROCEDURE d_consumo_receta();
+	
+
+-- Consumo producto
+CREATE OR REPLACE FUNCTION d_consumo_producto() 
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+	DELETE FROM CONSUMO_PRODUCTO
+	WHERE consumo_id = OLD.consumo_id;
+	RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_consumo_producto
+	BEFORE DELETE ON consumo FOR EACH ROW
+	EXECUTE PROCEDURE d_consumo_producto();
+
+	
+-- Comida
+CREATE OR REPLACE FUNCTION d_comida_plan()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+	DELETE FROM COMIDA
+	WHERE planid = OLD.id;
+	RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_comida_plan
+	BEFORE DELETE ON PLAN FOR EACH ROW
+	EXECUTE PROCEDURE d_comida_plan();
+
+
+-- Receta comida
+CREATE OR REPLACE FUNCTION d_receta_comida()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+	DELETE FROM RECETA_COMIDA
+	WHERE comidaid = OLD.id;
+	RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_receta_comida
+	BEFORE DELETE ON COMIDA FOR EACH ROW
+	EXECUTE PROCEDURE d_receta_comida();
+
+
+-- Producto comida
+CREATE OR REPLACE FUNCTION d_producto_comida()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+	DELETE FROM PRODUCTO_COMIDA
+	WHERE comidaid = OLD.id;
+	RETURN OLD;
+END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_producto_comida
+	BEFORE DELETE ON COMIDA FOR EACH ROW
+	EXECUTE PROCEDURE d_producto_comida();
+	
+	
+
+-- Test
+DELETE FROM CONSUMO_RECETA;

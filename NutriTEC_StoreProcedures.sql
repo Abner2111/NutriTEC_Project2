@@ -11,36 +11,68 @@ DECLARE
 	IdPlan INT;
 	IdComida INT;
 	IdTiempoComida INT;
+	IdProducto INT;
 BEGIN
 	IF NOT EXISTS (SELECT Id FROM PLAN WHERE PLAN.nombre = Nombre_) THEN
 		INSERT INTO PLAN(Nombre, NutricionistId)
 		VALUES (Nombre_, NutricionistId_);
 	END IF;
+	
 	IdPlan = (SELECT Id FROM PLAN WHERE PLAN.nombre = Nombre_);
 	IdTiempoComida = (SELECT Id FROM TIEMPO_COMIDA WHERE TIEMPO_COMIDA.nombre = Tiempocomida_);
 	INSERT INTO COMIDA (tiempo_comida, planid) VALUES (IdTiempoComida, IdPlan);
 	
 	IdComida = (SELECT Id FROM COMIDA WHERE COMIDA.tiempo_comida = IdTiempoComida AND COMIDA.planid = IdPlan);
-	INSERT INTO RECETA_COMIDA (comidaid, recetaname) VALUES (IdComida, Comida_);
+	
+	IF EXISTS (SELECT RecetaName FROM RECETA_COMIDA WHERE RECETA_COMIDA.recetaname = Comida_) THEN
+		INSERT INTO RECETA_COMIDA (comidaid, recetaname) VALUES (IdComida, Comida_);
+	ELSE
+		IdProducto = (SELECT Id FROM PRODUCTO WHERE PRODUCTO.nombre = Comida_);
+		INSERT INTO PRODUCTO_COMIDA (comidaid, producto_id) VALUES (IdComida, IdProducto);
+	END IF;
+	
 	commit;
 END
 $$
 
-SELECT * FROM GetPlan();
-CALL AddPlan('Gana grasa', 123456789, 'Cena', 'Pinto');
 
-CREATE OR REPLACE FUNCTION GetPlan()
+CREATE OR REPLACE FUNCTION GetPlanes()
+RETURNS setof PLAN
+language sql
+AS
+$$
+	SELECT * FROM PLAN;
+$$
+
+
+CREATE OR REPLACE FUNCTION GetPlanRecetas()
 RETURNS TABLE(id INT, plan VARCHAR, nutricionistid INT, tiempocomida VARCHAR, comida VARCHAR)
 language sql
 AS
 $$
-	--SELECT * FROM PLAN;
 	SELECT PLAN.id, PLAN.nombre, PLAN.nutricionistid, TIEMPO_COMIDA.nombre, RECETA_COMIDA.recetaname
 	FROM (((PLAN
 	INNER JOIN COMIDA ON PLAN.id = COMIDA.planid)
 	INNER JOIN TIEMPO_COMIDA ON COMIDA.tiempo_comida = TIEMPO_COMIDA.id)
 	INNER JOIN RECETA_COMIDA ON RECETA_COMIDA.comidaid = COMIDA.id);
 $$
+
+CREATE OR REPLACE FUNCTION GetPlanProductos()
+RETURNS TABLE(id INT, plan VARCHAR, nutricionistid INT, tiempocomida VARCHAR, comida VARCHAR)
+language sql
+AS
+$$
+	SELECT PLAN.id, PLAN.nombre, PLAN.nutricionistid, TIEMPO_COMIDA.nombre, PRODUCTO.nombre
+	FROM ((((PLAN
+	INNER JOIN COMIDA ON PLAN.id = COMIDA.planid)
+	INNER JOIN TIEMPO_COMIDA ON COMIDA.tiempo_comida = TIEMPO_COMIDA.id)
+	INNER JOIN PRODUCTO_COMIDA ON PRODUCTO_COMIDA.comidaid = COMIDA.id)
+	INNER JOIN PRODUCTO ON PRODUCTO.id = PRODUCTO_COMIDA.producto_id);
+$$
+
+SELECT * FROM GetPlanRecetas();
+SELECT * FROM GetPlanProductos();
+
 
 
 CREATE OR REPLACE FUNCTION GetPlanById(

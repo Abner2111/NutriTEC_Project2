@@ -8,8 +8,10 @@ class NuevoPlanFormulario extends Component {
     super(props);
 
     this.state = {
-      nombre: "",
+      plan: "",
       nutricionistid: "",
+      tiempocomida: "Desayuno",
+      comida: "",
       showModal: false,
     };
 
@@ -24,8 +26,10 @@ class NuevoPlanFormulario extends Component {
     // Enviar los datos al backend para crear un nuevo plan
     axios
       .post("http://localhost:5295/api/plan", {
-        nombre: this.state.nombre,
-        nutricionistid: this.state.nutricionistid
+        plan: this.state.plan,
+        nutricionistid: parseInt(this.state.nutricionistid),
+        tiempocomida: document.getElementById('tiempocomida').options[document.getElementById('tiempocomida').selectedIndex].value,
+        comida: this.state.comida
       })
       .then((response) => {
         this.props.onNewPlan(); // Refresh site
@@ -34,6 +38,7 @@ class NuevoPlanFormulario extends Component {
         this.setState({ error: error.message });
       });
 
+    console.log(document.getElementById('tiempocomida').options[document.getElementById('tiempocomida').selectedIndex].value);
     console.log("Nuevo plan agregado");
     this.props.onClose();
   };
@@ -79,23 +84,24 @@ class NuevoPlanFormulario extends Component {
         <Form onSubmit={this.handleSubmit}>
           <h2>Nuevo plan</h2>
           <div className="form-input">
-            <label htmlFor="nombre">Nombre:</label>
+            <label htmlFor="plan">Nombre:</label>
             <input
               type="text"
-              name="nombre"
-              value={this.state.nombre}
+              name="plan"
+              value={this.state.plan}
               onChange={this.handleChange}
               required
             />
           </div>
           <div className="form-input">
-            <label htmlFor="nombre">Tiempo de comida:</label>
-            <select name="cars" id="cars">
-              <option value="volvo">Desayuno</option>
-              <option value="saab">Merienda mañana</option>
-              <option value="mercedes">Almuerzo</option>
-              <option value="audi">Merienda tarde</option>
-              <option value="audi">Cena</option>
+            <label htmlFor="tiempocomida">Tiempo de comida:</label>
+            <select name="tiempocomida" id="tiempocomida">
+              <option value="Desayuno">Desayuno</option>
+              <option value="Merienda mañana">Merienda mañana</option>
+              <option value="Almuerzo">Almuerzo</option>
+              <option value="Merienda tarde">Merienda tarde</option>
+              <option value="Cena">Cena</option>
+              
             </select>
           </div>
           <div className="form-input">
