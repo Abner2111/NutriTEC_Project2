@@ -15,6 +15,8 @@ import GestionPlanes from './VistaNutricionista/GestionPlanes';
 import SeguimientoPaciente from './VistaNutricionista/SeguimientoPaciente';
 
 // Cliente
+import VistaCliente  from './VistaCliente/VistaCliente';
+import NuevoConsumoCliente from './VistaCliente/NuevoConsumoCliente';
 /* UC */
 
 function App() {
@@ -28,9 +30,11 @@ function App() {
             <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
             <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
             <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
-
             
-          </Routes>
+            <Route path='/vistacliente' element = { <VistaCliente/> }/>
+            <Route path='/nuevoconsumo' element = {<NuevoConsumoCliente/>}/>
+            
+          </Routes> 
       </Router>
       
     </div>
