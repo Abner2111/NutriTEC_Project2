@@ -35,7 +35,7 @@ const VistaPrincipal = () => {
                         title='Nutricionista'
                         imageUrl={NutricionistIcon}
                         body='Entrar como nutricionista'
-                        url='/loginnutricionist'
+                        url='/loginNutricionista'
                     />
                 </div>
 

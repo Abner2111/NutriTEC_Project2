@@ -30,32 +30,20 @@ $$;
 
 -- ------------------------------------------------------------------------------------------------------- --
 
-CREATE OR REPLACE FUNCTION AutenticarUsuario(
-  email VARCHAR(100),
-  password VARCHAR(100)
-)
-RETURNS VOID AS $$
-DECLARE
-  existe_nutricionista BOOLEAN;
+CREATE OR REPLACE FUNCTION udp_validar_credencialesN(p_correo VARCHAR(100), p_contrasena VARCHAR(100))
+  RETURNS BOOLEAN AS
+$$
 BEGIN
-  -- Verificar si el email y password corresponden a un nutricionista existente
-  SELECT TRUE INTO existe_nutricionista
-  FROM NUTRICIONISTA
-  WHERE Correo = email AND Contrasena = password;
-  
-  IF existe_nutricionista THEN
-    -- El usuario es un nutricionista, realizar la autenticación
-    -- Puedes agregar aquí el código de autenticación específico para nutricionistas
-    RAISE NOTICE 'Usuario autenticado como nutricionista.';
-  ELSE
-    -- El usuario no es un nutricionista, registrar como nutricionista
-    -- Puedes agregar aquí el código para registrar al usuario como nutricionista
-    -- Utiliza el procedimiento o función existente para registrar nutricionistas
-    
-    RAISE NOTICE 'Usuario no registrado como nutricionista.';
-  END IF;
+  RETURN EXISTS (
+    SELECT 1
+    FROM NUTRICIONISTA
+    WHERE Correo = p_correo AND Contrasena = p_contrasena
+  );
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
+
+
 
 -- --------------------------------------------------------------------------------------------------- --
 

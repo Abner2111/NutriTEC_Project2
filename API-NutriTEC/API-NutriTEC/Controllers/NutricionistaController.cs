@@ -2,6 +2,8 @@
 using API_NutriTEC.Models;
 using System;
 using System.Data;
+using System.Security.Cryptography;
+using System.Text;
 using API_NutriTEC.Data;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -24,11 +26,17 @@ namespace API_NutriTEC.Controllers
         [HttpPost("registrar")]
         public IActionResult RegistrarNutricionista([FromBody] Nutricionista nutricionista)
         {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                string contrasenaMD5 = GetMd5Hash(md5Hash, nutricionista.Contrasena);
+                nutricionista.Contrasena = contrasenaMD5;
+            }
+
             try
             {
                 var cedulaParam = new NpgsqlParameter("p_cedula", NpgsqlDbType.Integer)
                     { Value = nutricionista.Cedula };
-                var fotoParam = new NpgsqlParameter("p_foto", NpgsqlDbType.Bytea) { Value = nutricionista.Foto };
+                var fotoParam = new NpgsqlParameter("p_foto", NpgsqlDbType.Bytea) { Value = nutricionista.Foto};
                 var nombreParam = new NpgsqlParameter("p_nombre", NpgsqlDbType.Varchar)
                     { Value = nutricionista.Nombre };
                 var apellido1Param = new NpgsqlParameter("p_apellido1", NpgsqlDbType.Varchar)
@@ -69,6 +77,7 @@ namespace API_NutriTEC.Controllers
             }
         }
 
+
         // GET: api/nutricionista
         [HttpGet]
         public IActionResult ObtenerNutricionistas()
@@ -104,5 +113,58 @@ namespace API_NutriTEC.Controllers
             }
         }
 
+        // POST: api/nutricionista/validar-credenciales
+        [HttpGet("validar/{email}/{password}")]
+        public IActionResult ValidarCredenciales(string email, string password)
+        {
+            try
+            {
+                var md5 = MD5.Create();
+                var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var hashedPassword = BitConverter.ToString(hash).Replace("-", "").ToLower();
+
+                var correoParam = new NpgsqlParameter("p_correo", NpgsqlDbType.Varchar)
+                    { Value = email };
+                var contrasenaParam = new NpgsqlParameter("p_contrasena", NpgsqlDbType.Varchar)
+                    { Value = hashedPassword };
+
+                var resultadoParam = new NpgsqlParameter("p_resultado", NpgsqlDbType.Boolean)
+                    { Direction = ParameterDirection.Output };
+
+                _context.Database.ExecuteSqlRaw(
+                    "SELECT udp_validar_credencialesN(@p_correo, @p_contrasena) AS resultado",
+                    correoParam, contrasenaParam, resultadoParam);
+
+                bool resultado = resultadoParam.Value != DBNull.Value && (bool)resultadoParam.Value;
+
+                if (resultado)
+                {
+                    return Ok("Credenciales válidas.");
+                }
+                else
+                {
+                    return BadRequest("Credenciales inválidas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+
+
+        private string GetMd5Hash(MD5 md5Hash, string input)
+        {
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            StringBuilder sBuilder = new StringBuilder();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            return sBuilder.ToString();
+        }
     }
 }
