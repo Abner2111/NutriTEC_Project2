@@ -19,7 +19,7 @@ header {
 .main-content {
   margin-top: 2rem;
   overflow: auto;
-  height: 400px;
+  height: 350px;
   width: 300px;
   border: 1px solid #6495ed;
   border-radius: 5px;
@@ -27,7 +27,7 @@ header {
 .main-selected-content {
   margin-top: 2rem;
   overflow: auto;
-  height: 400px;
+  height: 350px;
   width: 300px;
   border: 1px solid #64edb6;
   border-radius: 5px;
@@ -51,9 +51,9 @@ header {
 }
 
 .search{
-  height: 500px;
+  height: 450px;
 }
 
 .added{
-  height: 500px;
+  height: 450px;
 }

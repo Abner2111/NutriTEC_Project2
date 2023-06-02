@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
 import ConsumableRow from './ConsumableRow';
 import SelectedConsumableRow from './SelectedConsumableRow';
+import MealTimeSelector from './MealTimeSelector';
 import axios from 'axios';
+
 class ConsumableList extends Component {
     constructor(props){
         super(props);
         this.state = {
+            //product list
             productos : [],
+            //recipe list
             recetas : [],
+            //filtered products
             productosFiltrados : [],
             data : []
         }
@@ -17,6 +22,8 @@ class ConsumableList extends Component {
             this.setState({ productos: response.data });
             this.setState({ productosFiltrados: response.data });
         })
+
+        
     } 
     
     /**
@@ -37,8 +44,9 @@ class ConsumableList extends Component {
         
         var updatedList = this.state.data;
 
-        updatedList = updatedList.filter((item)=> item.nombre !== query);
-
+        //updatedList = updatedList.filter((item)=> item.nombre !== query);
+        const index = updatedList.findIndex((i) => i.nombre === query);
+        updatedList.splice(index,1);
         this.setState({data:updatedList})
     }
     /**
@@ -51,7 +59,7 @@ class ConsumableList extends Component {
         var updatedList = this.state.productos;
 
         updatedList = updatedList.filter(obj => 
-            obj.nombre.toLowerCase().indexOf(query.toLowerCase()) >=0);
+            obj.nombre.toLowerCase().indexOf(query.toLowerCase()) >=0 || obj.codigoBarras.toLowerCase().indexOf(query.toLowerCase()) >=0);
 
         this.setState({productosFiltrados:updatedList})
         
@@ -88,26 +96,34 @@ class ConsumableList extends Component {
 
     render(){
         return(
-            <div className='row'>
-                <div className="search-header">
-                        <div className="search-text">Buscar:</div>
-                        <input id="search-box" onChange={this.filterBySearch} />
+            <div>
+                <div className='row'>
+                    <div className="col search-header">
+                            <div className="search-text">Buscar:</div>
+                            <input id="search-box" onChange={this.filterBySearch} />
                     </div>
-                <div className='col search'>
-                    <h3>Consumibles</h3>
-                    <div className="container main-content">
-                        
-                        {this.state.productosFiltrados.map(this.createProduct)}
-                    </div>
+                    <MealTimeSelector/>
+                    
                 </div>
-                <div className='col added'>
-                    <h3>Tu consumo</h3>
-                    <div className="container main-selected-content">
-                        
-                        {this.state.data.map(this.createProductSelection)}
+                <div className='row'>
+                    <div className='col search'>
+                        <h3>Consumibles</h3>
+                        <div className="container main-content">
+                            
+                            {this.state.productosFiltrados.map(this.createProduct)}
+                        </div>
                     </div>
+                    <div className='col added'>
+                        <h3>Tu consumo</h3>
+                        <div className="container main-selected-content">
+                            {this.state.data.map(this.createProductSelection)}
+                        </div>
+                    </div>
+                    
                 </div>
+                <button>Registrar Consumo</button>
             </div>
+            
             
             
         )
