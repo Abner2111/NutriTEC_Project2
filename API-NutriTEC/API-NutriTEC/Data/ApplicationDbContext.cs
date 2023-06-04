@@ -9,15 +9,22 @@ namespace API_NutriTEC.Data
         {
             Database.Migrate();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PlanComida>().HasKey(p => new {p.id, p.tiempocomida, p.comida});
+            modelBuilder.Entity<ClienteNutricionista>().HasKey(cn => new { cn.cliente, cn.nutricionista });
+        }
         
         public DbSet<Administrador> administrador { get; set; }
         public DbSet<Plan> plan { get; set; }
+        public DbSet<PlanComida> plancomida { get; set; }
         public DbSet<Cliente> cliente { get; set; }
         public DbSet<Medida> medida { get; set; }
         public DbSet<Consumo> consumo { get; set; }
         public DbSet<Receta> receta { get; set; }
         public DbSet<Nutricionista> nutricionista { get; set; }
-        
+        public DbSet<ClienteNutricionista> clientenutricionista { get; set; }
         public  DbSet<Producto> producto { get; set; }
         public DbSet<AddPlanToClienteRequest> planes_cliente { get; set; }
     }

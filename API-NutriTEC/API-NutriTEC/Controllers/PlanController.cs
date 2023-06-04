@@ -14,7 +14,7 @@ namespace API_NutriTEC.Controllers
         NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
         //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
         
-        private Plan plan = new Plan();
+        private PlanComida _planComida = new PlanComida();
         private readonly ApplicationDbContext _context;
 
         public PlanController(ApplicationDbContext context)
@@ -25,53 +25,40 @@ namespace API_NutriTEC.Controllers
         [HttpGet]
         public async Task <ActionResult<IEnumerable<Plan>>> GetPlanes()
         {
-            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlan();").ToList();
-            //return Ok();
+            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanes();").ToList();
+            return result;
+        }
+        
+        [HttpGet("Recetas")]
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesRecetas()
+        {
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanRecetas();").ToList();
+            return result;
+        }
+        
+        [HttpGet("Productos")]
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesProductos()
+        {
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanProductos();").ToList();
             return result;
         }
         
         [HttpGet("{id}")]
-        public async Task <ActionResult<IEnumerable<Plan>>> GetPlan(int id)
+        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlan(int id)
         {
-            var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanById({id});").ToList();
+            var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanById({id});").ToList();
             return result;
         }
-        /*
-        [HttpGet]
-        public List<Plan> Get()
-        {
-            NpgsqlDataAdapter da = new NpgsqlDataAdapter("getplan", con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            List<Plan> lstPlan = new List<Plan>();
-            if (dt.Rows.Count > 0)
-            {
-                for (int i = 0; i < dt.Rows.Count; i++)
-                { 
-                    Plan pl = new Plan();
-                    pl.id = Convert.ToInt32(dt.Rows[i]["Id"]);
-                    pl.nombre = Convert.ToString(dt.Rows[i]["Nombre"]);
-                    pl.nutricionistid = Convert.ToInt32(dt.Rows[i]["NutricionistId"]);
-                    lstPlan.Add(pl);
-                }
-            }
-            if (lstPlan.Count > 0)
-            {
-                return lstPlan;
-            }
-            else
-            {
-                return null;
-            }
-        }*/
 
         [HttpPost]
-        public async Task<ActionResult<Plan>> PostPlan(Plan plan)
+        public async Task<ActionResult<PlanComida>> PostPlan(PlanComida planComida)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("addplan", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("nombre_", plan.nombre);
-            cmd.Parameters.AddWithValue("nutricionistid_", plan.nutricionistid);
+            cmd.Parameters.AddWithValue("nombre_", planComida.plan);
+            cmd.Parameters.AddWithValue("nutricionistid_", planComida.nutricionistid);
+            cmd.Parameters.AddWithValue("tiempocomida_", planComida.tiempocomida);
+            cmd.Parameters.AddWithValue("comida_", planComida.comida);
             
             try
             {

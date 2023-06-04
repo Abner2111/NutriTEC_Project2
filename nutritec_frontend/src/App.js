@@ -4,14 +4,23 @@ import React from "react";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-// Administrador
+
 import VistaPrincipal from './VistaPrincipal';
+
+// Administrador
+import VistaAdministrador from './VistaAdministrador/VistaAdministrador';
+import ReporteCobro from './VistaAdministrador/ReporteCobro';
 
 // Nutricionista
 import LoginNutricionista from './VistaNutricionista/LoginNutricionista';
 import GestionProductos from './VistaNutricionista/GestionProductos';
 
 /* UC */
+import VistaNutricionista from './VistaNutricionista/VistaNutricionista'
+
+import BusquedaAsociacionPacientes from './VistaNutricionista/BusquedaAsociacionPacientes';
+import GestionPlanes from './VistaNutricionista/GestionPlanes';
+import SeguimientoPaciente from './VistaNutricionista/SeguimientoPaciente';
 
 // Cliente
 /* UC */
@@ -21,10 +30,16 @@ function App() {
     <div className="App">
       <Router>
           <Routes>
-            <Route path='/1' element={ <VistaPrincipal/> }/>
-            <Route path='/2' element={<LoginNutricionista/>}/>
-            <Route path='/' element={<GestionProductos/>}/>
+            <Route path='/' element = { <VistaPrincipal/> }/>
+            <Route path='/vistanutricionista' element = { <VistaNutricionista/> }/>
+            <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
+            <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
+            <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
+            
+            <Route path='/vistaadministrador' element = { <VistaAdministrador/> } />
+            <Route path='/reportecobro' element = { <ReporteCobro/> } />
 
+            
 
             
           </Routes>
