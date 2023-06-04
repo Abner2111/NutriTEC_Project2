@@ -4,8 +4,12 @@ import React from "react";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-// Administrador
+
 import VistaPrincipal from './VistaPrincipal';
+
+// Administrador
+import VistaAdministrador from './VistaAdministrador/VistaAdministrador';
+import ReporteCobro from './VistaAdministrador/ReporteCobro';
 
 // Nutricionista
 import VistaNutricionista from './VistaNutricionista/VistaNutricionista'
@@ -24,10 +28,14 @@ function App() {
           <Routes>
             <Route path='/' element = { <VistaPrincipal/> }/>
             <Route path='/vistanutricionista' element = { <VistaNutricionista/> }/>
-            
             <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
             <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
             <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
+            
+            <Route path='/vistaadministrador' element = { <VistaAdministrador/> } />
+            <Route path='/reportecobro' element = { <ReporteCobro/> } />
+
+            
 
             
           </Routes>
