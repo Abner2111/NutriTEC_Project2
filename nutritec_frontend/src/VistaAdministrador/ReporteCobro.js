@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { NavbarAdministrador } from '../Templates/NavbarAdministrador';
 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'
 
 class ReporteCobro extends Component {
   constructor(props) {
@@ -10,7 +12,15 @@ class ReporteCobro extends Component {
   
     this.state = {
       reportes: [], // lista de reportes obtenidos desde el API
-
+      columnas: [
+        {title: "Correo", field: "correo"},
+        {title: "Nombre", field: "nombre_completo"},
+        {title: "Tarjeta", field: "tarjeta_credito"},
+        {title: "Tipo de cobro", field: "descripcion"},
+        {title: "Monto total ($)", field: "clientes"},
+        {title: "Descuento (%)", field: "descuento"},
+        {title: "Monto a cobrar ($)", field: "monto_cobrar"},
+      ],
       error: null, // variable para guardar posibles errores del API
     };
   }
@@ -34,6 +44,18 @@ class ReporteCobro extends Component {
       });
   }
 
+  generatePDF = (x) => {
+    console.log(x)
+    const doc = new jsPDF()
+    doc.text("Reporte de cobro de "+x.nombre_completo,14,10)
+    doc.autoTable({
+      columns: this.state.columnas.map(col=>({...col,dataKey:col.field})),
+      body: [x],
+      theme: 'grid'
+    })
+    doc.save('ReporteCobro.pdf')
+  }
+
   // función que renderiza el componente
 render() {
   const { reportes, error } = this.state;
@@ -55,6 +77,7 @@ render() {
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Monto total</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Descuento</th>
             <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Monto a cobrar</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>PDF</th>
           </tr>
         </thead>
         
@@ -62,12 +85,16 @@ render() {
           
             <tr key={(reporte)}>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.correo}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.nombre} {reporte.apellido1} {reporte.apellido2}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.nombre_completo}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.tarjeta_credito}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.descripcion}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>${reporte.clientes}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.descuento}%</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>${reporte.monto_cobrar}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
+                <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
+                onClick={() => this.generatePDF(reporte)}>Generar PDF</button> 
+              </td>
             </tr>
           
         </tbody>

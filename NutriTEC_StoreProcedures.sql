@@ -172,7 +172,7 @@ $$
 
 CREATE VIEW GetNutricionistaInfo
 AS
-SELECT NUTRICIONISTA.correo, NUTRICIONISTA.nombre, NUTRICIONISTA.apellido1, NUTRICIONISTA.apellido2, NUTRICIONISTA.tarjeta_credito, TIPO_COBRO.descripcion, COUNT(CLIENTES_NUTRICIONISTA.cliente) AS clientes,
+SELECT NUTRICIONISTA.correo, NUTRICIONISTA.nombre || ' ' || NUTRICIONISTA.apellido1 || ' ' ||  NUTRICIONISTA.apellido2 as nombre_completo, NUTRICIONISTA.tarjeta_credito, TIPO_COBRO.descripcion, COUNT(CLIENTES_NUTRICIONISTA.cliente) AS clientes,
 	CASE 
 		WHEN TIPO_COBRO.descripcion = 'Semanal' THEN 0
 		WHEN TIPO_COBRO.descripcion = 'Mensual' THEN 5

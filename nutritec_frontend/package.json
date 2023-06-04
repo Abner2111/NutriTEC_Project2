@@ -10,6 +10,8 @@
     "bootstrap": "^5.2.3",
     "browser-image-compression": "^2.0.2",
     "image-compressor": "^2.0.3",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.29",
     "mdb-react-ui-kit": "^6.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",

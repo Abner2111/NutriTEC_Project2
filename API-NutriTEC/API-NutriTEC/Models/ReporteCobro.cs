@@ -6,9 +6,7 @@ public class ReporteCobro
 {
     [Key]
     public string correo { get; set; }
-    public string nombre { get; set; }
-    public string apellido1 { get; set; }
-    public string apellido2 { get; set; }
+    public string nombre_completo { get; set; }
     public string tarjeta_credito { get; set; }
     public string descripcion { get; set; }
     public int clientes { get; set; }
