@@ -38,6 +38,9 @@ function App() {
             
             <Route path='/vistaadministrador' element = { <VistaAdministrador/> } />
             <Route path='/reportecobro' element = { <ReporteCobro/> } />
+            <Route path= '/loginnutricionista' element={<LoginNutricionista/>}/>
+            <Route path= '/gestionproductos' element={<GestionProductos/>}/>
+            
 
             
 

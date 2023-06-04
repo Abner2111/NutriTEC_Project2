@@ -42,6 +42,7 @@ class LoginNutricionista extends React.Component {
       console.log(this.state.currentemail, this.state.currentpass);
       const data = await validarNutricionista(this.state.currentemail, this.state.currentpass);
       console.log(data);
+      window.location = "/vistanutricionista"
     }
   };
   handleInputChange = (event) => {

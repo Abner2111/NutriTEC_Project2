@@ -2,7 +2,7 @@ import React from 'react';
 import { obtenerProductos, agregarProducto, actualizarProducto, eliminarProducto } from '../Api';
 import '../Templates/diseñoH.css';
 import '../Templates/diseño.css';
-import { Navbar } from "../Templates/Navbar"
+import { NavbarNutricionista } from "../Templates/NavbarNutricionista"
 
 
 class GestionProductos extends React.Component {
@@ -78,7 +78,7 @@ class GestionProductos extends React.Component {
         const { productos, formValues, formMode, showPopup } = this.state;
         return (
             <div className="gestion-productos-container">
-                <Navbar />
+                <NavbarNutricionista />
                 <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Gestión de productos</h1>
                 <table className="tabla-productos">
                     <thead>
