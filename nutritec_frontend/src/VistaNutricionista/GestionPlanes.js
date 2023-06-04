@@ -16,6 +16,8 @@ class GestionPlanes extends Component {
       planes: [], // lista de planes obtenidos desde el API
       recetas: [],
       productos: [],
+      calorias_recetas: [],
+      calorias_productos: [],
       showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
       showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
       showthreeForm: false,
@@ -103,16 +105,23 @@ class GestionPlanes extends Component {
     axios.get('http://localhost:5295/api/Plan/Recetas') // obtiene la lista de teléfonos para cada paciente desde el API
       .then(response => {
         const recetas = {};
+        const calorias_recetas = {};
         response.data.forEach(comida => {
           if (!recetas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
             recetas[comida.id] = [];
+          }
+          if (!calorias_recetas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            calorias_recetas[comida.id] = [];
           }
           recetas[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
           recetas[comida.id].push(": ");
           recetas[comida.id].push(comida.comida);
           recetas[comida.id].push(<br></br>);
+          calorias_recetas[comida.id].push(comida.calorias);
+          calorias_recetas[comida.id].push(<br></br>);
         });
         this.setState({ recetas }); // se guarda la lista de teléfonos en el estado
+        this.setState({ calorias_recetas });
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
@@ -121,16 +130,23 @@ class GestionPlanes extends Component {
       axios.get('http://localhost:5295/api/Plan/Productos') // obtiene la lista de teléfonos para cada paciente desde el API
       .then(response => {
         const productos = {};
+        const calorias_productos = {};
         response.data.forEach(comida => {
           if (!productos[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
             productos[comida.id] = [];
+          }
+          if (!calorias_productos[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            calorias_productos[comida.id] = [];
           }
           productos[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
           productos[comida.id].push(": ");
           productos[comida.id].push(comida.comida);
           productos[comida.id].push(<br></br>);
+          calorias_productos[comida.id].push(comida.calorias);
+          calorias_productos[comida.id].push(<br></br>);
         });
         this.setState({ productos }); // se guarda la lista de teléfonos en el estado
+        this.setState({ calorias_productos });
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
@@ -185,7 +201,7 @@ render() {
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.productos[plan.id]} {this.state.recetas[plan.id]}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>UC</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.calorias_productos[plan.id]} {this.state.calorias_recetas[plan.id]}</td>
               <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
                 <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
                 onClick={() => this.getPlan(plan)}>Editar</button> 
