@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { NavbarNutricionista } from '../Templates/NavbarNutricionista';
 import axios from 'axios';
 
-import { CSSTransition } from 'react-transition-group';
-
-import NuevoPlanFormulario from '../Forms/NuevoPlanFormulario';
-import EditarPlanFormulario from '../Forms/EditarPlanFormulario';
+import { NavbarAdministrador } from '../Templates/NavbarAdministrador';
 
 
 class ReporteCobro extends Component {
@@ -13,203 +9,65 @@ class ReporteCobro extends Component {
     super(props);
   
     this.state = {
-      planes: [], // lista de planes obtenidos desde el API
-      recetas: [],
-      productos: [],
-      calorias_recetas: [],
-      calorias_productos: [],
-      showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
-      showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
-      showthreeForm: false,
+      reportes: [], // lista de reportes obtenidos desde el API
 
-      showDialog: false, // variable para mostrar/ocultar el diálogo para agregar nuevos sucursal
-      showtwoDialog: false, // variable para mostrar/ocultar el diálogo para añadir información adicional a una sucursal existente
-      
       error: null, // variable para guardar posibles errores del API
     };
   }
 
-  /* FORMS */
-
-  /* PARA AGREGAR SUCURSALES */
-  // Función para alternar la visibilidad del formulario para agregar sucursal
-  toggleForm = () => {
-    this.setState({ showForm: !this.state.showForm });
-  };
-
-  // Función para alternar la visibilidad del formulario para editar sucursal
-  togglet = () => {
-    this.setState({ showtwoForm: !this.state.showtwoForm });
-  };
-
-  // Función para alternar la visibilidad del formulario para eliminar sucursal
-  toggleth = () => {
-    this.setState({ showthreeForm: !this.state.showthreeForm });
-  };
-
-
-
-  /* DIÁLOGOS */
-  // Función para alternar la visibilidad del diálogo para agregar nueva sucursal
-  toggleDialog = () => {
-    this.setState(prevState => ({ showDialog: !prevState.showDialog }));
-  };
-
-  // Función para alternar la visibilidad del diálogo para editar sucursal
-  toggletD = () => {
-    this.setState(prevState => ({ showtwoDialog: !prevState.showtwoDialog }));
-  };
-
-  // Función para alternar la visibilidad del diálogo para eliminar sucursal
-  togglethD = () => {
-    this.setState(prevState => ({ showthreeDialog: !prevState.showthreeDialog }));
-  };
-
-  getPlan = (x) => {
-    this.setState({plan: x})
-    this.toggletD()
-  }
-
-  deletePlan = (id) => {
-    axios
-      .delete("http://localhost:5295/api/plan/"+id, {
-        
-      })
-      .then((response) => {
-        this.handlePlan();
-      })
-      .catch((error) => {
-        alert("No ha sido posible eliminar este plan")
-      });
-
-    console.log("Plan eliminado");
-  };
 
   /* PARA COMPONENTES */
   // función que se ejecuta cuando se carga el componente
   componentDidMount() {
-    this.handlePlan(); // se obtiene la lista de sucursales
+    this.handleReporteCobro(); // se obtiene la lista de sucursales
   }
 
   // función para obtener la lista de sucursales, y teléfonos desde el API
-  handlePlan = () => {
-    axios.get('http://localhost:5295/api/Plan') // obtiene la lista de sucursales desde el API
+  handleReporteCobro = () => {
+    axios.get('http://localhost:5295/api/ReporteCobro') // obtiene la lista de sucursales desde el API
       .then(response => {
-        this.setState({ planes: response.data }); // guarda la lista de sucursales en el estado
+        this.setState({ reportes: response.data }); // guarda la lista de sucursales en el estado
         console.log(response.data);
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
       });
-
-    axios.get('http://localhost:5295/api/Plan/Recetas') // obtiene la lista de teléfonos para cada paciente desde el API
-      .then(response => {
-        const recetas = {};
-        const calorias_recetas = {};
-        response.data.forEach(comida => {
-          if (!recetas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            recetas[comida.id] = [];
-          }
-          if (!calorias_recetas[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            calorias_recetas[comida.id] = [];
-          }
-          recetas[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
-          recetas[comida.id].push(": ");
-          recetas[comida.id].push(comida.comida);
-          recetas[comida.id].push(<br></br>);
-          calorias_recetas[comida.id].push(comida.calorias);
-          calorias_recetas[comida.id].push(<br></br>);
-        });
-        this.setState({ recetas }); // se guarda la lista de teléfonos en el estado
-        this.setState({ calorias_recetas });
-      })
-      .catch(error => {
-        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
-      });
-
-      axios.get('http://localhost:5295/api/Plan/Productos') // obtiene la lista de teléfonos para cada paciente desde el API
-      .then(response => {
-        const productos = {};
-        const calorias_productos = {};
-        response.data.forEach(comida => {
-          if (!productos[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            productos[comida.id] = [];
-          }
-          if (!calorias_productos[comida.id]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
-            calorias_productos[comida.id] = [];
-          }
-          productos[comida.id].push(comida.tiempocomida); // se agrega el teléfono actual a la lista de teléfonos del paciente
-          productos[comida.id].push(": ");
-          productos[comida.id].push(comida.comida);
-          productos[comida.id].push(<br></br>);
-          calorias_productos[comida.id].push(comida.calorias);
-          calorias_productos[comida.id].push(<br></br>);
-        });
-        this.setState({ productos }); // se guarda la lista de teléfonos en el estado
-        this.setState({ calorias_productos });
-      })
-      .catch(error => {
-        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
-      });
-  }
-
-  // función para abrir el diálogo para agregar nuevas sucursales
-  openDialog() {
-    this.setState({ isOpen: true });
-    document.body.style.overflow = "hidden";
-    document.getElementById("root").classList.add("blur");
-    document.querySelector(".dialog").classList.add("dialog-enter");
-  }
-
-  // función para cerrar el diálogo para agregar nuevas sucursales
-  closeDialog() {
-    this.setState({ isOpen: false });
-    document.body.style.overflow = "auto";
-    document.getElementById("root").classList.remove("blur");
-    document.querySelector(".dialog").classList.add("dialog-exit");
-    setTimeout(() => {
-      document.querySelector(".dialog").classList.remove("dialog-enter", "dialog-exit");
-    }, 500); // espera a que termine la transición antes de remover las clases
   }
 
   // función que renderiza el componente
 render() {
-  const { planes, error, showDialog, showtwoDialog } = this.state;
+  const { reportes, error } = this.state;
 
   return (
     <div style={{ backgroundColor: '#fff', textAlign: 'center' }}>
-        <NavbarNutricionista/>
-  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Planes</h1>
+        <NavbarAdministrador/>
+  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Reportes de cobro</h1>
       {error && <div>Error: {error}</div>}
-      {planes.map(plan => (
+      {reportes.map(reporte => (
         
       <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto 2em'}} className="table border shadow">
         <thead>
           <tr>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nombre</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nutricionista</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Comida</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Total calorías</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Editar</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Eliminar</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Correo del nutricionista</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Nombre del nutricionista</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Número de tarjeta</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Tipo de cobro</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Monto total</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Descuento</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Monto a cobrar</th>
           </tr>
         </thead>
         
         <tbody>
           
-            <tr key={(plan)}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nombre}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{plan.nutricionistid}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.productos[plan.id]} {this.state.recetas[plan.id]}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.calorias_productos[plan.id]} {this.state.calorias_recetas[plan.id]}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
-                <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer' }} 
-                onClick={() => this.getPlan(plan)}>Editar</button> 
-              </td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}> 
-                <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#c92d15', border: '2px solid #c92d15', cursor: 'pointer' }} 
-                onClick={() => this.deletePlan(plan.id)}>Eliminar</button>
-              </td>
+            <tr key={(reporte)}>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.correo}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.nombre} {reporte.apellido1} {reporte.apellido2}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.tarjeta_credito}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.descripcion}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>${reporte.clientes}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{reporte.descuento}%</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>${reporte.monto_cobrar}</td>
             </tr>
           
         </tbody>
@@ -217,102 +75,7 @@ render() {
       </table>
       
       ))}
-      <div>
-        <button style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '5px', backgroundColor: '#fff', color: '#4CAF50', border: '2px solid #4CAF50', cursor: 'pointer' }} 
-        onClick={this.toggleDialog}>Nuevo plan</button>
-        {showDialog && (
-            <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                background: "rgba(0, 0, 0, 0.5)", // fondo semitransparente
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 999 // asegurarse de que el diálogo esté por encima del resto del contenido
-              }}
-            >
-              <div>
-            <CSSTransition in={this.state.isOpen} classNames="dialog" timeout={500}>
-            <div
-              className="dialog"
-              style={{
-                backgroundColor: "#fff",
-                padding: "20px",
-                borderRadius: "5px",
-                maxWidth: "80%",
-                maxHeight: "80%",
-                overflow: "auto",
-                marginBottom: "5px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)", // sombra para dar profundidad
-              }}
-            >
-              {/* contenido del diálogo */}
-              <NuevoPlanFormulario 
-                onClose={this.toggleDialog}
-                onNewPlan={this.handlePlan}
-              />
-              
-            </div>
-          </CSSTransition>
-            </div>
-          </div>
-          )}
-      </div>
       
-
-      {showtwoDialog && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              background: "rgba(0, 0, 0, 0.5)", // fondo semitransparente
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              zIndex: 999 // asegurarse de que el diálogo esté por encima del resto del contenido
-            }}
-          >
-            <div>
-          <CSSTransition in={this.state.isOpen} classNames="dialog" timeout={500}>
-          <div
-            className="dialog"
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              maxWidth: "80%",
-              maxHeight: "80%",
-              overflow: "auto",
-              marginBottom: "5px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.5)", // sombra para dar profundidad
-            }}
-          >
-            {/* contenido del diálogo */}
-            <EditarPlanFormulario
-              editName={this.state}
-              onClose={this.toggletD}
-              onEditPlan={this.handlePlan}
-            />
-            
-          </div>
-        </CSSTransition>
-          </div>
-        </div>
-        )}
-
       </div>
     );
   }

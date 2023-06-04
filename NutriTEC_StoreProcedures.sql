@@ -170,20 +170,28 @@ END
 $$
 
 
-CREATE OR REPLACE FUNCTION GetNutricionistaInfo(
-	NutricionistaId_ INT
-)
-RETURNS TABLE(Correo VARCHAR, Nombre VARCHAR, Apellido1 VARCHAR, Apellido2 VARCHAR, Tarjeta_credito VARCHAR, Tipo_cobro VARCHAR)
-language sql
+CREATE VIEW GetNutricionistaInfo
 AS
-$$
-	SELECT NUTRICIONISTA.correo, NUTRICIONISTA.nombre, NUTRICIONISTA.apellido1, NUTRICIONISTA.apellido2, NUTRICIONISTA.tarjeta_credito, TIPO_COBRO.descripcion
-	FROM NUTRICIONISTA
-	INNER JOIN TIPO_COBRO ON TIPO_COBRO.id = NUTRICIONISTA.tipo_cobro
-	WHERE NUTRICIONISTA.Cedula = NutricionistaId_;
-$$
+SELECT NUTRICIONISTA.correo, NUTRICIONISTA.nombre, NUTRICIONISTA.apellido1, NUTRICIONISTA.apellido2, NUTRICIONISTA.tarjeta_credito, TIPO_COBRO.descripcion, COUNT(CLIENTES_NUTRICIONISTA.cliente) AS clientes,
+	CASE 
+		WHEN TIPO_COBRO.descripcion = 'Semanal' THEN 0
+		WHEN TIPO_COBRO.descripcion = 'Mensual' THEN 5
+		WHEN TIPO_COBRO.descripcion = 'Anual' THEN 10
+		ELSE 0
+	END AS descuento,
+	CASE 
+		WHEN TIPO_COBRO.descripcion = 'Semanal' THEN COUNT(CLIENTES_NUTRICIONISTA.cliente)
+		WHEN TIPO_COBRO.descripcion = 'Mensual' THEN COUNT(CLIENTES_NUTRICIONISTA.cliente) - COUNT(CLIENTES_NUTRICIONISTA.cliente) * 0.05
+		WHEN TIPO_COBRO.descripcion = 'Anual' THEN COUNT(CLIENTES_NUTRICIONISTA.cliente) - COUNT(CLIENTES_NUTRICIONISTA.cliente) * 0.10
+		ELSE 0
+	END AS monto_cobrar
+	FROM ((NUTRICIONISTA
+	INNER JOIN TIPO_COBRO ON TIPO_COBRO.id = NUTRICIONISTA.tipo_cobro)
+	INNER JOIN CLIENTES_NUTRICIONISTA ON CLIENTES_NUTRICIONISTA.nutricionista = NUTRICIONISTA.cedula)
+	GROUP BY NUTRICIONISTA.cedula, TIPO_COBRO.id;
 
-SELECT * FROM GetNutricionistaInfo(123456789);
+
+SELECT * FROM GetNutricionistaInfo;
 
 
 -- Asignación de un plan
@@ -213,6 +221,19 @@ $$
 	SELECT * FROM PLANES_CLIENTE WHERE planes_cliente.Cliente = Correo_;
 $$
 
+
+CREATE OR REPLACE FUNCTION udp_validar_credencialesA(p_correo VARCHAR(100), p_contrasena VARCHAR(100))
+  RETURNS BOOLEAN AS
+$$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1
+    FROM ADMINISTRADOR
+    WHERE Correo = p_correo AND Contrasena = p_contrasena
+  );
+END;
+$$
+LANGUAGE plpgsql;
 
 
 -- Pruebas
