@@ -14,10 +14,11 @@ import ReporteCobro from './VistaAdministrador/ReporteCobro';
 
 // Nutricionista
 import LoginNutricionista from './VistaNutricionista/LoginNutricionista';
-import GestionProductos from './VistaNutricionista/GestionProductos';
 import VistaNutricionista from './VistaNutricionista/VistaNutricionista'
+import GestionProductos from './VistaNutricionista/GestionProductos';
 import BusquedaAsociacionPacientes from './VistaNutricionista/BusquedaAsociacionPacientes';
 import GestionPlanes from './VistaNutricionista/GestionPlanes';
+import AsignacionPlanPaciente from './VistaNutricionista/AsignacionPlanPaciente';
 import SeguimientoPaciente from './VistaNutricionista/SeguimientoPaciente';
 
 // Cliente
@@ -34,17 +35,14 @@ function App() {
             <Route path='/reportecobro' element = { <ReporteCobro/> } />
             <Route path='/loginadministrador' element = { <LoginAdministrador/> } />
 
+            <Route path='/loginnutricionista' element={<LoginNutricionista/>}/>
             <Route path='/vistanutricionista' element = { <VistaNutricionista/> }/>
+            <Route path='/gestionproductos' element={<GestionProductos/>}/>
             <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
             <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
+            <Route path='/asignacionplanpaciente' element = { <AsignacionPlanPaciente/> }/>
             <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
             
-            <Route path= '/loginnutricionista' element={<LoginNutricionista/>}/>
-            <Route path= '/gestionproductos' element={<GestionProductos/>}/>
-            
-
-            
-
             
           </Routes>
       </Router>

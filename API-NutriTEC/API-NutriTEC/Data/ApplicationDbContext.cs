@@ -14,6 +14,8 @@ namespace API_NutriTEC.Data
         {
             modelBuilder.Entity<PlanComida>().HasKey(p => new {p.id, p.tiempocomida, p.comida});
             modelBuilder.Entity<ClienteNutricionista>().HasKey(cn => new { cn.cliente, cn.nutricionista });
+            modelBuilder.Entity<AddPlanToClienteRequest>()
+                .HasKey(ptc => new { ptc.Cliente, ptc.PlanId, ptc.Fecha_inicio, ptc.Fecha_final });
         }
         
         public DbSet<Administrador> administrador { get; set; }

@@ -25,6 +25,7 @@ class LoginNutricionista extends React.Component {
         Estatura: '',
         Peso: ''
       },
+      currentid: '',
       currentemail: '',
       currentpass: '',
       showPopup: 0
@@ -42,6 +43,7 @@ class LoginNutricionista extends React.Component {
       console.log(this.state.currentemail, this.state.currentpass);
       const data = await validarNutricionista(this.state.currentemail, this.state.currentpass);
       console.log(data);
+      sessionStorage.setItem("miId", this.state.currentid);
       window.location = "/vistanutricionista"
     }
   };
@@ -147,6 +149,14 @@ class LoginNutricionista extends React.Component {
             <MDBRow>
             <MDBCol md="7" className="form-container">
                 <form onSubmit={(e) => this.handleSubmit(e, 2)}>
+
+                <label className="form-label">Id</label>
+                  <MDBInput
+                    type="text"
+                    name="currentid"
+                    value={this.state.currentid}
+                    onChange={this.handleInputChange}
+                  />
 
                   <label className="form-label">Correo</label>
                   <MDBInput

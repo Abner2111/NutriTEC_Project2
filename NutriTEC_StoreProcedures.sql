@@ -198,8 +198,8 @@ SELECT * FROM GetNutricionistaInfo;
 CREATE OR REPLACE PROCEDURE AddPlanToCliente(
 	Cliente_ VARCHAR,
 	PlanId_ INT,
-	Fecha_inicio_ DATE,
-	Fecha_final_ DATE
+	Fecha_inicio_ VARCHAR,
+	Fecha_final_ VARCHAR
 )
 language plpgsql
 AS $$
@@ -210,6 +210,15 @@ BEGIN
 END
 $$
 
+
+CREATE OR REPLACE FUNCTION GetPlanesCliente(
+)
+RETURNS setof PLANES_CLIENTE
+language sql
+AS
+$$
+	SELECT * FROM PLANES_CLIENTE;
+$$
 
 CREATE OR REPLACE FUNCTION GetPlanesOfCliente(
 	Correo_ VARCHAR
