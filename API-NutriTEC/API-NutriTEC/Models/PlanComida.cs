@@ -11,4 +11,5 @@ public class PlanComida
     public int nutricionistid { get; set; }
     public string tiempocomida { get; set; }
     public string comida { get; set; }
+    public int? calorias { get; set; }
 }

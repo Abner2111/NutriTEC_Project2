@@ -170,19 +170,20 @@ END
 $$
 
 
-CREATE OR REPLACE FUNCTION GetClientesDeNutricionista(
-	
+CREATE OR REPLACE FUNCTION GetNutricionistaInfo(
+	NutricionistaId_ INT
 )
-RETURNS setof NUTRICIONISTA
+RETURNS TABLE(Correo VARCHAR, Nombre VARCHAR, Apellido1 VARCHAR, Apellido2 VARCHAR, Tarjeta_credito VARCHAR, Tipo_cobro VARCHAR)
 language sql
 AS
 $$
-	SELECT * 
+	SELECT NUTRICIONISTA.correo, NUTRICIONISTA.nombre, NUTRICIONISTA.apellido1, NUTRICIONISTA.apellido2, NUTRICIONISTA.tarjeta_credito, TIPO_COBRO.descripcion
 	FROM NUTRICIONISTA
-	INNER JOIN CLIENTES_NUTRICIONISTA ON
-	WHERE 
-	;
+	INNER JOIN TIPO_COBRO ON TIPO_COBRO.id = NUTRICIONISTA.tipo_cobro
+	WHERE NUTRICIONISTA.Cedula = NutricionistaId_;
 $$
+
+SELECT * FROM GetNutricionistaInfo(123456789);
 
 
 -- Asignación de un plan

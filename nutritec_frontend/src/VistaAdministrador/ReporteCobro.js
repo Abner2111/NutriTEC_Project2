@@ -8,7 +8,7 @@ import NuevoPlanFormulario from '../Forms/NuevoPlanFormulario';
 import EditarPlanFormulario from '../Forms/EditarPlanFormulario';
 
 
-class GestionPlanes extends Component {
+class ReporteCobro extends Component {
   constructor(props) {
     super(props);
   
@@ -318,4 +318,4 @@ render() {
   }
 }
 
-export default GestionPlanes;
+export default ReporteCobro;

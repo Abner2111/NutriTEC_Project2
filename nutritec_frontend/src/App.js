@@ -4,10 +4,18 @@ import React from "react";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-// Administrador
+
 import VistaPrincipal from './VistaPrincipal';
 
+// Administrador
+import VistaAdministrador from './VistaAdministrador/VistaAdministrador';
+import ReporteCobro from './VistaAdministrador/ReporteCobro';
+
 // Nutricionista
+import LoginNutricionista from './VistaNutricionista/LoginNutricionista';
+import GestionProductos from './VistaNutricionista/GestionProductos';
+
+/* UC */
 import VistaNutricionista from './VistaNutricionista/VistaNutricionista'
 
 import BusquedaAsociacionPacientes from './VistaNutricionista/BusquedaAsociacionPacientes';
@@ -26,10 +34,18 @@ function App() {
           <Routes>
             <Route path='/' element = { <VistaPrincipal/> }/>
             <Route path='/vistanutricionista' element = { <VistaNutricionista/> }/>
-            
             <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
             <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
             <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
+            
+            <Route path='/vistaadministrador' element = { <VistaAdministrador/> } />
+            <Route path='/reportecobro' element = { <ReporteCobro/> } />
+            <Route path= '/loginnutricionista' element={<LoginNutricionista/>}/>
+            <Route path= '/gestionproductos' element={<GestionProductos/>}/>
+            
+
+            
+
             
             <Route path='/vistacliente' element = { <VistaCliente/> }/>
             <Route path='/nuevoconsumo' element = {<NuevoConsumoCliente/>}/>
