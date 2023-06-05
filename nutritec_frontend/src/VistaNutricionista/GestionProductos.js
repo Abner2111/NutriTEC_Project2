@@ -60,7 +60,7 @@ class GestionProductos extends React.Component {
             this.setState({ formValues: { codigoBarras: '', nombre: '', aprobado: false, grasa: '', tamanoPorcion: '', energia: '', proteina: '', sodio: '', carbohidratos: '', hierro: '', vitaminaD: '', vitaminaB6: '', vitaminaC: '', vitaminaK: '', vitaminaB: '', vitaminaB12: '', vitaminaA: '', calcio: '' }, formMode: 'agregar', showPopup: false });
         }
     };
-    // Se ejecuta al cargar el componente
+    // Se ejecuta al cargar el componente 
     componentDidMount() {
         this.getProductos();
         document.addEventListener('mousedown', this.handleOuterClick);

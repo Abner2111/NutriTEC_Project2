@@ -34,4 +34,7 @@ export const obtenerProductos = async () => {
     const response = await axios.delete(`${API_URL}/Producto/eliminar/${id}`);
     return response.data;
   };
-  
+  export const aprobarProducto = async (id) =>{
+    const response = await axios.post(`${API_URL}/Producto/aprobar/${id}`);
+    return response.data;
+  }

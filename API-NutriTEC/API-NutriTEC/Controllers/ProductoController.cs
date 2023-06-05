@@ -78,8 +78,8 @@ namespace API_NutriTEC.Controllers
         }
 
         // POST: api/producto/aprobar
-        [HttpPost("aprobar")]
-        public IActionResult AprobarProducto([FromBody] int productoId)
+        [HttpPost("aprobar/{productoId}")]
+        public IActionResult AprobarProducto( int productoId)
         {
             try
             {

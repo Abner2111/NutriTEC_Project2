@@ -10,6 +10,8 @@ import VistaPrincipal from './VistaPrincipal';
 // Administrador
 import VistaAdministrador from './VistaAdministrador/VistaAdministrador';
 import ReporteCobro from './VistaAdministrador/ReporteCobro';
+import AprobarProductos from './VistaAdministrador/AprobarProductos';
+
 
 // Nutricionista
 import LoginNutricionista from './VistaNutricionista/LoginNutricionista';
@@ -30,7 +32,9 @@ function App() {
     <div className="App">
       <Router>
           <Routes>
-            <Route path='/' element = { <VistaPrincipal/> }/>
+            <Route path='/1' element = { <VistaPrincipal/> }/>
+            <Route path='/' element = { <AprobarProductos/> }/>
+
             <Route path='/vistanutricionista' element = { <VistaNutricionista/> }/>
             <Route path='/busquedaasociacionpacientes' element = { <BusquedaAsociacionPacientes/> }/>
             <Route path='/gestionplanes' element = { <GestionPlanes/> }/>
