@@ -22,7 +22,7 @@ const VistaCliente = () => {
                 title='Medidas'
                 imageUrl={MedidasIcon}
                 body='Registrar Nueva Medida'
-                url='/busquedaasociacionpacientes'
+                url='/nuevomedidas'
               />
             </div>
 

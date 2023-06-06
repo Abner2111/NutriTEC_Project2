@@ -58,7 +58,16 @@ class LoginCliente extends React.Component {
     });
   };
 
-
+  handleInputChangeR = (event) => {
+    const { name, value } = event.target;
+  
+    this.setState((prevState) => ({
+      formValues: {
+        ...prevState.formValues,
+        [name]: value
+      }
+    }));
+  };
   
   handleRegistro = async (event) => {
     event.preventDefault();

@@ -78,4 +78,9 @@ export const agregarConsumoProducto = async (correo, idProducto, mealtime) => {
   return response.data;
 }
 
+export const agregarMedidas = async (consumo) => {
+  const endpoint = API_URL+"/Medida"
+  const response = await axios.post(endpoint, consumo);
+  return response.data;
+}
  

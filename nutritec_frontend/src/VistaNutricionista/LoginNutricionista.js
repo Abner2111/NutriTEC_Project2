@@ -61,6 +61,7 @@ class LoginNutricionista extends React.Component {
     if (name === 'TarjetaCredito') {
       const creditCardRegex = /^(?:[0-9]{4}-){3}[0-9]{4}$|^([0-9]{4} ){3}[0-9]{4}$|^[0-9]{16}$/;
       if (!creditCardRegex.test(value)) {
+        // TODO mostrar mensaje de error para tarjeta invalida
         // Mostrar mensaje de error o realizar alguna acción de validación
         console.log('Número de tarjeta de crédito inválido');
       }

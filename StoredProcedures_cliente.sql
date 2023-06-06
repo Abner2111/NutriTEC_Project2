@@ -244,27 +244,27 @@ BEGIN
 			inptCorreoCliente);
 	ELSE
 		medidaExistenteId = (SELECT Id FROM MEDIDA WHERE MEDIDA.correocliente=inptCorreoCliente AND MEDIDA.fecha = inptFecha);
-		IF NOT (inptMedidaCintura IS NULL) THEN
+		IF NOT (inptMedidaCintura IS NULL OR inptMedidaCintura = 0) THEN
 			UPDATE MEDIDA
 			SET medidacintura = inptMedidaCintura
 			WHERE id = medidaExistenteId;
 		END IF;
-		IF NOT (inptPorcentajeGrasa IS NULL) THEN
+		IF NOT (inptPorcentajeGrasa IS NULL OR inptPorcentajeGrasa = 0) THEN
 			UPDATE MEDIDA
 			SET PorcentajeGrasa = inptPorcentajeGrasa
 			WHERE id = medidaExistenteId;
 		END IF;
-		IF  NOT (inptPorcentajeMusculo IS NULL) THEN
+		IF  NOT (inptPorcentajeMusculo IS NULL OR inptPorcentajeMusculo = 0) THEN
 			UPDATE MEDIDA
 			SET PorcentajeMusculo = inptPorcentajeMusculo
 			WHERE id = medidaExistenteId;
 		END IF;
-		IF NOT (inptMedidaCadera IS NULL) THEN
+		IF NOT (inptMedidaCadera IS NULL OR inptMedidaCadera = 0) THEN
 			UPDATE MEDIDA
 			SET MedidaCadera = inptMedidaCadera
 			WHERE id = medidaExistenteId;
 		END IF;
-		IF NOT (inptMedidaCuello IS NULL) THEN
+		IF NOT (inptMedidaCuello IS NULL OR inptMedidaCuello = 0) THEN
 			UPDATE MEDIDA
 			SET MedidaCuello = inptMedidaCuello
 			WHERE id = medidaExistenteId;

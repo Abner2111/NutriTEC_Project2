@@ -7,13 +7,11 @@ class ConsumableList extends Component {
     constructor(props){
         super(props);
         this.state = {
-            //product list
-            productos : [],
-            //recipe list
-            recetas : [],
-            //filtered products
+
+            productos : [], //productos obtenidos del api
+            recetas : [], //recetas obtenidas del api
             productosFiltrados : [],
-            data : [],
+            selectedProducts : [],
             selectedMealTime:''
         }
 
@@ -34,8 +32,7 @@ class ConsumableList extends Component {
      * @param {*} childdata 
      */
     childToParentAdd = (childdata) =>{
-        this.setState({data: [...this.state.data, childdata]});
-        console.log(this.state.data);
+        this.setState({selectedProducts: [...this.state.selectedProducts, childdata]});
     }
 
     /**
@@ -45,11 +42,11 @@ class ConsumableList extends Component {
     childToParentDelete = (childdata) =>{
         const query = childdata.nombre;
         
-        var updatedList = this.state.data;
+        var updatedList = this.state.selectedProducts;
 
         const index = updatedList.findIndex((i) => i.nombre === query);
         updatedList.splice(index,1);
-        this.setState({data:updatedList})
+        this.setState({selectedProducts:updatedList})
     }
     /**
      * filtering consumables
@@ -95,19 +92,15 @@ class ConsumableList extends Component {
                 />
     }
 
+    /**
+     * *registers consumables using api function to do it
+     */
     registerConsumables = () => {
         let selectedMealTime = this.state.selectedMealTime;
-        this.state.data.forEach(function(item,index){
+        this.state.selectedProducts.forEach(function(item,index){
             console.log(item.id)
             agregarConsumoProducto(localStorage.getItem('userEmail'), item.id, selectedMealTime)
         })
-
-        //for (let consumable in this.state.data){
-        //    if(consumable.id !== ''){
-        //        console.log(consumable.id)
-                //agregarConsumoProducto(localStorage.getItem('userEmail'), consumable.id, this.state.selectedMealTime)
-        //    }
-        //}
     }
 
     handleCallbackFromMealSelector = (childData) => {
@@ -118,40 +111,50 @@ class ConsumableList extends Component {
         console.log(this.state.selectedMealTime);
     }
     render(){
-        return(
-            <div>
-                <div className='row'>
-                    
-                    <div className="col search-header">
-                            <div className="search-text">Buscar:</div>
-                            <input id="search-box" onChange={this.filterBySearch} />
-                    </div>
-                    <MealTimeSelector parentCallback = {this.handleCallbackFromMealSelector}/>
-
-                </div>
-                <div className='row'>
-                    <div className='col search'>
-                        <h3>Consumibles</h3>
-                        <div className="container main-content">
-                            
-                            {this.state.productosFiltrados.map(this.createProduct)}
+        if ('userEmail' in localStorage && localStorage.getItem('userEmail') !== ''){
+            return(
+                <div>
+                    <div className='row'>
+                        
+                        <div className="col search-header">
+                                <div className="search-text">Buscar:</div>
+                                <input id="search-box" onChange={this.filterBySearch} />
                         </div>
+                        <MealTimeSelector parentCallback = {this.handleCallbackFromMealSelector}/>
+    
                     </div>
-                    <div className='col added'>
-                        <h3>Tu consumo</h3>
-                        <div className="container main-selected-content">
-                            {this.state.data.map(this.createProductSelection)}
+                    <div className='row'>
+                        <div className='col search'>
+                            <h3>Consumibles</h3>
+                            <div className="container main-content">
+                                
+                                {this.state.productosFiltrados.map(this.createProduct)}
+                            </div>
                         </div>
+                        <div className='col added'>
+                            <h3>Tu consumo</h3>
+                            <div className="container main-selected-content">
+                                {this.state.selectedProducts.map(this.createProductSelection)}
+                            </div>
+                        </div>
+                        
                     </div>
-                    
+                    <button onClick={this.registerConsumables} style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Registrar Consumo</button>
                 </div>
-                <button onClick={this.registerConsumables} style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Registrar Consumo</button>
-            </div>
-            
-            
-            
-        )
-    }
+                
+                
+                
+            );
+        } else {
+            return(
+                <div>
+                    <h>NO SE HA INGRESADO UN USUARIO</h>
+                </div>
+            )
+        }
+        } 
+       
+        
 
     
 }

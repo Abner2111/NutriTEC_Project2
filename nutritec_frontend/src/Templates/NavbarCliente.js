@@ -4,8 +4,12 @@ import icon from '../Imgs/ClientIcon.png'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-
+export const cerrarSesion = () => {
+    localStorage.removeItem('userEmail');
+}
 export const NavbarCliente = () => {
+
+    
   return (
     <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,10 +22,7 @@ export const NavbarCliente = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <a className="nav-link">Vista Cliente</a>
-                    </li>
-
+                    
                     <li className="nav-item">
                         <Link className="nav-link" to='/vistacliente'>Registro Diario</Link>
                     </li>
@@ -33,7 +34,9 @@ export const NavbarCliente = () => {
                     <li className="nav-item">
                         <Link className="nav-link" to='/avancecliente'>Reportes de Avance</Link>
                     </li>
-
+                    <li className="nav-item">
+                        <Link className="nav-link" to='/logincliente' onClick={cerrarSesion} style = {{color: '#FF0000'}}>Cerrar sesión</Link>
+                    </li>
                 </ul>
                 </div>
             </div>
