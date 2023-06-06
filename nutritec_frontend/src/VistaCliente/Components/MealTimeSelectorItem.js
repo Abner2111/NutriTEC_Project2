@@ -1,9 +1,9 @@
 import React from "react";
 
 const MealTimeSelectorItem = ({id, nombre}) =>{
-    let idText = {id}.toString();
+    
     return (
-    <option value = {idText}>{nombre}</option>
+    <option value = {id}>{nombre}</option>
     );
 }
 

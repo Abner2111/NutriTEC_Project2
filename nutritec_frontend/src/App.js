@@ -25,6 +25,7 @@ import SeguimientoPaciente from './VistaNutricionista/SeguimientoPaciente';
 // Cliente
 import VistaCliente  from './VistaCliente/VistaCliente';
 import NuevoConsumoCliente from './VistaCliente/NuevoConsumoCliente';
+import LoginCliente from './VistaCliente/LoginCliente';
 /* UC */
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             
             <Route path='/vistacliente' element = { <VistaCliente/> }/>
             <Route path='/nuevoconsumo' element = {<NuevoConsumoCliente/>}/>
+            <Route path='/logincliente' element = { <LoginCliente/> }/>
             
           </Routes> 
       </Router>

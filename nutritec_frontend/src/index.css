@@ -20,7 +20,7 @@ header {
   margin-top: 2rem;
   overflow: auto;
   height: 350px;
-  width: 300px;
+  width: 100%;
   border: 1px solid #6495ed;
   border-radius: 5px;
 }
@@ -28,7 +28,7 @@ header {
   margin-top: 2rem;
   overflow: auto;
   height: 350px;
-  width: 300px;
+  width: 100%;
   border: 1px solid #64edb6;
   border-radius: 5px;
   
@@ -41,6 +41,7 @@ header {
   
 }
 
+
 .consumable-detail {
   padding: 0 2rem;
 }
@@ -51,9 +52,12 @@ header {
 }
 
 .search{
-  height: 450px;
+  height: 425px;
+  width: auto;
 }
 
 .added{
-  height: 450px;
+  height: 425px;
+  width:auto;
 }
+

@@ -22,14 +22,14 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpPost("/producto")]
-        public async Task<ActionResult<Consumo>> PostConsumoProducto(Consumo consumo)
+        public async Task<ActionResult<Consumo>> PostConsumoProducto(ConsumoProducto consumo_producto)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoproducto", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("inptcorreo", consumo.cliente);
-            cmd.Parameters.AddWithValue("inptfecha", consumo.fecha);
-            cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo.tiempocomidaid);
-            cmd.Parameters.AddWithValue("inptproductoid", consumo.producto_id);
+            cmd.Parameters.AddWithValue("inptcorreo", consumo_producto.inptcorreo);
+            cmd.Parameters.AddWithValue("inptfecha", consumo_producto.inptfecha);
+            cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo_producto.inpttiempocomidaid);
+            cmd.Parameters.AddWithValue("inptproductoid", consumo_producto.inptproductoid);
 
             try
             {
@@ -45,14 +45,14 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpPost("/receta")]
-        public async Task<ActionResult<Consumo>> PostConsumoReceta(Consumo consumo)
+        public async Task<ActionResult<Consumo>> PostConsumoReceta(ConsumoReceta consumo_receta)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoreceta", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("inptcorreo", consumo.cliente);
-            cmd.Parameters.AddWithValue("inptfecha", consumo.fecha);
-            cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo.tiempocomidaid);
-            cmd.Parameters.AddWithValue("inptrecetaname", consumo.receta_name);
+            cmd.Parameters.AddWithValue("inptcorreo", consumo_receta.inptcorreo);
+            cmd.Parameters.AddWithValue("inptfecha", consumo_receta.inptfecha);
+            cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo_receta.inpttiempocomidaid);
+            cmd.Parameters.AddWithValue("inptrecetaname", consumo_receta.inptrecetaname);
 
             try
             {

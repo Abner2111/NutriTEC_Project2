@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import ConsumableRow from './ConsumableRow';
 import SelectedConsumableRow from './SelectedConsumableRow';
 import MealTimeSelector from './MealTimeSelector';
-import axios from 'axios';
-
+import { agregarConsumoProducto, obtenerProductos } from '../../Api';
 class ConsumableList extends Component {
     constructor(props){
         super(props);
@@ -14,18 +13,24 @@ class ConsumableList extends Component {
             recetas : [],
             //filtered products
             productosFiltrados : [],
-            data : []
+            data : [],
+            selectedMealTime:''
         }
 
-
-        axios.get('http://localhost:5295/api/producto').then(response => {
-            this.setState({ productos: response.data });
-            this.setState({ productosFiltrados: response.data });
-        })
+        this.getProducts();
+        console.log(this.state.productos)
 
         
     } 
-    
+
+    /**
+     * gets products from a api
+     */
+    getProducts = async () => {
+        const data = await obtenerProductos();
+        this.setState({productos: data});
+        this.setState({productosFiltrados: data});
+    }
     /**
      * adds selected consumables to the list of selected consumables
      * @param {*} childdata 
@@ -44,7 +49,6 @@ class ConsumableList extends Component {
         
         var updatedList = this.state.data;
 
-        //updatedList = updatedList.filter((item)=> item.nombre !== query);
         const index = updatedList.findIndex((i) => i.nombre === query);
         updatedList.splice(index,1);
         this.setState({data:updatedList})
@@ -93,17 +97,28 @@ class ConsumableList extends Component {
                 />
     }
 
+    registerConsume = () => {
+        for (let consumable in this.stateproductos){
 
+        }
+    }
+
+    handleCallbackFromMealSelector = (childData) => {
+        this.setState({selectedMealTime: childData.value})
+        console.log(this.selectedMealTime);
+    }
+    
     render(){
         return(
             <div>
                 <div className='row'>
+                    
                     <div className="col search-header">
                             <div className="search-text">Buscar:</div>
                             <input id="search-box" onChange={this.filterBySearch} />
                     </div>
-                    <MealTimeSelector/>
-                    
+                    <MealTimeSelector parentCallback = {this.handleCallbackFromMealSelector}/>
+
                 </div>
                 <div className='row'>
                     <div className='col search'>
@@ -121,7 +136,7 @@ class ConsumableList extends Component {
                     </div>
                     
                 </div>
-                <button>Registrar Consumo</button>
+                <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Registrar Consumo</button>
             </div>
             
             
