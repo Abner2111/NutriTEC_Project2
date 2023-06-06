@@ -14,9 +14,9 @@ public class MongoDBConnection
         
 
     }
-
-    public IMongoCollection<MDBCliente> Clientes
+    
+    public IMongoCollection<Retroalimentacion> Retroalimentacion
     {
-        get { return database.GetCollection<MDBCliente>("cliente"); } // Cambia "cliente" si tu colección tiene un nombre diferente
+        get { return database.GetCollection<Retroalimentacion>("retroalimentacion"); } // Cambia "cliente" si tu colección tiene un nombre diferente
     }
 }

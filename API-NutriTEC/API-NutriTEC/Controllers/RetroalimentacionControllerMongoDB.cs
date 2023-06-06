@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using API_NutriTEC.Data;
 using MongoDB.Bson;
 
 namespace API_NutriTEC.Controllers
@@ -13,9 +15,9 @@ namespace API_NutriTEC.Controllers
     {
         private readonly IMongoCollection<Retroalimentacion> _retroalimentacionCollection;
 
-        public RetroalimentacionControllerMongoDB(IMongoDatabase database)
+        public RetroalimentacionControllerMongoDB(MongoDBConnection dbConnection)
         {
-            _retroalimentacionCollection = database.GetCollection<Retroalimentacion>("retroalimentacion");
+            _retroalimentacionCollection = dbConnection.Retroalimentacion;
         }
 
         [HttpGet]
@@ -28,7 +30,7 @@ namespace API_NutriTEC.Controllers
         [HttpPost]
         public ActionResult<Retroalimentacion> CreateRetroalimentacion(Retroalimentacion retroalimentacion)
         {
-            retroalimentacion.Id = ObjectId.GenerateNewId().ToString();
+            retroalimentacion._id = ObjectId.GenerateNewId().ToString();
             retroalimentacion.Fecha = DateTime.UtcNow;
 
             _retroalimentacionCollection.InsertOne(retroalimentacion);

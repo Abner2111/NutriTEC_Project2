@@ -33,7 +33,6 @@ public class Startup
         services.AddRouting();
         services.AddAuthentication();
         services.AddLogging();
-        TestDatabaseConnection(Configuration.GetConnectionString("DefaultConnection"));
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             
@@ -41,27 +40,11 @@ public class Startup
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v1" });
         });
-            
 
-            
+
         services.AddControllers();
         //Llama a la funcion para habilitar CORS
 
-    }
-    private void TestDatabaseConnection(string connectionString)
-    {
-        try
-        {
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-                Console.WriteLine("Database connection successful!");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Database connection failed: " + ex.Message);
-        }
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

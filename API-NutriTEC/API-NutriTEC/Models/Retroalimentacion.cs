@@ -8,9 +8,8 @@ namespace API_NutriTEC.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string _id { get; set; }
 
-        [BsonRepresentation(BsonType.ObjectId)]
         public string PacienteId { get; set; }
 
         public string NutricionistaId { get; set; }
