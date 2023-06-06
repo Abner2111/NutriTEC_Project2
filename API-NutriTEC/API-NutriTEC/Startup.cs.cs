@@ -26,6 +26,8 @@ public class Startup
     }
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<MongoDBConnection>();
+        services.AddControllers();
         services.AddMvc();
         services.AddAuthorization();
         services.AddRouting();
