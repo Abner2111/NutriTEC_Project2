@@ -13,8 +13,6 @@ class MealTimeSelector extends Component{
         
     }
     createMealTime = ({id, nombre}) => {
-        console.log(id);
-        console.log(nombre);
         return < MealTimeSelectorItem
                 id = {id}
                 nombre = {nombre}
@@ -25,10 +23,11 @@ class MealTimeSelector extends Component{
         const data = await obtenerTiemposComida();
         this.setState({ mealtimes : data});
     }
+
     handleChange = (e) =>{
         this.setState({selectedValue:e.target.value});
-        this.props.parentCallback(this.state.selectedValue);
-        console.log(this.state.selectedValue)
+        this.props.parentCallback(e.target.value);
+        e.preventDefault();
     }
     render(){
         return(

@@ -74,7 +74,6 @@ export const agregarConsumoProducto = async (correo, idProducto, mealtime) => {
     inpttiempocomidaid: mealtime,
     inptproductoid: idProducto
   }
-
   const response = await axios.post(endpoint, consumo);
   return response.data;
 }

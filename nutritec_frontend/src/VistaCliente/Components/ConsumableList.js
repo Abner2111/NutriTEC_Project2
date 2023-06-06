@@ -18,8 +18,6 @@ class ConsumableList extends Component {
         }
 
         this.getProducts();
-        console.log(this.state.productos)
-
         
     } 
 
@@ -97,17 +95,28 @@ class ConsumableList extends Component {
                 />
     }
 
-    registerConsume = () => {
-        for (let consumable in this.stateproductos){
+    registerConsumables = () => {
+        let selectedMealTime = this.state.selectedMealTime;
+        this.state.data.forEach(function(item,index){
+            console.log(item.id)
+            agregarConsumoProducto(localStorage.getItem('userEmail'), item.id, selectedMealTime)
+        })
 
-        }
+        //for (let consumable in this.state.data){
+        //    if(consumable.id !== ''){
+        //        console.log(consumable.id)
+                //agregarConsumoProducto(localStorage.getItem('userEmail'), consumable.id, this.state.selectedMealTime)
+        //    }
+        //}
     }
 
     handleCallbackFromMealSelector = (childData) => {
-        this.setState({selectedMealTime: childData.value})
-        console.log(this.selectedMealTime);
+        this.setState({selectedMealTime: childData})
     }
-    
+
+    printSelectec = () => {
+        console.log(this.state.selectedMealTime);
+    }
     render(){
         return(
             <div>
@@ -136,7 +145,7 @@ class ConsumableList extends Component {
                     </div>
                     
                 </div>
-                <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Registrar Consumo</button>
+                <button onClick={this.registerConsumables} style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Registrar Consumo</button>
             </div>
             
             

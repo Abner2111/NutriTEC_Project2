@@ -21,7 +21,7 @@ namespace API_NutriTEC.Controllers
             _context = context;
         }
         
-        [HttpPost("/producto")]
+        [HttpPost("producto")]
         public async Task<ActionResult<Consumo>> PostConsumoProducto(ConsumoProducto consumo_producto)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoproducto", con);
@@ -44,7 +44,7 @@ namespace API_NutriTEC.Controllers
             }
         }
         
-        [HttpPost("/receta")]
+        [HttpPost("receta")]
         public async Task<ActionResult<Consumo>> PostConsumoReceta(ConsumoReceta consumo_receta)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoreceta", con);
