@@ -83,4 +83,16 @@ export const agregarMedidas = async (consumo) => {
   const response = await axios.post(endpoint, consumo);
   return response.data;
 }
+
+export const obtenerPlanesCliente = async (correo) => {
+  const endpoint = API_URL+"/Cliente/planes/"+correo;
+  const response = await axios.get(endpoint);
+  return response.data;
+}
+
+export const obtenerPlanes = async () => {
+  const endpoint = API_URL+"/Plan";
+  const response = await axios.get(endpoint);
+  return response.data;
+}
  

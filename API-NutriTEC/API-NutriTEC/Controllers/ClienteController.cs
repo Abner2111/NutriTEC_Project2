@@ -184,7 +184,8 @@ namespace API_NutriTEC.Controllers
                 var correoParam = new NpgsqlParameter("Correo_", NpgsqlDbType.Varchar)
                     { Value = correo };
 
-                var planesCliente = _context.planes_cliente.FromSqlRaw("SELECT * FROM GetPlanesOfCliente(@Correo_)", correoParam).ToList();
+                var planesCliente = _context.planes_cliente.FromSqlRaw("SELECT * FROM GetPlanesOfCliente(@correo_)", correoParam).ToList();
+                Console.WriteLine(planesCliente.ToString());
 
                 return Ok(planesCliente);
             }
