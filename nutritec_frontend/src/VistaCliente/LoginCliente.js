@@ -150,7 +150,7 @@ class LoginCliente extends React.Component {
                   />
                   <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Iniciar sesión</button>
                 </form>
-                <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }} onClick={() => this.setState({ showPopup: 1 })}>Registrarse</button>
+                  <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }} onClick={() => this.setState({ showPopup: 1 })}>Registrarse</button>
               </MDBCol>
               {showPopup === 1 && (
                 <div className="popup-container">

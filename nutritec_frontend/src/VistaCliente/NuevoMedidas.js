@@ -166,6 +166,7 @@ class NuevoMedidas extends Component{
                     
                     <div>
                         <NavbarCliente/>
+                        <h1 className="titulo">Registro de Medidas</h1>
                         <h>NO SE HA INGRESADO UN USUARIO</h>
                     </div>
                 )

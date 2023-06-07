@@ -36,6 +36,7 @@ class VisualizacionPlanes extends Component{
                 
                 <div>
                     <NavbarCliente/>
+                    <h1>Visualizacion de Planes de Alimentación</h1>
                     <Table data={this.state.planesCliente} height={500}>
                         <Column width={300} align="center" fixed resizable>
                             <HeaderCell>Plan ID</HeaderCell>
@@ -57,6 +58,7 @@ class VisualizacionPlanes extends Component{
             return(
                 <div>
                     <NavbarCliente/>
+                    <h1>Visualizacion de Planes de Alimentación</h1>
                     <h>NO SE HA INGRESADO UN USUARIO</h>
                 </div>
             )
