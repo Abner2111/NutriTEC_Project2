@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10sp"
+    tools:context=".NewRecetaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/createRecipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:text="@string/NewRecipetitle"
+            android:textSize="43sp" />
+
+
+        <EditText
+            android:id="@+id/recipeNameEntry"
+            android:layout_width="match_parent"
+            android:layout_height="65sp"
+            android:ems="10"
+            android:hint="Nombre de la receta"
+            android:inputType="textCapWords"/>
+
+        <SearchView
+            android:id="@+id/product_searchbox"
+            android:layout_width="match_parent"
+            android:layout_height="80sp"
+            android:layout_weight="1"
+            android:iconifiedByDefault="false"
+            android:queryHint="Búsqueda de productos">
+
+        </SearchView>
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="471dp"
+            android:layout_weight="6"
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp"
+            tools:listitem="@layout/consumable_list_item">
+
+
+        </ListView>
+
+        <Button
+            android:id="@+id/registroRecetaBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/register_recipe"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#393939"
+            android:textColorLink="#919191"
+            android:textSize="18sp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

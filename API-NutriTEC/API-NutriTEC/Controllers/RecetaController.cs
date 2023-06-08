@@ -23,13 +23,13 @@ namespace API_NutriTEC.Controllers
             _context = context;
         }
         
-        /* //UNDER CONSTRUCTION
+        
         [HttpGet]
         public async Task <ActionResult<IEnumerable<Receta>>> GetRecetas()
         {
-            var result = _context.receta.FromSqlRaw($"SELECT * FROM GetCliente();").ToList();
+            var result = _context.receta.ToList();
             return result;
-        }*/
+        }
         
         [HttpPost]
         public async Task<ActionResult<Receta>> PostReceta(Receta receta)
@@ -38,8 +38,6 @@ namespace API_NutriTEC.Controllers
             NpgsqlCommand cmd = new NpgsqlCommand("udp_newreceta", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("receta_", receta.nombre);
-            cmd.Parameters.AddWithValue("producto_id_", receta.producto_id);
-            
             try
             {
                 con.Open();

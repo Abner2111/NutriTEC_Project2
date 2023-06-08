@@ -6,5 +6,4 @@ public class Receta
 {
     [Key]
     public string nombre { get; set; }
-    public int producto_id { get; set; }
 }
