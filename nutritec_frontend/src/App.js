@@ -56,6 +56,8 @@ function App() {
             <Route path='/logincliente' element = { <LoginCliente/> }/>
             <Route path='/nuevoMedidas' element = { <NuevoMedidas/> }/>
             <Route path='/planescliente' element = { <VisualizacionPlanes/> }/>
+            <Route path='/aprobacionproductos' element = { <AprobarProductos/> }/>
+
           </Routes> 
       </Router>
       
