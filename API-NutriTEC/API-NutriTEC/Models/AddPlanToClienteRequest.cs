@@ -8,6 +8,6 @@ public class AddPlanToClienteRequest
     [Key]
     public string Cliente { get; set; }
     public int PlanId { get; set; }
-    public DateTime Fecha_inicio { get; set; }
-    public DateTime Fecha_final { get; set; }
+    public string Fecha_inicio { get; set; }
+    public string Fecha_final { get; set; }
 }
