@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity"
-    android:autofillHints="emailAddress"
     >
 
     <LinearLayout
@@ -25,12 +24,11 @@
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
             android:layout_height="150sp"
-            app:srcCompat="@drawable/full_logo"
             tools:srcCompat="@drawable/full_logo" />
 
         <EditText
             android:id="@+id/emai_inpt"
-            style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+            style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="65sp"
             android:ems="10"

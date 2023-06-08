@@ -99,8 +99,12 @@ class ConsumableList extends Component {
         let selectedMealTime = this.state.selectedMealTime;
         this.state.selectedProducts.forEach(function(item,index){
             console.log(item.id)
+            console.log(selectedMealTime)
+            console.log(localStorage.getItem('userEmail'))
             agregarConsumoProducto(localStorage.getItem('userEmail'), item.id, selectedMealTime)
+            
         })
+        this.state.selectedProducts = [];
     }
 
     handleCallbackFromMealSelector = (childData) => {

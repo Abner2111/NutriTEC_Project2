@@ -68,12 +68,14 @@ export const agregarConsumoProducto = async (correo, idProducto, mealtime) => {
   let currentYear = date.getFullYear();
 
   let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+  console.log(currentDate);
   const consumo = {
     inptcorreo: correo,
     inptfecha: currentDate,
-    inpttiempocomidaid: mealtime,
-    inptproductoid: idProducto
+    inpttiempocomidaid: Number(mealtime),
+    inptproductoid: Number(idProducto)
   }
+  console.log(JSON.stringify(consumo));
   const response = await axios.post(endpoint, consumo);
   return response.data;
 }

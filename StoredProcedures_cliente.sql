@@ -1,6 +1,5 @@
 CREATE OR REPLACE PROCEDURE udp_newReceta(
-	Receta_ VARCHAR,
-	Producto_id_ INT
+	Receta_ VARCHAR
 )
 language plpgsql
 AS $$
@@ -8,7 +7,6 @@ BEGIN
 	IF NOT EXISTS (SELECT Nombre FROM RECETA WHERE receta.Nombre = Receta_) THEN
 		INSERT INTO RECETA (Nombre) VALUES (Receta_);
 	END IF;
-	INSERT INTO PRODUCTOS_RECETA (Receta_name, Producto_id) VALUES (Receta_, Producto_id_);
 END
 $$
 
@@ -174,12 +172,22 @@ LANGUAGE plpgsql
 AS $$
 DECLARE 
 	consumoExistenteId int;
+	cantidad_actual int;
 BEGIN
 	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
 		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
-	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
-	INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
+	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid);
+	
+	IF NOT EXISTS(SELECT  consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId) THEN
+		INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
+	ELSE 
+	
+		cantidad_actual = (SELECT consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId);
+		UPDATE CONSUMO_PRODUCTO
+		SET CANTIDAD = (cantidad_actual+1)
+		WHERE consumo_id = consumoExistenteId and producto_id = inptproductoId;
+	END IF;
 END $$
 	
 /**
