@@ -17,7 +17,7 @@ const VistaPrincipal = () => {
                         title='Administrador'
                         imageUrl={AdminIcon}
                         body='Entrar como administrador'
-                        url='/loginadmin'
+                        url='/loginadministrador'
                     />
                 </div>
 

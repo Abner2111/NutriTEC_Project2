@@ -11,6 +11,11 @@ export const validarNutricionista = async (correo, contrasena)=> {
     return response.data;
 };
 
+export const validarAdministrador = async (correo, contrasena)=> {
+  const response = await axios.get(`${API_URL}/administrador/validar/${correo}/${contrasena}`);
+  return response.data;
+};
+
 export const obtenerProductos = async () => {
     const response = await axios.get(`${API_URL}/Producto`);
     return response.data;

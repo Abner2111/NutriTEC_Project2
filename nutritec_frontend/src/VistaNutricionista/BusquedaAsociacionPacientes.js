@@ -10,6 +10,7 @@ class BusquedaAsociacionPacientes extends Component {
     super(props);
   
     this.state = {
+      idCliente: sessionStorage.getItem("miId"),
       clientes: [], // lista de planes obtenidos desde el API
       mispacientes: [],
       id: "",
@@ -23,7 +24,7 @@ class BusquedaAsociacionPacientes extends Component {
     
     axios
       .post("http://localhost:5295/api/nutricionista/Asociar", {
-        nutricionista: 123456789,
+        nutricionista: this.state.idCliente,
         cliente: cliente.correo,
       })
       .then((response) => {
@@ -39,7 +40,7 @@ class BusquedaAsociacionPacientes extends Component {
   }
 
   handleMisPacientes = () => {
-    axios.get('http://localhost:5295/api/nutricionista/Asociados/'+123456789) // obtiene la lista de sucursales desde el API
+    axios.get('http://localhost:5295/api/nutricionista/Asociados/'+this.state.idCliente) // obtiene la lista de sucursales desde el API
       .then(response => {
         this.setState({ mispacientes: response.data }); // guarda la lista de sucursales en el estado
       })

@@ -157,9 +157,9 @@ namespace API_NutriTEC.Controllers
                     { Value = request.Cliente };
                 var planIdParam = new NpgsqlParameter("PlanId_", NpgsqlDbType.Integer)
                     { Value = request.PlanId };
-                var fechaInicioParam = new NpgsqlParameter("Fecha_inicio_", NpgsqlDbType.Date)
+                var fechaInicioParam = new NpgsqlParameter("Fecha_inicio_", NpgsqlDbType.Varchar)
                     { Value = request.Fecha_inicio };
-                var fechaFinalParam = new NpgsqlParameter("Fecha_final_", NpgsqlDbType.Date)
+                var fechaFinalParam = new NpgsqlParameter("Fecha_final_", NpgsqlDbType.Varchar)
                     { Value = request.Fecha_final };
 
                 _context.Database.ExecuteSqlRaw(
@@ -175,6 +175,24 @@ namespace API_NutriTEC.Controllers
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
+        
+        // GET: api/cliente/planes
+        [HttpGet("planes")]
+        public IActionResult GetPlanesOfCliente()
+        {
+            try
+            {
+
+                var planesCliente = _context.planes_cliente.FromSqlRaw("SELECT * FROM GetPlanesCliente()").ToList();
+
+                return Ok(planesCliente);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+        
         // GET: api/cliente/planes/{correo}
         [HttpGet("planes/{correo}")]
         public IActionResult GetPlanesOfCliente(string correo)
