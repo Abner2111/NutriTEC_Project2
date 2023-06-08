@@ -5,46 +5,43 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Control
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlanController : ControllerBase
+    public class PlanController : BaseController
     {
-        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
-        //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
-        
         private PlanComida _planComida = new PlanComida();
         private readonly ApplicationDbContext _context;
 
-        public PlanController(ApplicationDbContext context)
+        public PlanController(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task <ActionResult<IEnumerable<Plan>>> GetPlanes()
+        public async Task<ActionResult<IEnumerable<Plan>>> GetPlanes()
         {
             var result = _context.plan.FromSqlRaw($"SELECT * FROM GetPlanes();").ToList();
             return result;
         }
         
         [HttpGet("Recetas")]
-        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesRecetas()
+        public async Task<ActionResult<IEnumerable<PlanComida>>> GetPlanesRecetas()
         {
             var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanRecetas();").ToList();
             return result;
         }
         
         [HttpGet("Productos")]
-        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlanesProductos()
+        public async Task<ActionResult<IEnumerable<PlanComida>>> GetPlanesProductos()
         {
             var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanProductos();").ToList();
             return result;
         }
         
         [HttpGet("{id}")]
-        public async Task <ActionResult<IEnumerable<PlanComida>>> GetPlan(int id)
+        public async Task<ActionResult<IEnumerable<PlanComida>>> GetPlan(int id)
         {
             var result = _context.plancomida.FromSqlRaw($"SELECT * FROM GetPlanById({id});").ToList();
             return result;

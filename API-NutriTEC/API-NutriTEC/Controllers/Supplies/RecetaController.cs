@@ -1,48 +1,49 @@
 using System.Data;
-using System.Security.Cryptography;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Supplies
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecetaController : ControllerBase
+    public class RecetaController : BaseController
     {
-        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
-        //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
-        
-        private Receta receta = new Receta();
-        private readonly ApplicationDbContext _context;
 
-        public RecetaController(ApplicationDbContext context)
+        private Receta receta = new Receta();
+
+        public RecetaController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
-        
-        
+
         [HttpGet]
-        public async Task <ActionResult<IEnumerable<Receta>>> GetRecetas()
+        public async Task<ActionResult<IEnumerable<Receta>>> GetRecetas()
         {
-            var result = _context.receta.ToList();
-            return result;
+            try
+            {
+                var result = _dbContext.receta.ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<Receta>> PostReceta(Receta receta)
         {
-            
-            NpgsqlCommand cmd = new NpgsqlCommand("udp_newreceta", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("receta_", receta.nombre);
             try
             {
+                NpgsqlCommand cmd = new NpgsqlCommand("udp_newreceta", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("receta_", receta.nombre);
+
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
+
                 return Ok();
             }
             catch (Exception e)
@@ -50,6 +51,7 @@ namespace API_NutriTEC.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         /* // Under construction
         [HttpDelete("EliminarReceta/{receta}")]
         public async Task<ActionResult<Receta>> DeleteReceta(string correo)
@@ -70,20 +72,21 @@ namespace API_NutriTEC.Controllers
                 return BadRequest(e.Message);
             }
         } */
-        
+
         [HttpDelete("EliminarProducto/{receta}/{producto}")]
         public async Task<ActionResult<Receta>> DeleteProductoReceta(string receta, int producto)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand("deleteproductoreceta", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("receta_", receta);
-            cmd.Parameters.AddWithValue("producto_id_", producto);
-            
             try
             {
+                NpgsqlCommand cmd = new NpgsqlCommand("deleteproductoreceta", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("receta_", receta);
+                cmd.Parameters.AddWithValue("producto_id_", producto);
+
                 con.Open();
                 cmd.ExecuteNonQuery();
                 con.Close();
+
                 return Ok();
             }
             catch (Exception e)

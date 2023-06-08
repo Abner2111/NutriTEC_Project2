@@ -1,13 +1,10 @@
-﻿using API_NutriTEC.Models;
+﻿using API_NutriTEC.Data;
+using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using API_NutriTEC.Data;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Control
 {
     [ApiController]
     [Route("api/retroalimentacion")]

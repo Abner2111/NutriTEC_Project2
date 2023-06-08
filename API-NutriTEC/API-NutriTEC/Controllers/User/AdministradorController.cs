@@ -1,42 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using API_NutriTEC.Data;
-using API_NutriTEC.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.User
 {
     [Route("api/administrador")]
     [ApiController]
-    public class AdministradorController : ControllerBase
+    public class AdministradorController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public AdministradorController(ApplicationDbContext context)
+        public AdministradorController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
-        // GET: api/administradores
+        // GET: api/administrador
         [HttpGet("Prueba")]
-        public ActionResult<IEnumerable<Administrador>> GetAdministradores()
+        public IActionResult GetAdministradores()
         {
-            var administradores = _context.administrador.ToList();
-            return Ok(administradores);
+            var administradores = _dbContext.administrador.ToList();
+            if (administradores != null)
+            {
+                return SuccessResponse(administradores);
+
+            }
+            else
+            {
+                return ErrorResponse("No hay administradores");
+            }
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetTables()
+        public IActionResult GetTables()
         {
             try
             {
-                var tables = _context.Database.GetDbConnection().GetSchema("Tables");
+                var tables = _dbContext.Database.GetDbConnection().GetSchema("Tables");
                 var tableNames = new List<string>();
 
                 foreach (DataRow row in tables.Rows)
@@ -45,11 +47,11 @@ namespace API_NutriTEC.Controllers
                     tableNames.Add(tableName);
                 }
 
-                return Ok(tableNames);
+                return SuccessResponse(tableNames);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Error: " + ex.Message);
+                return ErrorResponse("Error: " + ex.Message);
             }
         }
 
@@ -63,14 +65,14 @@ namespace API_NutriTEC.Controllers
                 var hashedPassword = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
                 var correoParam = new NpgsqlParameter("p_correo", NpgsqlDbType.Varchar)
-                    { Value = email };
+                { Value = email };
                 var contrasenaParam = new NpgsqlParameter("p_contrasena", NpgsqlDbType.Varchar)
-                    { Value = hashedPassword };
+                { Value = hashedPassword };
 
                 var resultadoParam = new NpgsqlParameter("p_resultado", NpgsqlDbType.Boolean)
-                    { Direction = ParameterDirection.Output };
+                { Direction = ParameterDirection.Output };
 
-                _context.Database.ExecuteSqlRaw(
+                _dbContext.Database.ExecuteSqlRaw(
                     "SELECT udp_validar_credencialesA(@p_correo, @p_contrasena) AS resultado",
                     correoParam, contrasenaParam, resultadoParam);
 
@@ -78,7 +80,7 @@ namespace API_NutriTEC.Controllers
 
                 if (resultado)
                 {
-                    return Ok("Credenciales válidas.");
+                    return SuccessResponse("Credenciales válidas.");
                 }
                 else
                 {

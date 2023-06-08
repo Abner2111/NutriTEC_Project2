@@ -4,25 +4,22 @@ using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Control
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ConsumoController : ControllerBase
+    public class ConsumoController : BaseController
     {
-        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
-        //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
-        
         private Consumo consumo = new Consumo();
         private readonly ApplicationDbContext _context;
 
-        public ConsumoController(ApplicationDbContext context)
+        public ConsumoController(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
         
         [HttpPost("producto")]
-        public async Task<ActionResult<Consumo>> PostConsumoProducto(ConsumoProducto consumo_producto)
+        public IActionResult PostConsumoProducto(ConsumoProducto consumo_producto)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoproducto", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -45,7 +42,7 @@ namespace API_NutriTEC.Controllers
         }
         
         [HttpPost("receta")]
-        public async Task<ActionResult<Consumo>> PostConsumoReceta(ConsumoReceta consumo_receta)
+        public IActionResult PostConsumoReceta(ConsumoReceta consumo_receta)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registroconsumoreceta", con);
             cmd.CommandType = CommandType.StoredProcedure;

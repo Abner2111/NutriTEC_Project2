@@ -1,29 +1,25 @@
-
 using System.Data;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Control
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MedidaController : ControllerBase
+    public class MedidaController : BaseController
     {
-        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
-        //NpgsqlConnection con = new NpgsqlConnection(Configuration.GetConnectionString("DefaultConnection"));
-        
         private Medida medida = new Medida();
         private readonly ApplicationDbContext _context;
 
-        public MedidaController(ApplicationDbContext context)
+        public MedidaController(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Medida>> PostMedida(Medida medida)
+        public IActionResult PostMedida(Medida medida)
         {
             NpgsqlCommand cmd = new NpgsqlCommand("udp_registromedidas", con);
             cmd.CommandType = CommandType.StoredProcedure;

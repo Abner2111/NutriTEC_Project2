@@ -1,23 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API_NutriTEC.Data;
 using API_NutriTEC.Models;
-using System;
-using System.Data;
-using API_NutriTEC.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.Supplies
 {
-    [Route("api/producto")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ProductoController : ControllerBase
+    public class ProductoController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public ProductoController(ApplicationDbContext context)
+        public ProductoController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         // POST: api/producto/agregar
@@ -61,15 +56,15 @@ namespace API_NutriTEC.Controllers
                 var calcioParam = new NpgsqlParameter("calcio", NpgsqlDbType.Integer)
                     { Value = producto.Calcio };
 
-                _context.Database.ExecuteSqlRaw(
+                _dbContext.Database.ExecuteSqlRaw(
                     "SELECT AgregarProducto(@nombre, @codigo_barras, @tamano_porcion, @grasa, @energia, @proteina, @sodio, @carbohidratos, @hierro, @vitamina_d, @vitamina_b6, @vitamina_c, @vitamina_k, @vitamina_b, @vitamina_b12, @vitamina_a, @calcio)",
                     nombreParam, codigoBarrasParam, tamanoPorcionParam, grasaParam, energiaParam, proteinaParam,
                     sodioParam, carbohidratosParam, hierroParam, vitaminaDParam, vitaminaB6Param, vitaminaCParam,
                     vitaminaKParam, vitaminaBParam, vitaminaB12Param, vitaminaAParam, calcioParam);
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
-                return Ok("Producto agregado exitosamente.");
+                return SuccessResponse("Producto agregado exitosamente.");
             }
             catch (Exception ex)
             {
@@ -83,11 +78,11 @@ namespace API_NutriTEC.Controllers
         {
             try
             {
-                _context.Database.ExecuteSqlInterpolated($"CALL AprobarProducto({productoId})");
+                _dbContext.Database.ExecuteSqlInterpolated($"CALL AprobarProducto({productoId})");
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
-                return Ok("Producto aprobado exitosamente.");
+                return SuccessResponse("Producto aprobado exitosamente.");
             }
             catch (Exception ex)
             {
@@ -101,11 +96,11 @@ namespace API_NutriTEC.Controllers
         {
             try
             {
-                _context.Database.ExecuteSqlInterpolated($"CALL EliminarProductoPorCodigoBarras({codigoBarras})");
+                _dbContext.Database.ExecuteSqlInterpolated($"CALL EliminarProductoPorCodigoBarras({codigoBarras})");
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
-                return Ok("Producto eliminado exitosamente.");
+                return SuccessResponse("Producto eliminado exitosamente.");
             }
             catch (Exception ex)
             {
@@ -152,15 +147,15 @@ namespace API_NutriTEC.Controllers
                 var calcioParam = new NpgsqlParameter("calcio_param", NpgsqlDbType.Integer)
                     { Value = producto.Calcio };
 
-                _context.Database.ExecuteSqlRaw(
+                _dbContext.Database.ExecuteSqlRaw(
                     "CALL EditarProductoPorCodigoBarras(@codigo_barras_param, @tamano_porcion_param, @grasa_param, @energia_param, @proteina_param, @sodio_param, @carbohidratos_param, @hierro_param, @vitamina_d_param, @vitamina_b6_param, @vitamina_c_param, @vitamina_k_param, @vitamina_b_param, @vitamina_b12_param, @vitamina_a_param, @calcio_param)",
                     codigoBarrasParam, tamanoPorcionParam, grasaParam, energiaParam, proteinaParam, sodioParam,
                     carbohidratosParam, hierroParam, vitaminaDParam, vitaminaB6Param, vitaminaCParam, vitaminaKParam,
                     vitaminaBParam, vitaminaB12Param, vitaminaAParam, calcioParam);
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
-                return Ok("Producto editado exitosamente.");
+                return SuccessResponse("Producto editado exitosamente.");
             }
             catch (Exception ex)
             {
@@ -173,8 +168,8 @@ namespace API_NutriTEC.Controllers
         {
             try
             {
-                var productos = _context.producto.FromSqlRaw("SELECT * FROM ObtenerProductos()").ToList();
-                return Ok(productos);
+                var productos = _dbContext.producto.FromSqlRaw("SELECT * FROM ObtenerProductos()").ToList();
+                return SuccessResponse(productos);
             }
             catch (Exception ex)
             {

@@ -1,32 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using API_NutriTEC.Models;
-using System;
-using System.Data;
+﻿using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 using API_NutriTEC.Data;
+using API_NutriTEC.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
 
-namespace API_NutriTEC.Controllers
+namespace API_NutriTEC.Controllers.User
 {
     [Route("api/nutricionista")]
     [ApiController]
-    public class NutricionistaController : ControllerBase
+    public class NutricionistaController : BaseController
     {
-        NpgsqlConnection con = new NpgsqlConnection("Server=nutritecrelational.postgres.database.azure.com;Database=NutriTECrelational;Port=5432;User Id=nutritecadmin@nutritecrelational;Password=Nutritec1;Ssl Mode=Require;Trust Server Certificate=true;");
-        private readonly ApplicationDbContext _context;
-
-        public NutricionistaController(ApplicationDbContext context)
+        public NutricionistaController(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
         
         [HttpGet("Asociados/{nutricionista}")]
         public async Task <ActionResult<IEnumerable<Cliente>>> GetPacientesDeNutricionista(int nutricionista)
         {
-            var result = _context.cliente.FromSqlRaw($"SELECT * FROM GetClientesDeNutricionista({nutricionista});").ToList();
+            var result = _dbContext.cliente.FromSqlRaw($"SELECT * FROM GetClientesDeNutricionista({nutricionista});").ToList();
             return result;
         }
         
@@ -47,7 +42,7 @@ namespace API_NutriTEC.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Error: " + e.Message);
             }
         }
 
@@ -90,13 +85,13 @@ namespace API_NutriTEC.Controllers
                     { Value = nutricionista.Estatura };
                 var pesoParam = new NpgsqlParameter("p_peso", NpgsqlDbType.Integer) { Value = nutricionista.Peso };
 
-                _context.Database.ExecuteSqlRaw(
+                _dbContext.Database.ExecuteSqlRaw(
                     "CALL RegistrarNutricionista(@p_cedula, @p_foto, @p_nombre, @p_apellido1, @p_apellido2, @p_correo, @p_fecha_nacimiento, @p_tipo_cobro, @p_codigo, @p_tarjeta_credito, @p_contrasena, @p_direccion, @p_estatura, @p_peso)",
                     cedulaParam, fotoParam, nombreParam, apellido1Param, apellido2Param, correoParam,
                     fechaNacimientoParam, tipoCobroParam, codigoParam, tarjetaCreditoParam, contrasenaParam,
                     direccionParam, estaturaParam, pesoParam);
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
                 return Ok("Nutricionista registrado exitosamente.");
             }
@@ -114,7 +109,7 @@ namespace API_NutriTEC.Controllers
             try
             {
                 var nutricionistas =
-                    _context.nutricionista.FromSqlRaw("SELECT * FROM obtenernutricionistas()").ToList();
+                    _dbContext.nutricionista.FromSqlRaw("SELECT * FROM obtenernutricionistas()").ToList();
 
                 return Ok(nutricionistas);
             }
@@ -130,9 +125,9 @@ namespace API_NutriTEC.Controllers
         {
             try
             {
-                _context.Database.ExecuteSqlInterpolated($"CALL EliminarNutricionista({cedula})");
+                _dbContext.Database.ExecuteSqlInterpolated($"CALL EliminarNutricionista({cedula})");
 
-                _context.SaveChanges();
+                _dbContext.SaveChanges();
 
                 return Ok("Nutricionista eliminado exitosamente.");
             }
@@ -160,7 +155,7 @@ namespace API_NutriTEC.Controllers
                 var resultadoParam = new NpgsqlParameter("p_resultado", NpgsqlDbType.Boolean)
                     { Direction = ParameterDirection.Output };
 
-                _context.Database.ExecuteSqlRaw(
+                _dbContext.Database.ExecuteSqlRaw(
                     "SELECT udp_validar_credencialesN(@p_correo, @p_contrasena) AS resultado",
                     correoParam, contrasenaParam, resultadoParam);
 
@@ -168,7 +163,7 @@ namespace API_NutriTEC.Controllers
 
                 if (resultado)
                 {
-                    return Ok("Credenciales válidas.");
+                    return SuccessResponse("Credenciales válidas.");
                 }
                 else
                 {
@@ -179,21 +174,6 @@ namespace API_NutriTEC.Controllers
             {
                 return StatusCode(500, "Error: " + ex.Message);
             }
-        }
-
-
-        private string GetMd5Hash(MD5 md5Hash, string input)
-        {
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            StringBuilder sBuilder = new StringBuilder();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            return sBuilder.ToString();
         }
     }
 }
