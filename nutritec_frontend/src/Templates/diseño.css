@@ -145,7 +145,7 @@ tr:hover {
 }
 
 .popup {
-    height: 900px;
+    height: 100%;
     /* ajusta la altura del popup */
     overflow-y: auto;
     /* agrega scrollbar vertical */

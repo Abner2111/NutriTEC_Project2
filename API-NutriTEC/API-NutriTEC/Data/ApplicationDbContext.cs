@@ -1,4 +1,5 @@
-﻿using API_NutriTEC.Models;
+﻿using API_NutriTEC.Controllers;
+using API_NutriTEC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API_NutriTEC.Data
@@ -30,6 +31,8 @@ namespace API_NutriTEC.Data
         public  DbSet<Producto> producto { get; set; }
         public DbSet<AddPlanToClienteRequest> planes_cliente { get; set; }
         public DbSet<ReporteCobro> reporte_cobro { get; set; }
+        
+        public DbSet<TiempoComida> tiempo_comida { get; set; }
     }
 }
 

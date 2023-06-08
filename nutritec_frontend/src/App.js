@@ -24,6 +24,11 @@ import AsignacionPlanPaciente from './VistaNutricionista/AsignacionPlanPaciente'
 import SeguimientoPaciente from './VistaNutricionista/SeguimientoPaciente';
 
 // Cliente
+import VistaCliente  from './VistaCliente/VistaCliente';
+import NuevoConsumoCliente from './VistaCliente/NuevoConsumoCliente';
+import LoginCliente from './VistaCliente/LoginCliente';
+import NuevoMedidas from './VistaCliente/NuevoMedidas';
+import VisualizacionPlanes from './VistaCliente/VisualizacionPlanes';
 /* UC */
 
 function App() {
@@ -46,7 +51,12 @@ function App() {
             <Route path='/seguimientopaciente' element = { <SeguimientoPaciente/> }/>
             
             
-          </Routes>
+            <Route path='/vistacliente' element = { <VistaCliente/> }/>
+            <Route path='/nuevoconsumo' element = {<NuevoConsumoCliente/>}/>
+            <Route path='/logincliente' element = { <LoginCliente/> }/>
+            <Route path='/nuevoMedidas' element = { <NuevoMedidas/> }/>
+            <Route path='/planescliente' element = { <VisualizacionPlanes/> }/>
+          </Routes> 
       </Router>
       
     </div>

@@ -10,8 +10,4 @@ public class Consumo
     public int tiempocomidaid { get; set; }
     public string fecha { get; set; }
     
-    
-    public int consumo_id { get; set; }
-    public int producto_id { get; set; }
-    public string receta_name { get; set; }
 }

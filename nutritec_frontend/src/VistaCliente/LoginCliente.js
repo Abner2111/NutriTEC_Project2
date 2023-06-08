@@ -1,54 +1,56 @@
-import React from "react";
-import { registrarNutricionista, validarNutricionista } from "../Api";
+import React, { useEffect } from "react";
+import { registrarCliente, validarCliente} from "../Api";
 import '../Templates/diseñoH.css';
 import '../Templates/diseño.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
-
-
-class LoginNutricionista extends React.Component {
+class LoginCliente extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       formValues: {
-        Cedula: '',
-        Foto: '',
-        Nombre: '',
-        Apellido1: '',
-        Apellido2: '',
-        Correo: '',
-        FechaNacimiento: '',
-        TipoCobro: '',
-        Codigo: '',
-        TarjetaCredito: '',
-        Contrasena: '',
-        Direccion: '',
-        Estatura: '',
-        Peso: ''
+        correo: '',
+        nombre: '',
+        apellido1: '',
+        apellido2: '',
+        contrasena: '',
+        pais: '',
+        fecha_registro: '',
+        fecha_nacimiento: '',
+        estatura: '',
+        peso: ''
       },
-      currentid: '',
       currentemail: '',
       currentpass: '',
       showPopup: 0
     };
     this.handleOuterClick = this.handleOuterClick.bind(this);
+    
+
+
+    
   }
+  
+  
+
 
   handleSubmit = async (event, tipo, obj) => {
     event.preventDefault();
     if (tipo === 1) {
-      const data = await registrarNutricionista(obj);
+      const data = await registrarCliente(obj);
       console.log(data);
     }
     if (tipo === 2) {
       console.log(this.state.currentemail, this.state.currentpass);
-      const data = await validarNutricionista(this.state.currentemail, this.state.currentpass);
+      const data = await validarCliente(this.state.currentemail, this.state.currentpass);
       console.log(data);
-      sessionStorage.setItem("miId", this.state.currentid);
+      localStorage.setItem('userEmail',this.state.currentemail);
+      window.location = '/vistacliente';
       
-      window.location = "/vistanutricionista"
+      
     }
   };
+  
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({
@@ -56,18 +58,9 @@ class LoginNutricionista extends React.Component {
     });
   };
 
-
   handleInputChangeR = (event) => {
     const { name, value } = event.target;
-    // Validar número de tarjeta de crédito usando una expresión regular
-    if (name === 'TarjetaCredito') {
-      const creditCardRegex = /^(?:[0-9]{4}-){3}[0-9]{4}$|^([0-9]{4} ){3}[0-9]{4}$|^[0-9]{16}$/;
-      if (!creditCardRegex.test(value)) {
-        // TODO mostrar mensaje de error para tarjeta invalida
-        // Mostrar mensaje de error o realizar alguna acción de validación
-        console.log('Número de tarjeta de crédito inválido');
-      }
-    }
+  
     this.setState((prevState) => ({
       formValues: {
         ...prevState.formValues,
@@ -75,37 +68,23 @@ class LoginNutricionista extends React.Component {
       }
     }));
   };
+  
   handleRegistro = async (event) => {
     event.preventDefault();
     console.log(this.state.formValues);
-    const data = await registrarNutricionista(this.state.formValues);
+    const date = new Date();
+      let currentDay= String(date.getDate()).padStart(2, '0');
+
+      let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+      
+      let currentYear = date.getFullYear();
+
+      let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+    this.state.formValues.FechaRegistro = currentDate;
+    const data = await registrarCliente(this.state.formValues);
     console.log(data);
     this.setState({ showPopup: 0 })
   };
-  handleImageChange = (event) => {
-    const file = event.target.files[0];
-
-    try {
-      const imageUrl = URL.createObjectURL(file);
-
-      this.setState((prevState) => ({
-        formValues: {
-          ...prevState.formValues,
-          Foto: imageUrl,
-        },
-      }));
-
-      console.log(imageUrl);
-    } catch (error) {
-      console.error('Error al cargar la imagen:', error);
-    }
-  };
-
-
-
-
-
-
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleOuterClick);
@@ -120,46 +99,38 @@ class LoginNutricionista extends React.Component {
   handleOuterClick(event) {
     const container = document.querySelector('.popup');
     if (container && !container.contains(event.target)) {
+      
       this.setState({ showPopup: 0 });
       this.setState({
         formValues: {
-          Cedula: '',
-          Foto: '',
-          Nombre: '',
-          Apellido1: '',
-          Apellido2: '',
-          Correo: '',
-          FechaNacimiento: '',
-          TipoCobro: '',
-          Codigo: '',
-          TarjetaCredito: '',
-          Contrasena: '',
-          Direccion: '',
-          Estatura: '',
-          Peso: ''
-        }, showPopup: 0
+            correo: '',
+            nombre: '',
+            apellido1: '',
+            apellido2: '',
+            contrasena: '',
+            pais: '',
+            fecha_registro: '',
+            fecha_nacimiento: '',
+            estatura: '',
+            peso: ''
+          }, showPopup: 0
       });
     }
   }
+
+ 
+  
 
   render() {
     const { showPopup } = this.state;
     return (
       <div className="gestion-productos-container">
-        <h1 className="titulo">Inicio de sesion Nutricionista</h1>
+        <h1 className="titulo">Inicio de sesión clientes</h1>
         <div className="centered-container">
           <MDBContainer>
             <MDBRow>
             <MDBCol md="7" className="form-container">
                 <form onSubmit={(e) => this.handleSubmit(e, 2)}>
-
-                <label className="form-label">Id</label>
-                  <MDBInput
-                    type="text"
-                    name="currentid"
-                    value={this.state.currentid}
-                    onChange={this.handleInputChange}
-                  />
 
                   <label className="form-label">Correo</label>
                   <MDBInput
@@ -179,7 +150,7 @@ class LoginNutricionista extends React.Component {
                   />
                   <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }}>Iniciar sesión</button>
                 </form>
--                <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }} onClick={() => this.setState({ showPopup: 1 })}>Registrarse</button>
+                  <button style={{ color: '#FFF', backgroundColor: '#008CBA', borderRadius: '12px', padding: '12px', border: '2px solid #008CBA' }} onClick={() => this.setState({ showPopup: 1 })}>Registrarse</button>
               </MDBCol>
               {showPopup === 1 && (
                 <div className="popup-container">
@@ -187,34 +158,19 @@ class LoginNutricionista extends React.Component {
                     <h2>Registrar Nutricionista</h2>
                     <MDBCol>
                       <form onSubmit={this.handleRegistro}>
-                        <label className="form-label">Cédula</label>
-                        <MDBInput
-                          type="text"
-                          name="Cedula"
-                          value={this.state.formValues.Cedula}
-                          onChange={this.handleInputChangeR}
-                        />
-
-                        <label className="form-label">Foto</label>
-                        <MDBInput
-                          type="file"
-                          name="Foto"
-                          accept="image/*"
-                          onChange={this.handleImageChange}
-                        />
 
                         <label className="form-label">Nombre</label>
                         <MDBInput
                           type="text"
-                          name="Nombre"
+                          name="nombre"
                           value={this.state.formValues.Nombre}
                           onChange={this.handleInputChangeR}
                         />
 
-                        <label className="form-label">Prinmer Apellido</label>
+                        <label className="form-label">Primer Apellido</label>
                         <MDBInput
                           type="text"
-                          name="Apellido1"
+                          name="apellido1"
                           value={this.state.formValues.Apellido1}
                           onChange={this.handleInputChangeR}
                         />
@@ -222,7 +178,7 @@ class LoginNutricionista extends React.Component {
                         <label className="form-label">Segundo Apellido</label>
                         <MDBInput
                           type="text"
-                          name="Apellido2"
+                          name="apellido2"
                           value={this.state.formValues.Apellido2}
                           onChange={this.handleInputChangeR}
                         />
@@ -230,7 +186,7 @@ class LoginNutricionista extends React.Component {
                         <label className="form-label">Correo</label>
                         <MDBInput
                           type="email"
-                          name="Correo"
+                          name="correo"
                           value={this.state.formValues.Correo}
                           onChange={this.handleInputChangeR}
                         />
@@ -238,61 +194,38 @@ class LoginNutricionista extends React.Component {
                         <label className="form-label">Fecha de Nacimiento</label>
                         <MDBInput
                           type="date"
-                          name="FechaNacimiento"
+                          name="fecha_nacimiento"
                           value={this.state.formValues.FechaNacimiento}
                           onChange={this.handleInputChangeR}
                         />
 
-                        <label className="form-label">Tipo de Cobro</label>
-                        <MDBInput
-                          type="text"
-                          name="TipoCobro"
-                          value={this.state.formValues.TipoCobro}
-                          onChange={this.handleInputChangeR}
-                        />
-
-                        <label className="form-label">Codigo</label>
-                        <MDBInput
-                          type="text"
-                          name="Codigo"
-                          value={this.state.formValues.Codigo}
-                          onChange={this.handleInputChangeR}
-                        />
-
-                        <label className="form-label">Tarjeta de Credito</label>
-                        <MDBInput
-                          type="text"
-                          name="TarjetaCredito"
-                          value={this.state.formValues.TarjetaCredito}
-                          onChange={this.handleInputChangeR}
-                        />
 
                         <label className="form-label">Contraseña</label>
                         <MDBInput
                           type="password"
-                          name="Contrasena"
+                          name="contrasena"
                           value={this.state.formValues.Contrasena}
                           onChange={this.handleInputChangeR}
                         />
 
-                        <label className="form-label">Direccion</label>
+                        <label className="form-label">Pais</label>
                         <MDBInput
                           type="text"
-                          name="Direccion"
+                          name="pais"
                           value={this.state.formValues.Direccion}
                           onChange={this.handleInputChangeR}
                         />
                         <label className="form-label">Estatura</label>
                         <MDBInput
                           type="text"
-                          name="Estatura"
+                          name="estatura"
                           value={this.state.formValues.Estatura}
                           onChange={this.handleInputChangeR}
                         />
                         <label className="form-label">Peso</label>
                         <MDBInput
                           type="text"
-                          name="Peso"
+                          name="peso"
                           value={this.state.formValues.Peso}
                           onChange={this.handleInputChangeR}
                         />
@@ -310,4 +243,4 @@ class LoginNutricionista extends React.Component {
   }
 }
 
-export default LoginNutricionista;
+export default LoginCliente;
