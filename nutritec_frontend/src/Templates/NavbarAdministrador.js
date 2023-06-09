@@ -29,6 +29,9 @@ export const NavbarAdministrador = () => {
                     <li className="nav-item">
                         <Link className="nav-link" to='/reportecobro'>Reporte de cobro</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to='/loginadministrador'  style = {{color: '#FF0000'}}>Cerrar sesión</Link>
+                    </li>
 
                 </ul>
                 </div>

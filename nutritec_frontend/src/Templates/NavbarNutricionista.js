@@ -30,6 +30,9 @@ export const NavbarNutricionista = () => {
                         <Link className="nav-link" to='/seguimientopaciente'>Seguimiento paciente</Link>
                     </li>
 
+                    <li className="nav-item">
+                        <Link className="nav-link" to='/loginnutricionista'  style = {{color: '#FF0000'}}>Cerrar sesión</Link>
+                    </li>
 
                 </ul>
                 </div>
