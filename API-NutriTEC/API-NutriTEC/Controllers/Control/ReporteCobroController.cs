@@ -15,6 +15,13 @@ namespace API_NutriTEC.Controllers.Control
         {
         }
 
+        /// <summary>
+        /// This function retrieves a list of reporte_cobro objects from a SQL database using a raw SQL
+        /// query.
+        /// </summary>
+        /// <returns>
+        /// An `ActionResult` of type `IEnumerable<ReporteCobro>` is being returned.
+        /// </returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReporteCobro>>> GetReportesCobro()
         {

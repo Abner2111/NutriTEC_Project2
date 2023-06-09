@@ -17,7 +17,16 @@ namespace API_NutriTEC.Controllers.User
         {
         }
 
-        // GET: api/administrador
+        /// <summary>
+        /// This function retrieves a list of administrators from a database and returns a success
+        /// response with the list if it exists, or an error response if it does not.
+        /// </summary>
+        /// <returns>
+        /// The method is returning an IActionResult. If the list of administrators is not null, it
+        /// returns a SuccessResponse with the list of administrators. Otherwise, it returns an
+        /// ErrorResponse with the message "No hay administradores".
+        /// </returns>
+        
         [HttpGet("Prueba")]
         public IActionResult GetAdministradores()
         {
@@ -33,6 +42,14 @@ namespace API_NutriTEC.Controllers.User
             }
         }
 
+        /// <summary>
+        /// This function retrieves the names of all tables in the database and returns them as a list.
+        /// </summary>
+        /// <returns>
+        /// The method `GetTables()` returns a list of table names in the database as a success response
+        /// or an error message if an exception occurs.
+        /// </returns>
+        
         [HttpGet]
         public IActionResult GetTables()
         {
@@ -55,6 +72,21 @@ namespace API_NutriTEC.Controllers.User
             }
         }
 
+        /// <summary>
+        /// This function validates user credentials by hashing the password and checking it against the
+        /// stored hashed password in the database.
+        /// </summary>
+        /// <param name="email">A string representing the email address of the user trying to log
+        /// in.</param>
+        /// <param name="password">The password to be validated. It is passed as a string parameter to
+        /// the method.</param>
+        /// <returns>
+        /// The method returns an IActionResult object, which can be either a SuccessResponse with the
+        /// message "Credenciales válidas." or a BadRequest with the message "Credenciales inválidas."
+        /// depending on whether the email and password provided are valid or not. If an exception
+        /// occurs, it returns a StatusCode 500 with an error message.
+        /// </returns>
+        
         [HttpGet("validar/{email}/{password}")]
         public IActionResult ValidarCredenciales(string email, string password)
         {

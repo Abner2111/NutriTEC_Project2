@@ -15,7 +15,18 @@ namespace API_NutriTEC.Controllers.Supplies
         {
         }
 
-        // POST: api/producto/agregar
+        /// <summary>
+        /// This function adds a new product to a database using the values provided in the request
+        /// body.
+        /// </summary>
+        /// <param name="Producto">A class representing a product with the following properties:</param>
+        /// <returns>
+        /// The method is returning an IActionResult. The return value depends on whether the try block
+        /// is successful or not. If successful, it returns a SuccessResponse with the message "Producto
+        /// agregado exitosamente." If there is an exception, it returns a StatusCode 500 with the
+        /// message "Error: " and the exception message.
+        /// </returns>
+        
         [HttpPost("agregar")]
         public IActionResult AgregarProducto([FromBody] Producto producto)
         {
@@ -72,7 +83,19 @@ namespace API_NutriTEC.Controllers.Supplies
             }
         }
 
-        // POST: api/producto/aprobar
+        /// <summary>
+        /// This function approves a product by executing a SQL command and returns a success message or
+        /// an error message if an exception occurs.
+        /// </summary>
+        /// <param name="productoId">an integer representing the ID of the product that needs to be
+        /// approved.</param>
+        /// <returns>
+        /// The method is returning an IActionResult. The return value depends on whether the product is
+        /// approved successfully or not. If the product is approved successfully, it returns a success
+        /// response with a message "Producto aprobado exitosamente." If there is an error, it returns a
+        /// status code 500 with an error message.
+        /// </returns>
+        
         [HttpPost("aprobar/{productoId}")]
         public IActionResult AprobarProducto( int productoId)
         {
@@ -90,7 +113,20 @@ namespace API_NutriTEC.Controllers.Supplies
             }
         }
 
-        // DELETE: api/producto/eliminar/{codigoBarras}
+        /// <summary>
+        /// This function deletes a product from the database by its barcode.
+        /// </summary>
+        /// <param name="codigoBarras">a string representing the barcode of a product that needs to be
+        /// deleted from the database. This method is an HTTP DELETE endpoint that takes the barcode as
+        /// a parameter and deletes the corresponding product from the database.</param>
+        /// <returns>
+        /// The method is returning an IActionResult. The specific type of IActionResult being returned
+        /// depends on whether the try block is successful or not. If the try block is successful, the
+        /// method returns a SuccessResponse with a message indicating that the product was successfully
+        /// deleted. If the try block throws an exception, the method returns a StatusCode 500 with an
+        /// error message.
+        /// </returns>
+        
         [HttpDelete("eliminar/{codigoBarras}")]
         public IActionResult EliminarProductoPorCodigoBarras(string codigoBarras)
         {
@@ -108,7 +144,19 @@ namespace API_NutriTEC.Controllers.Supplies
             }
         }
 
-        // PUT: api/producto/editar/{codigoBarras}
+        /// <summary>
+        /// This function edits a product in a database by its barcode using the values provided in the
+        /// request body.
+        /// </summary>
+        /// <param name="codigoBarras">A string representing the barcode of the product to be
+        /// edited.</param>
+        /// <param name="Producto">A class representing a product with the following properties:</param>
+        /// <returns>
+        /// The method is returning an IActionResult. If the product is successfully edited, it returns
+        /// a SuccessResponse with a message indicating that the product was edited successfully. If
+        /// there is an error, it returns a StatusCode 500 with an error message.
+        /// </returns>
+        
         [HttpPut("editar/{codigoBarras}")]
         public IActionResult EditarProductoPorCodigoBarras(string codigoBarras, [FromBody] Producto producto)
         {
@@ -162,7 +210,15 @@ namespace API_NutriTEC.Controllers.Supplies
                 return StatusCode(500, "Error: " + ex.Message);
             }
         }
-        // GET: api/producto
+        /// <summary>
+        /// This function retrieves a list of products from a SQL database and returns a success
+        /// response or an error message.
+        /// </summary>
+        /// <returns>
+        /// The method is returning an IActionResult, which could be a SuccessResponse with a list of
+        /// products or a StatusCode with an error message.
+        /// </returns>
+        
         [HttpGet]
         public IActionResult ObtenerProductos()
         {
