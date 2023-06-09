@@ -12,7 +12,7 @@ import retrofit2.http.Url;
 public interface Methods {
 
     @Headers("Content-Type: application/json")
-    @POST("/Cliente")
+    @POST("/api/Cliente")
     Call<Cliente> getClientData(@Body Cliente cliente);
 
     @Headers("Content-Type: application/json")

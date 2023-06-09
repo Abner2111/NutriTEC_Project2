@@ -173,6 +173,11 @@ public class APIhandler {
                     responsestatus[0] = 1;
                 } else {
                     responsestatus[0] = 0;
+                    try {
+                        Log.d("cliente no registrado", response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 }
             }
