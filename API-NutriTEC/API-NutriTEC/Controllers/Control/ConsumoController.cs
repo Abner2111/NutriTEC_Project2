@@ -1,7 +1,10 @@
-using System.Data;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace API_NutriTEC.Controllers.Control
@@ -17,7 +20,52 @@ namespace API_NutriTEC.Controllers.Control
         {
             _context = context;
         }
-        
+
+        [HttpGet]
+        public IActionResult GetConsumo()
+        {
+            string connectionString = _context.Database.GetConnectionString();
+            List<ConsumoViewModel> consumoData = new List<ConsumoViewModel>();
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                string query = "SELECT * FROM VistaConsumo";
+
+                using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                {
+                    try
+                    {
+                        connection.Open();
+                        NpgsqlDataReader reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            ConsumoViewModel consumoItem = new ConsumoViewModel
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Producto_o_Receta = reader["Producto_o_Receta"].ToString(),
+                                TiempoComida = reader["TiempoComida"].ToString(),
+                                Fecha = reader["Fecha"].ToString(),
+                                Cliente = reader["Cliente"].ToString(),
+                                Producto_Consumido = reader["Producto_Consumido"].ToString()
+                            };
+
+                            consumoData.Add(consumoItem);
+                        }
+
+                        reader.Close();
+                        connection.Close();
+
+                        return Ok(consumoData);
+                    }
+                    catch (Exception e)
+                    {
+                        return BadRequest(e.Message);
+                    }
+                }
+            }
+        }
+
         [HttpPost("producto")]
         public IActionResult PostConsumoProducto(ConsumoProducto consumo_producto)
         {
@@ -40,7 +88,7 @@ namespace API_NutriTEC.Controllers.Control
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpPost("receta")]
         public IActionResult PostConsumoReceta(ConsumoReceta consumo_receta)
         {

@@ -107,3 +107,15 @@ export const obtenerPlanes = async () => {
   return response.data;
 }
  
+export const obtenerConsumos = async()=>{
+  const response = await axios.get(`${API_URL}/Consumo`);
+  return response.data;
+}
+export const obtenerRetroalimentacion = async()=>{
+  const response = await axios.get(`${API_URL}/retroalimentacion`);
+  return response.data;
+}
+export const agregarRetroalimentacion = async(retroalimentacion)=>{
+  const response = await axios.post(`${API_URL}/retroalimentacion`,retroalimentacion);
+  return response.data
+}

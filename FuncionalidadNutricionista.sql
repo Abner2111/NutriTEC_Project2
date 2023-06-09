@@ -221,3 +221,24 @@ BEGIN
   RETURN QUERY SELECT * FROM PRODUCTO;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ----------------------------------------------------------------------------------------------- --
+
+
+CREATE VIEW VistaConsumo AS
+SELECT c.Id, 
+       CASE
+           WHEN cp.Receta_name IS NOT NULL THEN cp.Receta_name
+           WHEN co.Producto_id IS NOT NULL THEN p.Nombre
+       END AS Producto_o_Receta,
+       tc.Nombre AS TiempoComida,
+       c.Fecha,
+       c.Cliente,
+       p2.Nombre AS Producto_Consumido
+FROM CONSUMO c
+LEFT JOIN CONSUMO_RECETA cp ON c.Id = cp.Consumo_id
+LEFT JOIN RECETA r ON cp.Receta_name = r.Nombre
+LEFT JOIN TIEMPO_COMIDA tc ON c.TiempoComidaId = tc.Id
+LEFT JOIN CONSUMO_PRODUCTO co ON c.Id = co.Consumo_id
+LEFT JOIN PRODUCTO p2 ON co.Producto_id = p2.Id
+LEFT JOIN PRODUCTO p ON cp.Receta_name IS NULL AND co.Producto_id = p.Id;
