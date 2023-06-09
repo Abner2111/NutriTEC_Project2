@@ -10,6 +10,26 @@ BEGIN
 END
 $$
 
+
+CREATE OR REPLACE PROCEDURE udpasignarproductosareceta(
+	Receta_ VARCHAR,
+	Producto_ VARCHAR
+)
+language plpgsql
+AS $$
+DECLARE 
+	IdProducto int;
+BEGIN
+	IF NOT EXISTS (SELECT Nombre FROM RECETA WHERE RECETA.Nombre = Receta_) THEN
+		INSERT INTO RECETA VALUES (Receta_);
+	END IF;
+	
+	IdProducto = (SELECT Id FROM PRODUCTO WHERE PRODUCTO.nombre = Producto_);
+	INSERT INTO PRODUCTOS_RECETA (Receta_name, Producto_id) VALUES (Receta_, IdProducto);
+	
+END
+$$
+
 /**
 obtiene informacion nutricional de una receta dado el nommbre
 **/

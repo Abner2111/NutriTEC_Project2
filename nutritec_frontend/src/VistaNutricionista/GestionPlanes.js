@@ -72,7 +72,7 @@ class GestionPlanes extends Component {
 
   deletePlan = (id) => {
     axios
-      .delete("http://localhost:5295/api/plan/"+id, {
+      .delete("https://nutritecrestapi.azurewebsites.net/api/plan/"+id, {
         
       })
       .then((response) => {
@@ -90,10 +90,10 @@ class GestionPlanes extends Component {
   componentDidMount() {
     this.handlePlan(); // se obtiene la lista de sucursales
   }
-
+  
   // función para obtener la lista de sucursales, y teléfonos desde el API
   handlePlan = () => {
-    axios.get('http://localhost:5295/api/Plan') // obtiene la lista de sucursales desde el API
+    axios.get('https://nutritecrestapi.azurewebsites.net/api/Plan') // obtiene la lista de sucursales desde el API
       .then(response => {
         this.setState({ planes: response.data }); // guarda la lista de sucursales en el estado
         console.log(response.data);
@@ -101,8 +101,8 @@ class GestionPlanes extends Component {
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
       });
-
-    axios.get('http://localhost:5295/api/Plan/Recetas') // obtiene la lista de teléfonos para cada paciente desde el API
+      
+    axios.get('https://nutritecrestapi.azurewebsites.net/api/Plan/Recetas') // obtiene la lista de teléfonos para cada paciente desde el API
       .then(response => {
         const recetas = {};
         const calorias_recetas = {};
@@ -127,7 +127,7 @@ class GestionPlanes extends Component {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
       });
 
-      axios.get('http://localhost:5295/api/Plan/Productos') // obtiene la lista de teléfonos para cada paciente desde el API
+      axios.get('https://nutritecrestapi.azurewebsites.net/api/Plan/Productos') // obtiene la lista de teléfonos para cada paciente desde el API
       .then(response => {
         const productos = {};
         const calorias_productos = {};

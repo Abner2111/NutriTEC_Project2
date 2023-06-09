@@ -34,7 +34,7 @@ class ReporteCobro extends Component {
 
   // función para obtener la lista de sucursales, y teléfonos desde el API
   handleReporteCobro = () => {
-    axios.get('http://localhost:5295/api/ReporteCobro') // obtiene la lista de sucursales desde el API
+    axios.get('https://nutritecrestapi.azurewebsites.net/api/ReporteCobro') // obtiene la lista de sucursales desde el API
       .then(response => {
         this.setState({ reportes: response.data }); // guarda la lista de sucursales en el estado
         console.log(response.data);

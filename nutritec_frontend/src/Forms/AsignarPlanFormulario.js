@@ -25,7 +25,7 @@ class AsignarPlanFormulario extends Component {
 
     // Enviar los datos al backend para crear un nuevo plan
     axios
-      .post("http://localhost:5295/api/Cliente/addplan", {
+      .post("https://nutritecrestapi.azurewebsites.net/api/Cliente/addplan", {
         cliente: this.state.cliente,
         planId: this.state.planId,
         fecha_inicio: this.state.fecha_inicio,

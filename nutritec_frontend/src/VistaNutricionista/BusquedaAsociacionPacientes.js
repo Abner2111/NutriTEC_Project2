@@ -23,7 +23,7 @@ class BusquedaAsociacionPacientes extends Component {
     console.log(cliente);
     
     axios
-      .post("http://localhost:5295/api/nutricionista/Asociar", {
+      .post("https://nutritecrestapi.azurewebsites.net/api/nutricionista/Asociar", {
         nutricionista: this.state.idCliente,
         cliente: cliente.correo,
       })
@@ -40,7 +40,7 @@ class BusquedaAsociacionPacientes extends Component {
   }
 
   handleMisPacientes = () => {
-    axios.get('http://localhost:5295/api/nutricionista/Asociados/'+this.state.idCliente) // obtiene la lista de sucursales desde el API
+    axios.get('https://nutritecrestapi.azurewebsites.net/api/nutricionista/Asociados/'+this.state.idCliente) // obtiene la lista de sucursales desde el API
       .then(response => {
         this.setState({ mispacientes: response.data }); // guarda la lista de sucursales en el estado
       })
@@ -57,7 +57,7 @@ class BusquedaAsociacionPacientes extends Component {
     var paraBuscar = document.getElementById('aBuscar').value;
 
     if (critBusqueda == 'Correo'){
-        axios.get('http://localhost:5295/api/Cliente/PorCorreo/'+paraBuscar) // obtiene la lista de sucursales desde el API
+        axios.get('https://nutritecrestapi.azurewebsites.net/api/Cliente/PorCorreo/'+paraBuscar) // obtiene la lista de sucursales desde el API
         .then(response => {
             this.setState({ clientes: response.data }); // guarda la lista de sucursales en el estado
         })
@@ -67,7 +67,7 @@ class BusquedaAsociacionPacientes extends Component {
     }
 
     if (critBusqueda == 'Nombre'){
-        axios.get('http://localhost:5295/api/Cliente/PorNombre/'+paraBuscar) // obtiene la lista de sucursales desde el API
+        axios.get('https://nutritecrestapi.azurewebsites.net/api/Cliente/PorNombre/'+paraBuscar) // obtiene la lista de sucursales desde el API
         .then(response => {
             this.setState({ clientes: response.data }); // guarda la lista de sucursales en el estado
         })

@@ -3,15 +3,13 @@ import axios from "axios";
 import { Form } from 'react-bootstrap';
 
 
-class NuevoPlanFormulario extends Component {
+class NuevaRecetaFormulario extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      plan: "",
-      nutricionistid: "",
-      tiempocomida: "Desayuno",
-      comida: "",
+      receta_name: "",
+      producto: "",
       showModal: false,
     };
 
@@ -25,21 +23,18 @@ class NuevoPlanFormulario extends Component {
 
     // Enviar los datos al backend para crear un nuevo plan
     axios
-      .post("https://nutritecrestapi.azurewebsites.net/api/plan", {
-        plan: this.state.plan,
-        nutricionistid: parseInt(this.state.nutricionistid),
-        tiempocomida: document.getElementById('tiempocomida').options[document.getElementById('tiempocomida').selectedIndex].value,
-        comida: this.state.comida
+      .post("https://nutritecrestapi.azurewebsites.net/AgregarProductos", {
+        receta_name: this.state.receta_name,
+        producto: this.state.producto,
       })
       .then((response) => {
-        this.props.onNewPlan(); // Refresh site
+        this.props.onNewReceta(); // Refresh site
       })
       .catch((error) => {
         this.setState({ error: error.message });
       });
 
-    console.log(document.getElementById('tiempocomida').options[document.getElementById('tiempocomida').selectedIndex].value);
-    console.log("Nuevo plan agregado");
+    console.log("Nueva receta agregada");
     this.props.onClose();
   };
 
@@ -82,48 +77,29 @@ class NuevoPlanFormulario extends Component {
         }}
       >
         <Form onSubmit={this.handleSubmit}>
-          <h2>Nuevo plan</h2>
+          <h2>Nueva receta</h2>
           <div className="form-input">
-            <label htmlFor="plan">Nombre:</label>
+            <label htmlFor="receta_name">Receta:</label>
             <input
               type="text"
-              name="plan"
-              value={this.state.plan}
+              name="receta_name"
+              value={this.state.receta_name}
               onChange={this.handleChange}
               required
             />
           </div>
+
           <div className="form-input">
-            <label htmlFor="tiempocomida">Tiempo de comida:</label>
-            <select name="tiempocomida" id="tiempocomida">
-              <option value="Desayuno">Desayuno</option>
-              <option value="Merienda mañana">Merienda mañana</option>
-              <option value="Almuerzo">Almuerzo</option>
-              <option value="Merienda tarde">Merienda tarde</option>
-              <option value="Cena">Cena</option>
-              
-            </select>
-          </div>
-          <div className="form-input">
-            <label htmlFor="nutricionistid">Id del nutricionista:</label>
+            <label htmlFor="producto">Producto:</label>
             <input
               type="text"
-              name="nutricionistid"
-              value={this.state.nutricionistid}
+              name="producto"
+              value={this.state.producto}
               onChange={this.handleChange}
               required
             />
           </div>
-          <div className="form-input">
-            <label htmlFor="comida">Comida:</label>
-            <input
-              type="text"
-              name="comida"
-              value={this.state.comida}
-              onChange={this.handleChange}
-              required
-            />
-          </div>
+          
 
             <div style={{marginTop: "20px"}}>
             <button type="submit" style={{
@@ -135,7 +111,7 @@ class NuevoPlanFormulario extends Component {
               display: "block",
               margin: "0 auto",
               padding: "10px 20px"
-            }}>Agregar plan</button>
+            }}>Agregar receta</button>
             </div>
 
       </Form>
@@ -143,4 +119,4 @@ class NuevoPlanFormulario extends Component {
             );
     }
 }
-export default NuevoPlanFormulario;
+export default NuevaRecetaFormulario;

@@ -4,19 +4,23 @@ import axios from 'axios';
 
 import { CSSTransition } from 'react-transition-group';
 
-import AsignarPlanFormulario from '../Forms/AsignarPlanFormulario';
+import NuevaRecetaFormulario from '../Forms/NuevaRecetaFormulario';
 
 
-class AsignacionPlanPaciente extends Component {
+class GestionRecetas extends Component {
   constructor(props) {
     super(props);
   
     this.state = {
-      clientes: [], // lista de clientes obtenidos desde el API
+      recetas: [],
+      productos: [],
       
-      showForm: false, // variable para mostrar/ocultar el formulario para asignar planes
+      showForm: false, // variable para mostrar/ocultar el formulario para agregar sucursales
+      showtwoForm: false, // variable para mostrar/ocultar el formulario para añadir información adicional a una sucursal existente
+      showthreeForm: false,
 
-      showDialog: false, // variable para mostrar/ocultar el diálogo para asignar nuevos planes
+      showDialog: false, // variable para mostrar/ocultar el diálogo para agregar nuevos sucursal
+      showtwoDialog: false, // variable para mostrar/ocultar el diálogo para añadir información adicional a una sucursal existente
       
       error: null, // variable para guardar posibles errores del API
     };
@@ -30,6 +34,16 @@ class AsignacionPlanPaciente extends Component {
     this.setState({ showForm: !this.state.showForm });
   };
 
+  // Función para alternar la visibilidad del formulario para editar sucursal
+  togglet = () => {
+    this.setState({ showtwoForm: !this.state.showtwoForm });
+  };
+
+  // Función para alternar la visibilidad del formulario para eliminar sucursal
+  toggleth = () => {
+    this.setState({ showthreeForm: !this.state.showthreeForm });
+  };
+
 
 
   /* DIÁLOGOS */
@@ -38,20 +52,47 @@ class AsignacionPlanPaciente extends Component {
     this.setState(prevState => ({ showDialog: !prevState.showDialog }));
   };
 
+  // Función para alternar la visibilidad del diálogo para editar sucursal
+  toggletD = () => {
+    this.setState(prevState => ({ showtwoDialog: !prevState.showtwoDialog }));
+  };
+
+  // Función para alternar la visibilidad del diálogo para eliminar sucursal
+  togglethD = () => {
+    this.setState(prevState => ({ showthreeDialog: !prevState.showthreeDialog }));
+  };
 
 
   /* PARA COMPONENTES */
   // función que se ejecuta cuando se carga el componente
   componentDidMount() {
-    this.handleCliente(); // se obtiene la lista de sucursales
+    this.handleReceta(); // se obtiene la lista de sucursales
   }
-
+  
   // función para obtener la lista de sucursales, y teléfonos desde el API
-  handleCliente = () => {
-    axios.get('https://nutritecrestapi.azurewebsites.net/api/Cliente/planes') // obtiene la lista de sucursales desde el API
+  handleReceta = () => {
+    axios.get('https://nutritecrestapi.azurewebsites.net/api/Receta') // obtiene la lista de sucursales desde el API
       .then(response => {
-        this.setState({ clientes: response.data }); // guarda la lista de sucursales en el estado
+        this.setState({ recetas: response.data }); // guarda la lista de sucursales en el estado
         console.log(response.data);
+      })
+      .catch(error => {
+        this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
+      });
+      
+    axios.get('https://nutritecrestapi.azurewebsites.net/ObtenerProductos') // obtiene la lista de teléfonos para cada paciente desde el API
+      .then(response => {
+        console.log(response.data)
+        const productos = {};
+        response.data.forEach(receta => {
+          if (!productos[receta.receta_name]) { // si no existe una entrada para el paciente actual en la lista de teléfonos, se crea una
+            productos[receta.receta_name] = [];
+          }
+          productos[receta.receta_name].push(receta.producto); // se agrega el teléfono actual a la lista de teléfonos del paciente
+          productos[receta.receta_name].push(<br></br>);
+        });
+        this.setState({ productos });
+        //console.log(this.state.productos)
       })
       .catch(error => {
         this.setState({ error: error.message }); // guarda el error en el estado en caso de que haya alguno
@@ -79,42 +120,38 @@ class AsignacionPlanPaciente extends Component {
 
   // función que renderiza el componente
 render() {
-  const { clientes, error, showDialog } = this.state;
+  const { recetas, error, showDialog } = this.state;
 
   return (
     <div style={{ backgroundColor: '#fff', textAlign: 'center' }}>
         <NavbarNutricionista/>
-  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Planes de clientes</h1>
+  <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Recetas</h1>
       {error && <div>Error: {error}</div>}
-      
+      {recetas.map(receta => (
         
       <table style={{ borderCollapse: 'collapse', width: '80%', margin: '0 auto 2em'}} className="table border shadow">
         <thead>
           <tr>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Cliente</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Plan</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Fecha inicio</th>
-            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Fecha final</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Receta</th>
+            <th style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>Productos</th>
           </tr>
         </thead>
         
         <tbody>
-            {clientes.map(cliente => (
-            <tr key={(cliente.cliente)}>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{cliente.cliente}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{cliente.planId}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{cliente.fecha_inicio}</td>
-              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{cliente.fecha_final}</td>
+          
+            <tr key={(receta)}>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{receta.nombre}</td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #1c3a56' }}>{this.state.productos[receta.nombre]}</td>
             </tr>
-          ))}
+          
         </tbody>
         
       </table>
       
-      
+      ))}
       <div>
         <button style={{ marginTop: '20px', padding: '10px 20px', borderRadius: '5px', backgroundColor: '#fff', color: '#4CAF50', border: '2px solid #4CAF50', cursor: 'pointer' }} 
-        onClick={this.toggleDialog}>Asignar plan</button>
+        onClick={this.toggleDialog}>Nueva receta</button>
         {showDialog && (
             <div
               style={{
@@ -149,9 +186,9 @@ render() {
               }}
             >
               {/* contenido del diálogo */}
-              <AsignarPlanFormulario 
+              <NuevaRecetaFormulario 
                 onClose={this.toggleDialog}
-                onNewPlan={this.handleCliente}
+                onNewReceta={this.handleReceta}
               />
               
             </div>
@@ -167,4 +204,4 @@ render() {
   }
 }
 
-export default AsignacionPlanPaciente;
+export default GestionRecetas;

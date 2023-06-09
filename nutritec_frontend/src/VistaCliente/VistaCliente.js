@@ -7,7 +7,8 @@ import MiniCard from "../Templates/MiniCard"
 // Icons
 import MedidasIcon from "../Imgs/MeasurementsIcon.png"
 import MealIcon from '../Imgs/MealIcon.png'
-
+import ProductoIcon from '../Imgs/ProductoIcon.png'
+import RecetaIcon from '../Imgs/RecetaIcon.png'
 
 const VistaCliente = () => {
     return (
@@ -23,6 +24,24 @@ const VistaCliente = () => {
                 imageUrl={MedidasIcon}
                 body='Registrar Nueva Medida'
                 url='/nuevomedidas'
+              />
+            </div>
+
+            <div className='col'>
+              <MiniCard
+                title='Productos/Platillos'
+                imageUrl={ProductoIcon}
+                body='Gestionar productos'
+                url='/gestionproductoscliente'
+              />
+            </div>
+
+            <div className='col'>
+              <MiniCard
+                title='Recetas'
+                imageUrl={RecetaIcon}
+                body='Gestionar recetas'
+                url='/gestionrecetas'
               />
             </div>
 

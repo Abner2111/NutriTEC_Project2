@@ -29,7 +29,8 @@ import NuevoConsumoCliente from './VistaCliente/NuevoConsumoCliente';
 import LoginCliente from './VistaCliente/LoginCliente';
 import NuevoMedidas from './VistaCliente/NuevoMedidas';
 import VisualizacionPlanes from './VistaCliente/VisualizacionPlanes';
-/* UC */
+import GestionProductosCliente from './VistaCliente/GestionProductos';
+import GestionRecetas from './VistaCliente/GestionRecetas';
 
 function App() {
   return (
@@ -56,8 +57,9 @@ function App() {
             <Route path='/logincliente' element = { <LoginCliente/> }/>
             <Route path='/nuevoMedidas' element = { <NuevoMedidas/> }/>
             <Route path='/planescliente' element = { <VisualizacionPlanes/> }/>
+            <Route path='/gestionproductoscliente' element = { <GestionProductosCliente/> }/>
             <Route path='/aprobacionproductos' element = { <AprobarProductos/> }/>
-
+            <Route path='/gestionrecetas' element = { <GestionRecetas/> }/>
           </Routes> 
       </Router>
       

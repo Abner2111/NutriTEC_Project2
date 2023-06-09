@@ -25,7 +25,7 @@ class EditarPlanFormulario extends Component {
 
     // Enviar los datos al backend para crear una nueva sucursal
     axios
-      .put("http://localhost:5295/api/plan/"+this.state.id, {
+      .put("https://nutritecrestapi.azurewebsites.net/api/plan/"+this.state.id, {
         id: this.state.id,
         nombre: this.state.nombre,
         nutricionistid: this.state.nutricionistid,
