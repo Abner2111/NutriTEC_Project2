@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent consumableRegistryActivity = new Intent(MainActivity.this, MealTimeSelectionActivity.class);
+                consumableRegistryActivity.putExtra("userEmail", extras.getString("userEmail"));
+                consumableRegistryActivity.putExtra("userName",getIntent().getExtras().getString("userName"));
                 startActivity(consumableRegistryActivity);
             }
         });
@@ -41,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent measurementRegistryActivity = new Intent(MainActivity.this, MeasurementRegisterActivity.class);
-                measurementRegistryActivity.putExtra("useEmail", extras.getString("userEmail"));
+                measurementRegistryActivity.putExtra("userEmail", extras.getString("userEmail"));
+                measurementRegistryActivity.putExtra("userName",getIntent().getExtras().getString("userName"));
                 startActivity(measurementRegistryActivity);
+
             }
         });
 

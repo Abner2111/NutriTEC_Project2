@@ -17,7 +17,7 @@ class NuevoMedidas extends Component{
               porcentajemusculo: '0',
               medidacadera: '0',
               medidacuello: '0',
-              correocliente: '0'
+              correocliente: ''
             }
         }
     }

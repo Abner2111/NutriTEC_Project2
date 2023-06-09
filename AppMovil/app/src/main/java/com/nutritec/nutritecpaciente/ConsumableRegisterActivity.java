@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.nutritec.nutritecpaciente.databinding.ActivityConsumableRegisterBinding;
+import com.nutritec.nutritecpaciente.connection.APIhandler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,19 +29,60 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityConsumableRegisterBinding.inflate(getLayoutInflater());
-        setUpData();
-        setUpList();
-        initSearchWidgets();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+        try {
+            Thread setupdataThread = new Thread(){
+                public void run(){
+                    try {
+                        setUpData(consumableList);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setUpList();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            };
+            setupdataThread.start();
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error al obtener consumibles",Toast.LENGTH_LONG).show();
+            Log.d("Error al obtener consumibles",e.toString());
+        }
+
+
         setContentView(binding.getRoot());
+
+        initSearchWidgets();
+
+
         binding.registroConsumoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selecting){
                     showSelection();
                 } else {
-                    Toast.makeText(getApplicationContext(),"Consumo Registrado",Toast.LENGTH_SHORT).show();
+                    for(Consumable consumable: selectedConsumables){
+                        int respuesta = APIhandler.registerNewConsumo(consumable,getIntent().getExtras()
+                                .getString("userEmail"),getIntent().getExtras().getInt("mealTime"));
+                        Log.d("respuesta post", String.valueOf(respuesta));
+                    }
+                    Log.d("User consumible",getIntent().getExtras()
+                            .getString("userEmail"));
+                    Log.d("Meal Consumible", String.valueOf(getIntent().getExtras().getInt("mealTime")));
+                    Toast.makeText(getApplicationContext(),"Consumo Registrado",
+                            Toast.LENGTH_SHORT).show();
                     finish();
-                    Intent home = new Intent(ConsumableRegisterActivity.this, MainActivity.class);
+                    Intent home = new Intent(ConsumableRegisterActivity.this,
+                            MainActivity.class);
+                    home.putExtra("userEmail",getIntent().getExtras().getString("userEmail"));
+                    home.putExtra("userName",getIntent().getExtras().getString("userName"));
                     startActivity(home);
                 }
             }
@@ -81,16 +127,33 @@ public class ConsumableRegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void setUpData(){
-        consumableList.add(new Consumable("Gallo Pinto","300", ""));
-        consumableList.add(new Consumable("Manzana","60",  "11111111"));
-        consumableList.add(new Consumable("Agua","0","22222222"));
-        consumableList.add(new Consumable("Casado con carne","550",  ""));
-        consumableList.add(new Consumable("Mandarina","75", ""));
-        consumableList.add(new Consumable("Hamburguesa con queso","900", ""));
-        consumableList.add(new Consumable("Snickers", "488","33333333"));
-        consumableList.add(new Consumable("Casado con pescado", "500",""));
-        consumableList.add(new Consumable("Agua gasificada","0","44444444"));
+    private void setUpData(ArrayList<Consumable> consumableList) throws Exception {
+        JSONArray productos = APIhandler.getProductos();
+        JSONArray recetas = APIhandler.getRecetas();
+
+        Log.d("productos obtenidos",productos.toString());
+        Log.d("recetas obtenidos",recetas.toString());
+        for(int index = 0;index<productos.length();index++){
+            if(productos.getJSONObject(index).getString("aprobado").equals("true")){
+                Consumable newConsumable = new Consumable();
+                newConsumable.setNombre(productos.getJSONObject(index).getString("nombre"));
+                newConsumable.setBarcode(productos.getJSONObject(index).getString("codigoBarras"));
+                newConsumable.setIdentifier(productos.getJSONObject(index).getString("id"));
+                consumableList.add(newConsumable);
+            }
+        }
+        for(int index = 0;index<recetas.length();index++){
+
+                Consumable newConsumable = new Consumable();
+                newConsumable.setNombre(recetas.getJSONObject(index).getString("nombre"));
+                consumableList.add(newConsumable);
+
+        }
+
+
+
+
+
     }
     @SuppressLint("SetTextI18n")
     private void showSelection(){

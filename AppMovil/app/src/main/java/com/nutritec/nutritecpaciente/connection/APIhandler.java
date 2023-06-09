@@ -1,4 +1,5 @@
 package com.nutritec.nutritecpaciente.connection;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -40,10 +41,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIhandler {
     private static Retrofit retrofit;
-    private static String BASE_URL = "https://192.168.31.38:443/api/";
+    private static String BASE_URL = "https://192.168.0.9:443";
 
     public APIhandler(){
-
     }
     public static void setBaseUrl(String url){
         BASE_URL = url;
@@ -193,39 +193,57 @@ public class APIhandler {
      * @return an integer if the value is 1, post was successful, if it is 0, api rejected it,
      *      * if it is -1, the post could not be sent
      */
-    public static int registerNewConsumo(Consumable consumible, String correo, String tiempocomida){
+    public static int registerNewConsumo(Consumable consumible, String correo, int tiempocomida){
         final int[] responsestatus = new int[1];
         Calendar c = Calendar.getInstance();
         SimpleDateFormat SDFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateString = SDFormat.format(c.getTime());
+
         Methods methods = getRetrofitInstance().create(Methods.class);
-        if (consumible.getIdentifier().equals("")){
-            Call<ConsumoProducto> call = methods.getConsumoProductoData(new ConsumoProducto(correo, currentDateString,Integer.parseInt(tiempocomida), Integer.parseInt(consumible.getIdentifier())));
+
+        if (!consumible.getIdentifier().equals("")){
+            Call<ConsumoProducto> call = methods.getConsumoProductoData(new ConsumoProducto(correo,currentDateString,tiempocomida,Integer.parseInt(consumible.getIdentifier())));
+            Log.d("Producto a registrar",correo +" "+currentDateString+" "+tiempocomida+" "+consumible.getIdentifier());
+            Log.d("call",call.toString());
             call.enqueue(new Callback<ConsumoProducto>() {
                 @Override
-                public void onResponse(@NonNull Call<ConsumoProducto> call, @NonNull Response<ConsumoProducto> response) {
+                public void onResponse(Call<ConsumoProducto> call,  Response<ConsumoProducto> response) {
                     if(response.isSuccessful()){
                         responsestatus[0] = 1;
                     } else {
                         responsestatus[0] = 0;
+
+                        try {
+                            Log.d("error consumo", response.errorBody().string());
+                        } catch (IOException e) {
+                            Log.d("error",e.toString());
+                        }
 
                     }
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ConsumoProducto> call, Throwable t) {
+                public void onFailure(Call<ConsumoProducto> call, Throwable t) {
+                    Log.d("error registro","no se pudo enviar");
                     responsestatus[0] = -1;
                 }
             });
         } else {
-            Call<ConsumoReceta> call = methods.getConsumoRecetaData(new ConsumoReceta(correo, currentDateString,Integer.parseInt(tiempocomida), consumible.getNombre()));
+            Call<ConsumoReceta> call = methods.getConsumoRecetaData(new ConsumoReceta(correo, currentDateString,tiempocomida, consumible.getNombre()));
+
+            Log.d("Receta a registrar",correo +" "+currentDateString+" "+tiempocomida+" "+consumible.getNombre());
             call.enqueue(new Callback<ConsumoReceta>() {
                 @Override
-                public void onResponse(@NonNull Call<ConsumoReceta> call, @NonNull Response<ConsumoReceta> response) {
+                public void onResponse(Call<ConsumoReceta> call,Response<ConsumoReceta> response) {
                     if(response.isSuccessful()){
                         responsestatus[0] = 1;
                     } else {
                         responsestatus[0] = 0;
+                        try {
+                            Log.d("error consumo", response.errorBody().string());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
                     }
                 }
@@ -246,7 +264,7 @@ public class APIhandler {
      * @throws Exception if connection is not achieved
      */
     public static JSONArray getProductos() throws Exception {
-        String productsString = sendGet(BASE_URL+"producto");
+        String productsString = sendGet(BASE_URL+"/api/producto");
         JSONArray productsJSON = new JSONArray(productsString);
         return productsJSON;
     }
@@ -257,19 +275,19 @@ public class APIhandler {
      * @throws Exception if connection is not achieved
      */
     public static JSONArray getRecetas() throws Exception{
-        String recetasString = sendGet(BASE_URL+"Receta");
+        String recetasString = sendGet(BASE_URL+"/api/Receta");
         JSONArray recetasJSON = new JSONArray(recetasString);
         return recetasJSON;
     }
 
     public static JSONArray getMealTimes() throws Exception{
-        String mealTimeString = sendGet(BASE_URL+"TiempoComida");
+        String mealTimeString = sendGet(BASE_URL+"/api/TiempoComida");
         JSONArray mealTimeJSON = new JSONArray(mealTimeString);
         return mealTimeJSON;
     }
 
     public static JSONArray validarCliente(String correo, String contrasena) throws Exception {
-        String sendString = BASE_URL+"Cliente/Login/"+correo+"/"+contrasena;
+        String sendString = BASE_URL+"/api/Cliente/Login/"+correo+"/"+contrasena;
         Log.d("API request", sendString);
         String clientString = sendGet(sendString);
         JSONArray clientJSON = new JSONArray(clientString);
@@ -280,7 +298,7 @@ public class APIhandler {
     public static int registrarMedidas(String cintura, String grasa, String musculo, String cadera, String cuello, String correo){
         final int[] responsestatus = new int[1];
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat SDFormat = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDFormat = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateString = SDFormat.format(c.getTime());
         Methods methods = getRetrofitInstance().create(Methods.class);
         if (cintura.equals("")){
@@ -307,12 +325,13 @@ public class APIhandler {
                     responsestatus[0] = 1;
                 } else {
                     responsestatus[0] = 0;
-                    Log.d("Medida sin exito", String.valueOf(response.code()));
+                    Log.d("Error Medida", response.toString());
+
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Medida> call, Throwable t) {
+            public void onFailure(Call<Medida> call, Throwable t) {
                 responsestatus[0] = -1;
             }
         });

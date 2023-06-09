@@ -30,6 +30,7 @@ namespace API_NutriTEC.Controllers
             cmd.Parameters.AddWithValue("inptfecha", consumo_producto.inptfecha);
             cmd.Parameters.AddWithValue("inpttiempocomidaid", consumo_producto.inpttiempocomidaid);
             cmd.Parameters.AddWithValue("inptproductoid", consumo_producto.inptproductoid);
+           
 
             try
             {

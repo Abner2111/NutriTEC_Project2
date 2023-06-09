@@ -33,41 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/breakfastlbl"
-                android:textSize="18sp"
-                android:checked="true"/>
 
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/morningsnacklabl"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButton3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/lunchlbl"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButton4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/afternoonsnacklbl"
-                android:textSize="18sp" />
-
-            <RadioButton
-                android:id="@+id/radioButton5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cenalbl"
-                android:textSize="18sp" />
         </RadioGroup>
 
     </LinearLayout>
