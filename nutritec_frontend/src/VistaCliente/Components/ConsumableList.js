@@ -109,12 +109,15 @@ class ConsumableList extends Component {
     createProduct = (consumible) => {
         
         if(consumible.id!=null){
-            return < ConsumableRow 
+            if(consumible.aprobado===true){
+                return < ConsumableRow 
                 id = {consumible.id}
                 nombre = {consumible.nombre}
                 codigoBarras = {consumible.codigoBarras}
                 childToParent = {this.childToParentAdd}
                 />
+            }
+            
         } else {
             return < ConsumableRow 
                 id = {"N/A"}
