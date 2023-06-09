@@ -102,16 +102,6 @@
                             android:textSize="18sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/user_Cedula_edittext"
-                        style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
-                        android:layout_width="match_parent"
-                        android:layout_height="65dp"
-                        android:ems="10"
-                        android:hint="*Cédula"
-                        android:inputType="number|textPersonName"
-                        android:textSize="18sp" />
-
                     <EditText
                         android:id="@+id/user_Edad_edittext"
                         style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
@@ -154,51 +144,19 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:text="Dirección"
-                        android:textAlignment="center"
-                        android:textColor="?attr/editTextColor"
-                        android:textSize="18sp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="65sp"
                         android:orientation="horizontal">
 
                         <EditText
-                            android:id="@+id/user_provincia_edittext"
+                            android:id="@+id/userPaisEdittext"
                             style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="65sp"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="*Provincia"
-                            android:inputType="text|textCapWords"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/user_canton_edittext"
-                            style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="65sp"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="*Cantón"
-                            android:inputType="text|textCapWords"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/user_distrito_edittext"
-                            style="@style/Widget.Material3.TextInputEditText.FilledBox.Dense"
-                            android:layout_width="match_parent"
-                            android:layout_height="65sp"
-                            android:layout_weight="1"
-                            android:ems="10"
-                            android:hint="*Distrito"
+                            android:hint="*País"
                             android:inputType="text|textCapWords"
                             android:textSize="18sp" />
 

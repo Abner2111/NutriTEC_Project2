@@ -1,24 +1,25 @@
 package com.nutritec.nutritecpaciente.connection;
 
 public class ConsumoProducto {
-    private String inpcorreo;
-    private String inpfecha;
-    private int inpttiempocomidaid;
-    private int inptproductoid;
+    private final String inptcorreo;
+    private final String inptfecha;
+    private final int inpttiempocomidaid;
+    private final int inptproductoid;
 
-    public ConsumoProducto(String inpcorreo, String inpfecha, int inpttiempocomidaid, int inptproductoid) {
-        this.inpcorreo = inpcorreo;
-        this.inpfecha = inpfecha;
+
+    public ConsumoProducto(String inptcorreo, String inptfecha, int inpttiempocomidaid, int inptproductoid) {
+        this.inptcorreo = inptcorreo;
+        this.inptfecha = inptfecha;
         this.inpttiempocomidaid = inpttiempocomidaid;
         this.inptproductoid = inptproductoid;
     }
 
     public String getInpcorreo() {
-        return inpcorreo;
+        return inptcorreo;
     }
 
     public String getInpfecha() {
-        return inpfecha;
+        return inptfecha;
     }
 
     public int getInpttiempocomidaid() {

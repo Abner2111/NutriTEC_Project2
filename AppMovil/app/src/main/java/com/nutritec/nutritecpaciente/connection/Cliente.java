@@ -15,7 +15,8 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String correo, String nombre, String apellido1, String apellido2, String contrasena, String pais, String fecha_registro, String fecha_nacimiento, int estatura, int peso) {
+    public Cliente(String correo, String nombre, String apellido1, String apellido2, String contrasena,
+                   String pais, String fecha_registro, String fecha_nacimiento, int estatura, int peso) {
         this.correo = correo;
         this.nombre = nombre;
         this.apellido1 = apellido1;

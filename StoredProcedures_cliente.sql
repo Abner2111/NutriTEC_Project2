@@ -174,16 +174,16 @@ DECLARE
 	consumoExistenteId int;
 	cantidad_actual int;
 BEGIN
-	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
+	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid Limit 1) THEN
 		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
-	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid);
+	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid Limit 1);
 	
-	IF NOT EXISTS(SELECT  consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId) THEN
+	IF NOT EXISTS(SELECT  consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId Limit 1) THEN
 		INSERT INTO CONSUMO_PRODUCTO VALUES(consumoExistenteId, inptproductoId);
 	ELSE 
 	
-		cantidad_actual = (SELECT consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId);
+		cantidad_actual = (SELECT consumo_producto.cantidad from consumo_producto where consumo_producto.consumo_id = consumoExistenteId and consumo_producto.producto_id = inptproductoId Limit 1);
 		UPDATE CONSUMO_PRODUCTO
 		SET CANTIDAD = (cantidad_actual+1)
 		WHERE consumo_id = consumoExistenteId and producto_id = inptproductoId;
@@ -204,13 +204,23 @@ LANGUAGE plpgsql
 AS $$
 DECLARE 
 	consumoExistenteId int;
+	cantidad_actual int;
 BEGIN
-	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid) THEN
+	IF NOT EXISTS(SELECT Id FROM CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid Limit 1) THEN
 		INSERT INTO CONSUMO (Cliente, TiempoComidaId, Fecha) VALUES(inptcorreo, inpttiempocomidaid, inptfecha);
 	END IF;
-	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha);
-	INSERT INTO CONSUMO_RECETA VALUES(consumoExistenteId, inptRecetaName);
-end $$
+	consumoExistenteId = (SELECT Id from CONSUMO WHERE CONSUMO.cliente = inptcorreo AND CONSUMO.fecha = inptfecha AND CONSUMO.tiempocomidaid = inpttiempocomidaid Limit 1);
+	
+	IF NOT EXISTS(SELECT  consumo_receta.cantidad from consumo_receta where consumo_receta.consumo_id = consumoExistenteId and consumo_receta.receta_name = inptRecetaName Limit 1) THEN
+		INSERT INTO CONSUMO_RECETA VALUES(consumoExistenteId, inptRecetaName);
+	ELSE 
+	
+		cantidad_actual = (SELECT  consumo_receta.cantidad from consumo_receta where consumo_receta.consumo_id = consumoExistenteId and consumo_receta.receta_name = inptRecetaName Limit 1);
+		UPDATE CONSUMO_RECETA
+		SET CANTIDAD = (cantidad_actual+1)
+		WHERE consumo_id = consumoExistenteId and receta_name = inptRecetaName;
+	END IF;
+END $$;
 
 CALL udp_registroConsumoReceta('cliente@estudiantec.cr', '27-05-2023', 11, 'Pinto');
 
