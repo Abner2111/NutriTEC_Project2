@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.nutritec.nutritecpaciente.connection.APIhandler;
@@ -62,7 +63,7 @@ public class NewRecetaActivity extends AppCompatActivity {
         getCurrentRecipes.start();
 
 
-
+        initSearchWidgets();
         binding.registroRecetaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +73,7 @@ public class NewRecetaActivity extends AppCompatActivity {
                     String recipeName = String.valueOf(binding.recipeNameEntry.getText());
                     if(!recipeName.equals("") && !currentRecipes.contains(recipeName.toLowerCase())){
                         for(int i =0;i<selectedProducts.size();i++){
-                            APIhandler.agregarReceta(recipeName,selectedProducts.get(i).getIdentifier());
+                            int response = APIhandler.agregarReceta(recipeName,selectedProducts.get(i).getNombre());
                         }
                     }
                     Toast.makeText(getApplicationContext(),"Receta Creada",Toast.LENGTH_SHORT).show();
@@ -86,7 +87,7 @@ public class NewRecetaActivity extends AppCompatActivity {
     private void showSelection(){
         binding.createRecipeTitle.setText("Productos Seleccionados");
         ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(), selectedProducts);
-        binding.listview.setAdapter(adapter);
+        binding.listviewProductos.setAdapter(adapter);
         selecting = false;
         binding.registroRecetaBtn.setText("Confirmar");
     }
@@ -107,7 +108,7 @@ public class NewRecetaActivity extends AppCompatActivity {
     }
     private void setUpList(){
         ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(),  productList, selectedProducts);
-        binding.listview.setAdapter(adapter);
+        binding.listviewProductos.setAdapter(adapter);
     }
 
     private void getRecipeNames(ArrayList<String> currentRecipes) throws Exception {
@@ -117,6 +118,27 @@ public class NewRecetaActivity extends AppCompatActivity {
             this.currentRecipes.add(recetas.getJSONObject(index).getString("nombre").toLowerCase());
 
         }
+    }
+    private void initSearchWidgets(){
+        binding.productSearchbox.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                ArrayList<Consumable> filteredConsumables = new ArrayList<Consumable>();
+                for(Consumable consumable: productList){
+                    if (consumable.getNombre().toLowerCase().contains(s) || consumable.getBarcode().contains(s)){
+                        filteredConsumables.add(consumable);
+                    }
+                }
+                ConsumableListAdapter adapter = new ConsumableListAdapter(getApplicationContext(), filteredConsumables, selectedProducts);
+                binding.listviewProductos.setAdapter(adapter);
+                return false;
+            }
+        });
     }
 
 

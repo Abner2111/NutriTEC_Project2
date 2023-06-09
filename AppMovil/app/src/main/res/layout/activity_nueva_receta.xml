@@ -43,7 +43,7 @@
         </SearchView>
 
         <ListView
-            android:id="@+id/listview"
+            android:id="@+id/listviewProductos"
             android:layout_width="match_parent"
             android:layout_height="471dp"
             android:layout_weight="6"

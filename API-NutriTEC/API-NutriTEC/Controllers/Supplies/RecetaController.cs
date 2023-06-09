@@ -48,10 +48,10 @@ namespace API_NutriTEC.Controllers.Supplies
         [HttpPost("/AgregarProductos")]
         public async Task<ActionResult<Receta>> PostRecetaProductos(ProductoReceta productoreceta)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand("udp_asignarProductosAReceta", con);
+            NpgsqlCommand cmd = new NpgsqlCommand("udpasignarproductosareceta", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("receta", productoreceta.receta_name);
-            cmd.Parameters.AddWithValue("producto", productoreceta.producto);
+            cmd.Parameters.AddWithValue("receta_", productoreceta.receta_name);
+            cmd.Parameters.AddWithValue("producto_", productoreceta.producto);
 
             try
             {
