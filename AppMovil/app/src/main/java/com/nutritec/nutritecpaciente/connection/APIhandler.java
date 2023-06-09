@@ -342,4 +342,28 @@ public class APIhandler {
         });
         return responsestatus[0];
     }
+    public static int agregarReceta(String name, String product_id){
+        final int[] responsestatus = new int[1];
+        Methods methods = getRetrofitInstance().create(Methods.class);
+        Call<ProductoReceta> call = methods.getProductoRecetaData(new ProductoReceta(name, product_id));
+        call.enqueue(new Callback<ProductoReceta>() {
+            @Override
+            public void onResponse(@NonNull Call<ProductoReceta> call, @NonNull Response<ProductoReceta> response) {
+                if(response.isSuccessful()){
+                    responsestatus[0] = 1;
+                } else {
+                    responsestatus[0] = 0;
+                    Log.d("Error receta", response.toString());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductoReceta> call, Throwable t) {
+                responsestatus[0] = -1;
+                Log.d("Error receta", "no se pudo");
+            }
+        });
+        return responsestatus[0];
+    }
 }

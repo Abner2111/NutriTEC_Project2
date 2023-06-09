@@ -29,4 +29,8 @@ public interface Methods {
     @POST("/api/Medida")
     Call<Medida> getMedidaData(@Body Medida medida);
 
+    @Headers("Content-Type: application/json")
+    @POST("/AgregarProductos")
+    Call<ProductoReceta> getProductoRecetaData(@Body ProductoReceta productoReceta);
+
 }

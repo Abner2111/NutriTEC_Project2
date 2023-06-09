@@ -18,6 +18,33 @@ namespace API_NutriTEC.Controllers.Control
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Medida>>> GetMedidas()
+        {
+            try
+            {
+                var result = _dbContext.medida.ToList();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error: " + e.Message);
+            }
+        }
+        
+        [HttpGet("{correo}")]
+        public async Task<ActionResult<IEnumerable<Medida>>> GetMedidasUsuario(String correo)
+        {
+            try
+            {
+                var result = _dbContext.medida.OrderByDescending(me => me.fecha).Where(m =>m.correocliente == correo).ToList();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error: " + e.Message);
+            }
+        }
         [HttpPost]
         public IActionResult PostMedida(Medida medida)
         {
