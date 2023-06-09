@@ -2,6 +2,7 @@ using System.Data;
 using API_NutriTEC.Data;
 using API_NutriTEC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace API_NutriTEC.Controllers.Supplies
@@ -28,6 +29,40 @@ namespace API_NutriTEC.Controllers.Supplies
             catch (Exception ex)
             {
                 return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+        [HttpGet("/ObtenerProductos")]
+        public IActionResult GetProductosOfRecetas()
+        {
+            try
+            {
+                var productosReceta = _dbContext.producto_receta.FromSqlRaw("SELECT * FROM GetProductosReceta;").ToList();
+
+                return Ok(productosReceta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
+        }
+        [HttpPost("/AgregarProductos")]
+        public async Task<ActionResult<Receta>> PostRecetaProductos(ProductoReceta productoreceta)
+        {
+            NpgsqlCommand cmd = new NpgsqlCommand("udpasignarProductosAReceta", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("receta", productoreceta.receta_name);
+            cmd.Parameters.AddWithValue("producto", productoreceta.producto);
+
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
 
