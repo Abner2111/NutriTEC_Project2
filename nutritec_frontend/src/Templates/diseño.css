@@ -207,9 +207,9 @@ tr:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh;
+    height: 55vh;
     /* Opcional: ajusta la altura según tus necesidades */
-    margin-left: 330px;
+    margin-left: 19%;
     /* Ajusta el valor según tus necesidades */
 }
 .custom-button {

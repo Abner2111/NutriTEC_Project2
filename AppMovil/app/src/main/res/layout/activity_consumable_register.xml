@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2sp"
                 android:layout_weight="1"
-                android:text="@string/new_product" />
+                android:text="@string/new_product"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/newRecipeBtn"
@@ -54,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2sp"
                 android:layout_weight="1"
-                android:text="@string/new_recipe" />
+                android:text="@string/new_recipe"
+                android:visibility="visible" />
         </LinearLayout>
 
         <ListView

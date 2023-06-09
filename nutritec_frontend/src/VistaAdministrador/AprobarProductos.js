@@ -2,7 +2,7 @@ import React from 'react';
 import { obtenerProductos, agregarProducto, aprobarProducto, eliminarProducto } from '../Api';
 import '../Templates/diseñoH.css';
 import '../Templates/diseño.css';
-import { NavbarNutricionista } from "../Templates/NavbarNutricionista"
+import { NavbarAdministrador } from "../Templates/NavbarAdministrador"
 
 
 class GestionProductos extends React.Component {
@@ -80,7 +80,7 @@ class GestionProductos extends React.Component {
         const { productos} = this.state;
         return (
             <div className="gestion-productos-container">
-                <NavbarNutricionista />
+                <NavbarAdministrador />
                 <h1 style={{ margin: '50px 0', fontSize: '2.5rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Aprobar Productos</h1>
                 <table className="tabla-productos">
                     <thead>

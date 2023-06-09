@@ -148,6 +148,7 @@ class LoginNutricionista extends React.Component {
       <div className="gestion-productos-container">
         <h1 className="titulo">Inicio de sesion Nutricionista</h1>
         <div className="centered-container">
+        
           <MDBContainer>
             <MDBRow>
             <MDBCol md="7" className="form-container">
