@@ -31,6 +31,7 @@ import NuevoMedidas from './VistaCliente/NuevoMedidas';
 import VisualizacionPlanes from './VistaCliente/VisualizacionPlanes';
 import GestionProductosCliente from './VistaCliente/GestionProductos';
 import GestionRecetas from './VistaCliente/GestionRecetas';
+import ReporteProgreso from './VistaCliente/ReporteProgreso';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route path='/gestionproductoscliente' element = { <GestionProductosCliente/> }/>
             <Route path='/aprobacionproductos' element = { <AprobarProductos/> }/>
             <Route path='/gestionrecetas' element = { <GestionRecetas/> }/>
+            <Route path='/avancecliente' element = { <ReporteProgreso/> }/>
           </Routes> 
       </Router>
       

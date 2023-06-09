@@ -151,3 +151,7 @@ export const agregarRetroalimentacion = async(retroalimentacion)=>{
   const response = await axios.post(`${API_URL}/retroalimentacion`,retroalimentacion);
   return response.data
 }
+export const obtenerMedidasCliente = async(correo)=>{
+  const response = await axios.get(`${API_URL}/Medida/${correo}`);
+  return response.data
+}
