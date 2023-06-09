@@ -2,13 +2,26 @@ import React, { Component } from "react";
 import { obtenerMedidasCliente } from "../Api";
 import '../Templates/diseñoH.css';
 import '../Templates/diseño.css';
+
 import { NavbarCliente } from "../Templates/NavbarCliente";
+
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'
 
 class ReporteProgreso extends Component{
     constructor(props){
         super(props);
         this.state = {
-            medidas: []
+            medidas: [],
+            columnas: [
+                {title: "Fecha", field: "fecha"},
+                {title: "Cuello (cm)", field: "medidacuello"},
+                {title: "Cintura (cm)", field: "medidacintura"},
+                {title: "Cadera (cm)", field: "medidacadera"},
+                {title: "Grasa (%)", field: "porcentajegrasa"},
+                {title: "Músculo (%)", field: "porcentajemusculo"},
+            ],
+            error: null
         };
 
 
@@ -25,7 +38,19 @@ class ReporteProgreso extends Component{
     getMedidas = async () =>{
         const data = await obtenerMedidasCliente(localStorage.getItem('userEmail'));
         this.setState({medidas : data});
+        console.log(this.state.medidas)
     }
+
+    generatePDF = () => {
+        const doc = new jsPDF()
+        doc.text("Reporte de progreso",14,10)
+        doc.autoTable({
+          columns: this.state.columnas.map(col=>({...col,dataKey:col.field})),
+          body: this.state.medidas.map(dat=>({...dat, dataKey:dat.field})),
+          theme: 'grid'
+        })
+        doc.save('ReporteProgreso.pdf')
+      }
 
     componentDidMount(){
         this.getMedidas();
@@ -61,6 +86,8 @@ class ReporteProgreso extends Component{
                         ))}
                     </tbody>
                 </table>
+                <button style={{ borderRadius: '5px', backgroundColor: '#fff', color: '#ccdb19', border: '2px solid #ccdb19', cursor: 'pointer', marginTop: '20px' }} 
+                onClick={() => this.generatePDF()}>Generar PDF</button> 
 
             </div>
         )
