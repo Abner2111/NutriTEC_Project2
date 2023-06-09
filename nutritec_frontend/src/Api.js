@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL =  'http://localhost:5295/api';
+const API_URL =  'https://nutritecrestapi.azurewebsites.net/api';
 
 export const registrarNutricionista = async (nutricionista)=>{
     const response = await axios.post(`${API_URL}/nutricionista/registrar`, nutricionista);
@@ -23,6 +23,17 @@ export const obtenerProductos = async () => {
     })
     .catch(error => {
       console.error('Error al obtener productos',error);
+      return null;
+    });
+  };
+
+  export const obtenerRecetas = async () => {
+    const endpoint = `${API_URL}/Receta`;
+    return axios.get(endpoint).then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      console.error('Error al obtener recetas',error);
       return null;
     });
   };
@@ -83,6 +94,27 @@ export const agregarConsumoProducto = async (correo, idProducto, mealtime) => {
     inptfecha: currentDate,
     inpttiempocomidaid: Number(mealtime),
     inptproductoid: Number(idProducto)
+  }
+  console.log(JSON.stringify(consumo));
+  const response = await axios.post(endpoint, consumo);
+  return response.data;
+}
+export const agregarConsumoReceta = async (correo, nombreReceta, mealtime) => {
+  const endpoint = API_URL+"/Consumo/receta"
+  const date = new Date();
+  let currentDay= String(date.getDate()).padStart(2, '0');
+
+  let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+      
+  let currentYear = date.getFullYear();
+
+  let currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+  console.log(currentDate);
+  const consumo = {
+    inptcorreo: correo,
+    inptfecha: currentDate,
+    inpttiempocomidaid: Number(mealtime),
+    inptrecetaname: nombreReceta
   }
   console.log(JSON.stringify(consumo));
   const response = await axios.post(endpoint, consumo);

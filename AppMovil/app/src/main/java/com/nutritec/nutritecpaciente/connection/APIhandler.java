@@ -41,7 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIhandler {
     private static Retrofit retrofit;
-    private static String BASE_URL = "https://192.168.0.9:443";
+    private static String BASE_URL = "https://nutritecrestapi.azurewebsites.net/";
 
     public APIhandler(){
     }

@@ -32,6 +32,14 @@ class MealTimeSelector extends Component{
     getMealtimes = async() => {
         const data = await obtenerTiemposComida();
         this.setState({ mealtimes : data});
+        setTimeout(()=>{
+            this.selectedValue = data[0].id;
+            
+        },1000);
+        setTimeout(()=>{
+            
+            this.props.parentCallback(this.selectedValue);
+        },1000);
     }
 
     /* `handleChange` is a function that is called when the value of the `select` element in the

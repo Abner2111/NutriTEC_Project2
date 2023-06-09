@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ConsumableRow = ({id, nombre, codigoBarras,childToParent}) => {
+const ConsumableRow = ({id, nombre, codigoBarras, childToParent}) => {
     return (
         <div className = "row consumable">
             <div className = "col-md-1 consumable-add">

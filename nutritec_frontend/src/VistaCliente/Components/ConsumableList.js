@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import ConsumableRow from './ConsumableRow';
 import SelectedConsumableRow from './SelectedConsumableRow';
 import MealTimeSelector from './MealTimeSelector';
-import { agregarConsumoProducto, obtenerProductos } from '../../Api';
+import { agregarConsumoProducto, agregarConsumoReceta, obtenerProductos, obtenerRecetas } from '../../Api';
+
 class ConsumableList extends Component {
     constructor(props){
         super(props);
@@ -10,29 +11,56 @@ class ConsumableList extends Component {
 
             productos : [], //productos obtenidos del api
             recetas : [], //recetas obtenidas del api
+            consumibles: [],
             productosFiltrados : [],
-            selectedProducts : [],
+            selectedConsumibles : [],
             selectedMealTime:''
         }
 
+        
         this.getProducts();
+        this.getRecetas();
+        
         
     } 
 
-    /**
+    /** 
      * gets products from a api
      */
     getProducts = async () => {
         const data = await obtenerProductos();
         this.setState({productos: data});
-        this.setState({productosFiltrados: data});
     }
+    /**
+     * gets recipes from api
+     */
+    getRecetas = async () =>{
+        const data = await obtenerRecetas();
+        
+        this.setState({recetas: data});
+        
+        setTimeout(()=>{
+            let consumableList = [...this.state.productos,...this.state.recetas];
+            
+            this.setState({consumibles : consumableList});
+            this.setState({productosFiltrados : consumableList});
+            console.log(this.state.productosFiltrados.length);
+            console.log(this.state.consumibles.length);
+        },500);
+        
+        
+    }
+
+   
+
+    
     /**
      * adds selected consumables to the list of selected consumables
      * @param {*} childdata 
      */
     childToParentAdd = (childdata) =>{
-        this.setState({selectedProducts: [...this.state.selectedProducts, childdata]});
+        
+        this.setState({selectedConsumibles: [...this.state.selectedConsumibles, childdata]});
     }
 
     /**
@@ -42,25 +70,34 @@ class ConsumableList extends Component {
     childToParentDelete = (childdata) =>{
         const query = childdata.nombre;
         
-        var updatedList = this.state.selectedProducts;
+        var updatedList = this.state.selectedConsumibles;
 
         const index = updatedList.findIndex((i) => i.nombre === query);
         updatedList.splice(index,1);
-        this.setState({selectedProducts:updatedList})
+        this.setState({selectedConsumibles:updatedList})
     }
     /**
      * filtering consumables
      * @param {*} event 
      */
     filterBySearch = (event) => {
+        
         const query = event.target.value;
         
-        var updatedList = this.state.productos;
+        var updatedList = this.state.consumibles;
 
-        updatedList = updatedList.filter(obj => 
-            obj.nombre.toLowerCase().indexOf(query.toLowerCase()) >=0 || obj.codigoBarras.toLowerCase().indexOf(query.toLowerCase()) >=0);
+       
+        
+        updatedList = updatedList.filter(function (obj){
+            if(obj.id!=null){
+                return obj.nombre.toLowerCase().indexOf(query.toLowerCase()) >=0 || obj.codigoBarras.toLowerCase().indexOf(query.toLowerCase()) >=0;
+            } else {
+                return obj.nombre.toLowerCase().indexOf(query.toLowerCase()) >=0;
+            }
+            
+        });
 
-        this.setState({productosFiltrados:updatedList})
+        this.setState({productosFiltrados : updatedList}); 
         
         
     }
@@ -69,13 +106,24 @@ class ConsumableList extends Component {
      * @param {*} product 
      * @returns 
      */
-    createProduct = ({id, nombre, codigoBarras}) => {
-        return < ConsumableRow 
-                id = {id}
-                nombre = {nombre}
-                codigoBarras = {codigoBarras}
+    createProduct = (consumible) => {
+        
+        if(consumible.id!=null){
+            return < ConsumableRow 
+                id = {consumible.id}
+                nombre = {consumible.nombre}
+                codigoBarras = {consumible.codigoBarras}
                 childToParent = {this.childToParentAdd}
                 />
+        } else {
+            return < ConsumableRow 
+                id = {"N/A"}
+                nombre = {consumible.nombre}
+                codigoBarras = "N/A"
+                childToParent = {this.childToParentAdd}
+                />
+        }
+        
     }
 
     /**
@@ -83,13 +131,23 @@ class ConsumableList extends Component {
      * @param {*} param0 
      * @returns 
      */
-    createProductSelection = ({id, nombre, codigoBarras}) => {
-        return < SelectedConsumableRow 
-                id = {id}
-                nombre = {nombre}
-                codigoBarras = {codigoBarras}
+    createProductSelection = (consumible) => {
+        if(consumible.id!=null){
+            return < SelectedConsumableRow 
+                id = {consumible.id}
+                nombre = {consumible.nombre}
+                codigoBarras = {consumible.codigoBarras}
                 childToParent = {this.childToParentDelete}
                 />
+        } else {
+            return < SelectedConsumableRow 
+                id = {"N/A"}
+                nombre = {consumible.nombre}
+                codigoBarras = "N/A"
+                childToParent = {this.childToParentDelete}
+                />
+        }
+        
     }
 
     /**
@@ -97,17 +155,20 @@ class ConsumableList extends Component {
      */
     registerConsumables = () => {
         let selectedMealTime = this.state.selectedMealTime;
-        this.state.selectedProducts.forEach(function(item,index){
-            console.log(item.id)
-            console.log(selectedMealTime)
-            console.log(localStorage.getItem('userEmail'))
-            agregarConsumoProducto(localStorage.getItem('userEmail'), item.id, selectedMealTime)
+        this.state.selectedConsumibles.forEach(function(item,index){
+            if (item.id!=="N/A"){
+                agregarConsumoProducto(localStorage.getItem('userEmail'), item.id, selectedMealTime)
+            } else {
+                agregarConsumoReceta(localStorage.getItem('userEmail'),item.nombre, selectedMealTime)
+            }
+            
             
         })
-        this.state.selectedProducts = [];
+        this.setState({selectedConsumibles: []});
     }
 
     handleCallbackFromMealSelector = (childData) => {
+        console.log(childData);
         this.setState({selectedMealTime: childData})
     }
 
@@ -133,12 +194,13 @@ class ConsumableList extends Component {
                             <div className="container main-content">
                                 
                                 {this.state.productosFiltrados.map(this.createProduct)}
+                                
                             </div>
                         </div>
                         <div className='col added'>
                             <h3>Tu consumo</h3>
                             <div className="container main-selected-content">
-                                {this.state.selectedProducts.map(this.createProductSelection)}
+                                {this.state.selectedConsumibles.map(this.createProductSelection)}
                             </div>
                         </div>
                         
